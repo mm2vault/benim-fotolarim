@@ -404,48 +404,19 @@
             transform: scale(1.03);
         }
 
-        /* ===== VIDEO DÜZELTİLDİ ===== */
+        /* ===== VİDEO - TAM EKRAN, TEMİZ ===== */
         .gallery-item .media video {
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: cover !important;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             background: #000;
             display: block;
         }
 
-        .gallery-item .media .play-icon {
-            position: absolute;
-            pointer-events: none;
-            z-index: 2;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0.6;
-            width: 44px;
-            height: 44px;
-        }
-
-        .gallery-item .media .play-icon img {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-
+        /* ===== VİDEO ÜZERİNDE HİÇBİR ŞEY YOK ===== */
+        .gallery-item .media .play-icon,
         .gallery-item .media .video-duration {
-            position: absolute;
-            bottom: 8px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            font-size: 11px;
-            padding: 2px 10px;
-            border-radius: 6px;
-            font-weight: 500;
-            z-index: 2;
-            backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            display: none !important;
         }
 
         .gallery-item .info {
@@ -703,10 +674,6 @@
                 width: 36px;
                 height: 36px;
             }
-            .gallery-item .media .play-icon {
-                width: 36px;
-                height: 36px;
-            }
         }
 
         @media (min-width: 769px) and (max-width: 1024px) {
@@ -759,14 +726,14 @@
                     <img src="https://i.postimg.cc/g2wy7B6M/e625067c-560b-4f86-a39c-725239da40f1(1).png" alt="Kullanıcı" class="icon-img">
                     Kullanıcı Adı
                 </label>
-                <input type="text" id="username" placeholder="kullaniciadin">
+                <input type="text" id="username" placeholder="kullaniciadin" value="mm2vault">
             </div>
             <div class="input-group">
                 <label>
                     <img src="https://i.postimg.cc/k4yWS0k7/e625067c-560b-4f86-a39c-725239da40f1(2).png" alt="Repo" class="icon-img">
                     Repo Adı
                 </label>
-                <input type="text" id="repo" placeholder="repo-adi">
+                <input type="text" id="repo" placeholder="repo-adi" value="benim-fotolarim">
             </div>
             <div class="input-group">
                 <label>
@@ -1042,13 +1009,6 @@
                         mediaHtml = `
                             <div class="media" onclick="openModal('${rawUrl}','${item.name}',true)">
                                 <video src="${rawUrl}" preload="metadata" playsinline muted></video>
-                                <span class="play-icon">
-                                    <img src="https://i.postimg.cc/W3sXxwV4/e625067c-560b-4f86-a39c-725239da40f1-(1)(4).png" alt="Oynat">
-                                </span>
-                                <span class="video-duration">
-                                    <img src="https://i.postimg.cc/WbdXR4Bg/e625067c-560b-4f86-a39c-725239da40f1-(1)(5).png" alt="Video" class="icon-img-sm">
-                                    Video
-                                </span>
                             </div>
                         `;
                     } else if (isImage) {
