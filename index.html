@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>📸 Gallery Cloud</title>
-    
-    <!-- ===== FAVICON (Sekme İkonu) ===== -->
+    <title>Gallery Cloud</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/tCYfpbZy/be371099-de3c-430e-b3de-37d5dbd175fa.png">
-
     <style>
+        /* ===== RESET ===== */
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +22,10 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            background-image: radial-gradient(ellipse at 50% 0%, #1a2332 0%, #0b0e14 70%);
+            background-image: 
+                radial-gradient(ellipse at 20% 50%, rgba(240, 147, 62, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(240, 147, 62, 0.05) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 0%, #1a2332 0%, #0b0e14 70%);
         }
 
         .app {
@@ -58,14 +59,17 @@
             margin: 0 auto;
         }
 
-        /* ===== HEADER ===== */
+        /* ===== HEADER (CANLI) ===== */
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 28px;
-            padding-bottom: 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(240, 147, 62, 0.08), rgba(230, 126, 34, 0.04));
+            border-radius: 20px;
+            border: 1px solid rgba(240, 147, 62, 0.1);
+            box-shadow: 0 0 40px rgba(240, 147, 62, 0.05);
         }
 
         .header-left {
@@ -79,6 +83,7 @@
             width: auto;
             border-radius: 12px;
             display: block;
+            filter: drop-shadow(0 0 12px rgba(240, 147, 62, 0.2));
         }
 
         .header h1 {
@@ -91,18 +96,19 @@
         }
 
         .header-badge {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 4px 14px;
+            background: linear-gradient(135deg, rgba(240, 147, 62, 0.15), rgba(230, 126, 34, 0.05));
+            padding: 6px 16px;
             border-radius: 20px;
             font-size: 11px;
             font-weight: 500;
-            color: #8892a8;
+            color: #f0933e;
             letter-spacing: 0.4px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(240, 147, 62, 0.15);
             white-space: nowrap;
             display: flex;
             align-items: center;
             gap: 6px;
+            box-shadow: 0 0 20px rgba(240, 147, 62, 0.05);
         }
 
         /* ===== GİRİŞ ===== */
@@ -122,7 +128,7 @@
         .input-group label {
             font-size: 10px;
             font-weight: 600;
-            color: #6b7a93;
+            color: #8892a8;
             text-transform: uppercase;
             letter-spacing: 0.6px;
             display: flex;
@@ -138,14 +144,14 @@
             font-size: 14px;
             color: #e8edf5;
             outline: none;
-            transition: 0.25s;
+            transition: 0.3s;
             font-family: inherit;
             width: 100%;
         }
 
         .input-group input:focus {
             border-color: #f0933e;
-            box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
+            box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08), 0 0 20px rgba(240, 147, 62, 0.04);
             background: rgba(255, 255, 255, 0.06);
         }
 
@@ -203,7 +209,7 @@
             padding: 36px 20px 30px;
             text-align: center;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.4s;
             background: rgba(255, 255, 255, 0.01);
             margin-bottom: 18px;
             position: relative;
@@ -212,11 +218,13 @@
         .file-area:hover {
             border-color: rgba(240, 147, 62, 0.3);
             background: rgba(255, 255, 255, 0.03);
+            box-shadow: 0 0 30px rgba(240, 147, 62, 0.03);
         }
 
         .file-area.dragover {
             border-color: #f0933e;
             background: rgba(240, 147, 62, 0.05);
+            box-shadow: 0 0 40px rgba(240, 147, 62, 0.05);
         }
 
         .file-area .icon {
@@ -267,23 +275,25 @@
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.25s;
+            transition: 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             font-family: inherit;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-upload {
             background: linear-gradient(135deg, #f0933e, #e67e22);
             color: #fff;
-            box-shadow: 0 4px 20px rgba(240, 147, 62, 0.2);
+            box-shadow: 0 4px 20px rgba(240, 147, 62, 0.25);
         }
 
         .btn-upload:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(240, 147, 62, 0.3);
+            box-shadow: 0 6px 30px rgba(240, 147, 62, 0.35);
         }
 
         .btn-upload:disabled {
@@ -295,11 +305,13 @@
         .btn-list {
             background: rgba(255, 255, 255, 0.05);
             color: #e8edf5;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .btn-list:hover {
             background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.03);
         }
 
         .btn-slideshow {
@@ -311,6 +323,7 @@
         .btn-slideshow:hover {
             background: rgba(240, 147, 62, 0.2);
             transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(240, 147, 62, 0.05);
         }
 
         .btn-clear {
@@ -329,7 +342,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0 14px;
+            padding: 14px 0 16px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
             margin-top: 2px;
             flex-wrap: wrap;
@@ -387,14 +400,26 @@
             border-radius: 18px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.04);
-            transition: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             cursor: pointer;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .gallery-item:hover {
             border-color: rgba(240, 147, 62, 0.25);
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(240, 147, 62, 0.03);
         }
 
         .gallery-item .media {
@@ -412,12 +437,12 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: 0.4s;
+            transition: 0.5s;
             display: block;
         }
 
         .gallery-item:hover .media img {
-            transform: scale(1.03);
+            transform: scale(1.05);
         }
 
         .gallery-item .media video {
@@ -756,6 +781,9 @@
             }
             .header-logo {
                 height: 34px;
+            }
+            .header {
+                padding: 12px 16px;
             }
             .gallery {
                 grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
