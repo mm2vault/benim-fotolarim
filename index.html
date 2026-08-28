@@ -404,6 +404,7 @@
             transform: scale(1.03);
         }
 
+        /* ===== VIDEO DÜZELTİLDİ ===== */
         .gallery-item .media video {
             width: 100%;
             height: 100%;
@@ -837,7 +838,6 @@
     </div>
 
     <script>
-        // ===== DOM =====
         const username = document.getElementById('username');
         const repo = document.getElementById('repo');
         const token = document.getElementById('token');
@@ -889,7 +889,6 @@
 
         fileInput.addEventListener('change', updateFileCount);
 
-        // DRAG & DROP
         fileArea.addEventListener('dragover', e => {
             e.preventDefault();
             fileArea.classList.add('dragover');
@@ -904,7 +903,6 @@
             }
         });
 
-        // YÜKLE
         async function uploadFiles() {
             const cfg = validateConfig();
             if (!cfg) return;
@@ -970,7 +968,6 @@
 
         uploadBtn.addEventListener('click', uploadFiles);
 
-        // LİSTELE
         async function listFiles() {
             const cfg = validateConfig();
             if (!cfg) return;
@@ -1033,7 +1030,7 @@
                     if (isVideo) {
                         mediaHtml = `
                             <div class="media" onclick="openModal('${rawUrl}','${item.name}',true)">
-                                <video src="${rawUrl}" preload="metadata" playsinline></video>
+                                <video src="${rawUrl}" preload="metadata" playsinline muted></video>
                                 <span class="play-icon">
                                     <img src="https://i.postimg.cc/W3sXxwV4/e625067c-560b-4f86-a39c-725239da40f1-(1)(4).png" alt="Oynat" class="icon-img-xl">
                                 </span>
@@ -1077,7 +1074,6 @@
 
         listBtn.addEventListener('click', listFiles);
 
-        // MODAL
         function openModal(url, name, isVideo) {
             currentModalUrl = url;
             currentModalName = name;
@@ -1110,7 +1106,6 @@
             }
         });
 
-        // İNDİR
         function downloadFile(url, filename) {
             fetch(url)
                 .then(response => {
@@ -1141,7 +1136,6 @@
             if (currentModalUrl) downloadFile(currentModalUrl, currentModalName);
         });
 
-        // SİL
         async function deleteFile(filename) {
             if (!confirm(`"${filename}" kalıcı olarak silinsin mi?`)) return;
             const cfg = getConfig();
@@ -1182,7 +1176,6 @@
             }
         }
 
-        // TÜMÜNÜ TEMİZLE
         async function clearAll() {
             const cfg = getConfig();
             if (!cfg.user || !cfg.repo || !cfg.token) {
@@ -1225,7 +1218,6 @@
 
         clearBtn.addEventListener('click', clearAll);
 
-        // LOCAL STORAGE
         try {
             const saved = localStorage.getItem('fotoApp');
             if (saved) {
