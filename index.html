@@ -329,7 +329,6 @@
             transform: translateY(-2px);
         }
 
-        /* ===== GALERİ HEADER (GÜNCELLENDİ) ===== */
         .gallery-header {
             display: flex;
             justify-content: space-between;
@@ -365,7 +364,6 @@
             font-size: 12px;
         }
 
-        /* ===== ARAMA KUTUSU ===== */
         .search-input {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -388,7 +386,6 @@
             color: #4a5268;
         }
 
-        /* ===== FİLTRE BUTONLARI ===== */
         .filter-buttons {
             display: flex;
             gap: 4px;
@@ -416,7 +413,6 @@
             color: #f0933e;
         }
 
-        /* ===== SIRALAMA ===== */
         .sort-select {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -434,7 +430,6 @@
             color: #e8edf5;
         }
 
-        /* ===== ZIP BUTONU ===== */
         .btn-download-all {
             background: rgba(46, 160, 67, 0.12);
             color: #4cda6c;
@@ -905,7 +900,7 @@
             </button>
         </div>
 
-        <!-- ===== GALERİ HEADER (GÜNCELLENDİ) ===== -->
+        <!-- GALERİ HEADER -->
         <div class="gallery-header">
             <div class="left">
                 <img src="https://i.postimg.cc/T29c5b6r/e625067c-560b-4f86-a39c-725239da40f1.png" alt="Galeri" class="icon-img-sm">
@@ -913,22 +908,18 @@
                 <span class="count" id="galleryCount">0 dosya</span>
             </div>
             <div class="right">
-                <!-- ARAMA -->
                 <input type="text" id="searchInput" placeholder="🔍 Dosya ara..." class="search-input">
-                <!-- FİLTRE -->
                 <div class="filter-buttons">
                     <button class="filter-btn active" data-filter="all">Tümü</button>
                     <button class="filter-btn" data-filter="image">🖼️</button>
                     <button class="filter-btn" data-filter="video">🎬</button>
                 </div>
-                <!-- SIRALAMA -->
                 <select id="sortSelect" class="sort-select">
                     <option value="newest">🕐 En Yeni</option>
                     <option value="oldest">🕐 En Eski</option>
                     <option value="az">A-Z</option>
                     <option value="za">Z-A</option>
                 </select>
-                <!-- ZIP İNDİR -->
                 <button class="btn-download-all" id="downloadAllBtn">
                     <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm">
                     ZIP
@@ -1165,7 +1156,6 @@
                 setStatus(`📸 ${data.length} dosya bulundu`, 'success');
                 galleryCount.textContent = `${data.length} dosya`;
 
-                // Sıralamayı uygula
                 siralaVeGoster();
 
             } catch (e) {
@@ -1190,7 +1180,7 @@
                 return;
             }
 
-            // 1. Sıralama
+            const cfg = getConfig();
             const sorted = [...tumDosyalar];
             const secim = sortSelect.value;
 
@@ -1204,10 +1194,7 @@
                 sorted.sort((a, b) => b.name.localeCompare(a.name));
             }
 
-            // 2. Galeriyi oluştur
-            const cfg = getConfig();
             gallery.innerHTML = '';
-
             let gosterilen = 0;
             const arama = searchInput.value.toLowerCase().trim();
 
@@ -1217,19 +1204,16 @@
                 const isVideo = /\.(mp4|webm|mov|avi|mkv|3gp)$/i.test(item.name);
                 const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i.test(item.name);
 
-                // Filtre kontrolü
                 let filtreGecer = true;
                 if (aktifFiltre === 'image' && !isImage) filtreGecer = false;
                 if (aktifFiltre === 'video' && !isVideo) filtreGecer = false;
 
-                // Arama kontrolü
                 let aramaGecer = true;
                 if (arama && !item.name.toLowerCase().includes(arama)) aramaGecer = false;
 
                 if (!filtreGecer || !aramaGecer) continue;
 
                 gosterilen++;
-
                 const div = document.createElement('div');
                 div.className = 'gallery-item';
 
@@ -1279,7 +1263,6 @@
             }
         }
 
-        // Filtre butonları
         filterBtns.forEach(btn => {
             btn.addEventListener('click', function() {
                 filterBtns.forEach(b => b.classList.remove('active'));
@@ -1289,14 +1272,11 @@
             });
         });
 
-        // Arama
         searchInput.addEventListener('input', siralaVeGoster);
-
-        // Sıralama
         sortSelect.addEventListener('change', siralaVeGoster);
 
         // ============================================
-        // TÜMÜNÜ İNDİR (ZIP)
+        // TÜMÜNÜ İNDİR (ZIP - Düzeltilmiş)
         // ============================================
         downloadAllBtn.addEventListener('click', async function() {
             const cfg = getConfig();
@@ -1306,7 +1286,7 @@
             }
 
             this.disabled = true;
-            this.innerHTML = '⏳ Hazırlanıyor...';
+            this.innerHTML = '⏳ Dosyalar taranıyor...';
 
             try {
                 const url = `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar`;
@@ -1331,17 +1311,28 @@
                     return;
                 }
 
-                this.innerHTML = `⏳ ${data.length} dosya taranıyor...`;
+                if (data.length > 500) {
+                    if (!confirm(`⚠️ ${data.length} dosya var. Bu kadar dosyayı ZIP olarak indirmek uzun sürebilir. Devam etmek istiyor musunuz?`)) {
+                        this.disabled = false;
+                        this.innerHTML =
+                            '<img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm"> ZIP';
+                        return;
+                    }
+                }
+
+                this.innerHTML = `⏳ ${data.length} dosya indiriliyor...`;
                 setStatus(`⏳ ${data.length} dosya taranıyor...`, 'loading');
 
                 const zip = new JSZip();
                 let indirilen = 0;
                 let hatali = 0;
 
-                for (const item of data) {
+                for (let i = 0; i < data.length; i++) {
+                    const item = data[i];
                     const rawUrl =
                         `https://raw.githubusercontent.com/${cfg.user}/${cfg.repo}/main/fotolar/${encodeURIComponent(item.name)}`;
-                    this.innerHTML = `⏳ ${indirilen + 1}/${data.length}: ${item.name}`;
+                    
+                    this.innerHTML = `⏳ ${i + 1}/${data.length}: ${item.name}`;
 
                     try {
                         const response = await fetch(rawUrl);
@@ -1355,6 +1346,10 @@
                     } catch (e) {
                         hatali++;
                     }
+
+                    if (i % 50 === 0 && i > 0) {
+                        await new Promise(r => setTimeout(r, 100));
+                    }
                 }
 
                 this.innerHTML = '⏳ ZIP oluşturuluyor...';
@@ -1362,7 +1357,7 @@
                 const zipBlob = await zip.generateAsync({ type: 'blob' });
                 saveAs(zipBlob, `galeri_${new Date().toISOString().slice(0,10)}.zip`);
 
-                setStatus(`✅ ${indirilen} dosya indirildi (${hatali} hata)`, 'success');
+                setStatus(`✅ ${indirilen} dosya ZIP olarak indirildi (${hatali} hata)`, 'success');
                 this.innerHTML =
                     '<img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm"> ZIP';
                 this.disabled = false;
@@ -1563,4 +1558,4 @@
     </script>
 
 </body>
-    </html>
+</html>
