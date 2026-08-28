@@ -56,13 +56,6 @@
             margin: 0 auto;
         }
 
-        .icon-img-xl {
-            width: 44px;
-            height: 44px;
-            display: block;
-            margin: 0 auto;
-        }
-
         .header-logo img {
             width: 28px;
             height: 28px;
@@ -326,6 +319,17 @@
             transform: translateY(-2px);
         }
 
+        .btn-slideshow {
+            background: rgba(240, 147, 62, 0.12);
+            color: #f0933e;
+            border: 1px solid rgba(240, 147, 62, 0.15);
+        }
+
+        .btn-slideshow:hover {
+            background: rgba(240, 147, 62, 0.2);
+            transform: translateY(-2px);
+        }
+
         .gallery-header {
             display: flex;
             justify-content: space-between;
@@ -340,7 +344,7 @@
         .gallery-header .left {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 10px;
             font-size: 13px;
             color: #6b7a93;
             font-weight: 500;
@@ -361,70 +365,17 @@
             font-size: 12px;
         }
 
-        .search-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 5px 12px;
-            font-size: 13px;
-            color: #e8edf5;
-            outline: none;
-            transition: 0.25s;
-            font-family: inherit;
-            width: 140px;
-        }
-
-        .search-input:focus {
-            border-color: #f0933e;
-            box-shadow: 0 0 0 3px rgba(240, 147, 62, 0.1);
-        }
-
-        .search-input::placeholder {
-            color: #4a5268;
-        }
-
-        .filter-buttons {
+        .gallery-stats {
             display: flex;
-            gap: 4px;
-        }
-
-        .filter-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 8px;
-            padding: 4px 10px;
-            font-size: 13px;
-            color: #6b7a93;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: inherit;
-        }
-
-        .filter-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .filter-btn.active {
-            background: rgba(240, 147, 62, 0.15);
-            border-color: #f0933e;
-            color: #f0933e;
-        }
-
-        .sort-select {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 5px 10px;
+            gap: 14px;
             font-size: 12px;
-            color: #e8edf5;
-            outline: none;
-            font-family: inherit;
-            cursor: pointer;
+            color: #7a879f;
         }
 
-        .sort-select option {
-            background: #1a2332;
-            color: #e8edf5;
+        .gallery-stats span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .gallery {
@@ -488,11 +439,6 @@
             display: block;
         }
 
-        .gallery-item .media .play-icon,
-        .gallery-item .media .video-duration {
-            display: none !important;
-        }
-
         .gallery-item .info {
             padding: 10px 14px 14px;
             display: flex;
@@ -549,136 +495,134 @@
             background: rgba(248, 81, 73, 0.08);
         }
 
-        .modal {
+        /* ===== SLAYT GÖSTERİSİ ===== */
+        .slideshow-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.94);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            z-index: 999;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
             align-items: center;
             justify-content: center;
-            padding: 24px;
-            animation: fadeIn 0.25s ease;
+            flex-direction: column;
         }
 
-        .modal.active {
+        .slideshow-overlay.active {
             display: flex;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.97);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .modal-content {
-            max-width: 94vw;
-            max-height: 92vh;
-            border-radius: 20px;
-            position: relative;
-            background: #0b0e14;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
-        }
-
-        .modal-content img,
-        .modal-content video {
-            max-width: 94vw;
-            max-height: 85vh;
-            display: block;
+        .slideshow-overlay .slide-img {
+            max-width: 90vw;
+            max-height: 80vh;
             object-fit: contain;
             border-radius: 16px;
         }
 
-        .modal-content video {
+        .slideshow-overlay .slide-video {
+            max-width: 90vw;
+            max-height: 80vh;
+            border-radius: 16px;
             background: #000;
-            width: auto;
-            height: auto;
         }
 
-        .modal-close {
+        .slideshow-overlay .slide-info {
+            color: #8892a8;
+            font-size: 14px;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .slideshow-overlay .slide-counter {
+            color: #4a5268;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .slideshow-close {
             position: absolute;
-            top: 14px;
-            right: 18px;
-            background: rgba(0, 0, 0, 0.6);
+            top: 20px;
+            right: 30px;
+            background: none;
             border: none;
             color: #fff;
-            font-size: 22px;
-            width: 40px;
-            height: 40px;
+            font-size: 36px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: 0.2s;
+            z-index: 10;
+        }
+
+        .slideshow-close:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .slideshow-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 28px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             cursor: pointer;
-            transition: 0.25s;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 5;
+            z-index: 10;
         }
 
-        .modal-close:hover {
+        .slideshow-nav:hover {
             background: rgba(255, 255, 255, 0.1);
-            transform: rotate(90deg) scale(1.05);
         }
 
-        .modal-bottom {
+        .slideshow-nav.prev {
+            left: 20px;
+        }
+
+        .slideshow-nav.next {
+            right: 20px;
+        }
+
+        .slideshow-controls {
             position: absolute;
-            bottom: 24px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
+            gap: 16px;
             align-items: center;
-            gap: 14px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            padding: 10px 18px 10px 24px;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            max-width: 90%;
-            z-index: 5;
+            z-index: 10;
         }
 
-        .modal-filename {
-            color: #9aabbf;
-            font-size: 13px;
-            max-width: 180px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .modal-download {
-            background: linear-gradient(135deg, #f0933e, #e67e22);
+        .slideshow-controls button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: #fff;
-            border: none;
+            padding: 8px 20px;
             border-radius: 30px;
-            padding: 9px 24px;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13px;
             cursor: pointer;
-            transition: 0.25s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            transition: 0.2s;
             font-family: inherit;
-            white-space: nowrap;
         }
 
-        .modal-download:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 28px rgba(240, 147, 62, 0.4);
+        .slideshow-controls button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .slideshow-controls .play-btn {
+            background: rgba(240, 147, 62, 0.2);
+            border-color: #f0933e;
+            color: #f0933e;
+        }
+
+        .slideshow-controls .play-btn:hover {
+            background: rgba(240, 147, 62, 0.3);
         }
 
         @media (max-width: 768px) {
@@ -744,23 +688,42 @@
                 width: 32px;
                 height: 32px;
             }
-            .icon-img-xl {
-                width: 36px;
-                height: 36px;
-            }
             .gallery-header {
                 flex-direction: column;
                 align-items: stretch;
             }
             .gallery-header .left {
                 justify-content: center;
+                flex-wrap: wrap;
             }
             .gallery-header .right {
                 justify-content: center;
                 flex-wrap: wrap;
             }
-            .search-input {
-                width: 100%;
+            .gallery-stats {
+                font-size: 11px;
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .slideshow-nav {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+            .slideshow-nav.prev {
+                left: 10px;
+            }
+            .slideshow-nav.next {
+                right: 10px;
+            }
+            .slideshow-controls {
+                bottom: 16px;
+                gap: 10px;
+            }
+            .slideshow-controls button {
+                padding: 6px 14px;
+                font-size: 12px;
             }
         }
 
@@ -863,6 +826,9 @@
                 <img src="https://i.postimg.cc/8Pxf7kjM/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Listele" class="icon-img">
                 Listele
             </button>
+            <button class="btn btn-slideshow" id="slideshowBtn">
+                🎬 Slayt Başlat
+            </button>
             <button class="btn btn-clear" id="clearBtn">
                 <img src="https://i.postimg.cc/g0WwKMyH/e625067c-560b-4f86-a39c-725239da40f1-(1)(1).png" alt="Temizle" class="icon-img">
                 Temizle
@@ -875,20 +841,10 @@
                 <img src="https://i.postimg.cc/T29c5b6r/e625067c-560b-4f86-a39c-725239da40f1.png" alt="Galeri" class="icon-img-sm">
                 <span>Galeri</span>
                 <span class="count" id="galleryCount">0 dosya</span>
-            </div>
-            <div class="right">
-                <input type="text" id="searchInput" placeholder="🔍 Dosya ara..." class="search-input">
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all">Tümü</button>
-                    <button class="filter-btn" data-filter="image">🖼️</button>
-                    <button class="filter-btn" data-filter="video">🎬</button>
+                <div class="gallery-stats" id="galleryStats">
+                    <span>🖼️ <span id="imageCount">0</span></span>
+                    <span>🎬 <span id="videoCount">0</span></span>
                 </div>
-                <select id="sortSelect" class="sort-select">
-                    <option value="newest">🕐 En Yeni</option>
-                    <option value="oldest">🕐 En Eski</option>
-                    <option value="az">A-Z</option>
-                    <option value="za">Z-A</option>
-                </select>
             </div>
         </div>
 
@@ -917,6 +873,20 @@
         </div>
     </div>
 
+    <!-- SLAYT GÖSTERİSİ -->
+    <div class="slideshow-overlay" id="slideshowOverlay">
+        <button class="slideshow-close" id="slideshowClose">✕</button>
+        <button class="slideshow-nav prev" id="slideshowPrev">‹</button>
+        <button class="slideshow-nav next" id="slideshowNext">›</button>
+        <div id="slideshowContent"></div>
+        <div class="slide-info" id="slideshowInfo"></div>
+        <div class="slide-counter" id="slideshowCounter"></div>
+        <div class="slideshow-controls">
+            <button id="slideshowPlayBtn" class="play-btn">⏸ Durdur</button>
+            <button id="slideshowSpeedBtn">⏱ 3sn</button>
+        </div>
+    </div>
+
     <script>
         // ============================================
         // DOM REFERANSLARI
@@ -930,23 +900,37 @@
         const fileArea = document.getElementById('fileArea');
         const fileCount = document.getElementById('fileCount');
         const galleryCount = document.getElementById('galleryCount');
+        const imageCount = document.getElementById('imageCount');
+        const videoCount = document.getElementById('videoCount');
         const uploadBtn = document.getElementById('uploadBtn');
         const listBtn = document.getElementById('listBtn');
         const clearBtn = document.getElementById('clearBtn');
+        const slideshowBtn = document.getElementById('slideshowBtn');
         const gallery = document.getElementById('gallery');
         const modal = document.getElementById('modal');
         const modalMedia = document.getElementById('modalMedia');
         const modalFilename = document.getElementById('modalFilename');
         const modalClose = document.getElementById('modalClose');
         const modalDownload = document.getElementById('modalDownload');
-        const searchInput = document.getElementById('searchInput');
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const sortSelect = document.getElementById('sortSelect');
+
+        // Slayt
+        const slideshowOverlay = document.getElementById('slideshowOverlay');
+        const slideshowContent = document.getElementById('slideshowContent');
+        const slideshowInfo = document.getElementById('slideshowInfo');
+        const slideshowCounter = document.getElementById('slideshowCounter');
+        const slideshowClose = document.getElementById('slideshowClose');
+        const slideshowPrev = document.getElementById('slideshowPrev');
+        const slideshowNext = document.getElementById('slideshowNext');
+        const slideshowPlayBtn = document.getElementById('slideshowPlayBtn');
+        const slideshowSpeedBtn = document.getElementById('slideshowSpeedBtn');
 
         let currentModalUrl = '';
         let currentModalName = '';
         let tumDosyalar = [];
-        let aktifFiltre = 'all';
+        let slideshowIndex = 0;
+        let slideshowTimer = null;
+        let slideshowSpeed = 3000;
+        let slideshowPlaying = true;
 
         // ============================================
         // YARDIMCI FONKSİYONLAR
@@ -1043,13 +1027,19 @@
             }
 
             uploadBtn.disabled = false;
+            
             if (failed === 0 && success > 0) {
-                setStatus(`✅ ${success} dosya yüklendi`, 'success');
+                setStatus(`✅ ${success} dosya yüklendi, galeri yenileniyor...`, 'success');
                 fileInput.value = '';
                 updateFileCount();
-                listFiles();
+                setTimeout(() => {
+                    listFiles();
+                }, 3000);
             } else if (success > 0) {
                 setStatus(`⚠️ ${success} başarılı, ${failed} hata`, 'error');
+                setTimeout(() => {
+                    listFiles();
+                }, 3000);
             } else {
                 setStatus('❌ Hiçbir dosya yüklenemedi', 'error');
             }
@@ -1067,7 +1057,7 @@
         uploadBtn.addEventListener('click', uploadFiles);
 
         // ============================================
-        // LİSTELEME (Hızlandırılmış)
+        // LİSTELEME
         // ============================================
         async function listFiles() {
             const cfg = validateConfig();
@@ -1092,6 +1082,8 @@
                         </div>
                     `;
                     galleryCount.textContent = '0 dosya';
+                    imageCount.textContent = '0';
+                    videoCount.textContent = '0';
                     tumDosyalar = [];
                     return;
                 }
@@ -1112,14 +1104,74 @@
                         </div>
                     `;
                     galleryCount.textContent = '0 dosya';
+                    imageCount.textContent = '0';
+                    videoCount.textContent = '0';
                     tumDosyalar = [];
                     return;
                 }
 
                 tumDosyalar = data;
+                
+                // İstatistikleri hesapla
+                let imgSay = 0, vidSay = 0;
+                data.forEach(item => {
+                    if (/\.(mp4|webm|mov|avi|mkv|3gp)$/i.test(item.name)) vidSay++;
+                    else if (/\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i.test(item.name)) imgSay++;
+                });
+                imageCount.textContent = imgSay;
+                videoCount.textContent = vidSay;
+
                 setStatus(`📸 ${data.length} dosya bulundu`, 'success');
                 galleryCount.textContent = `${data.length} dosya`;
-                siralaVeGoster();
+
+                // Galeriyi oluştur
+                const fragment = document.createDocumentFragment();
+                data.sort((a, b) => a.name.localeCompare(b.name)).reverse();
+
+                for (const item of data) {
+                    const rawUrl =
+                        `https://raw.githubusercontent.com/${cfg.user}/${cfg.repo}/main/fotolar/${encodeURIComponent(item.name)}`;
+                    const isVideo = /\.(mp4|webm|mov|avi|mkv|3gp)$/i.test(item.name);
+                    const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i.test(item.name);
+
+                    const div = document.createElement('div');
+                    div.className = 'gallery-item';
+
+                    let mediaHtml = '';
+                    if (isVideo) {
+                        mediaHtml = `
+                            <div class="media" onclick="openModal('${rawUrl}','${item.name}',true)">
+                                <video src="${rawUrl}" preload="metadata" playsinline muted></video>
+                            </div>
+                        `;
+                    } else if (isImage) {
+                        mediaHtml = `
+                            <div class="media" onclick="openModal('${rawUrl}','${item.name}',false)">
+                                <img src="${rawUrl}" loading="lazy" 
+                                     onerror="this.parentElement.innerHTML='<span style=color:#4a5268;font-size:20px;>⚠️</span>'">
+                            </div>
+                        `;
+                    } else {
+                        mediaHtml =
+                            `<div class="media" style="color:#4a5268;font-size:13px;text-align:center;padding:10px;">📄 ${item.name}</div>`;
+                    }
+
+                    div.innerHTML = `
+                        ${mediaHtml}
+                        <div class="info">
+                            <span class="name" title="${item.name}">${item.name}</span>
+                            <div class="actions">
+                                <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">
+                                    <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="İndir" class="icon-img-sm">
+                                    İndir
+                                </button>
+                                <button class="delete-btn" onclick="deleteFile('${item.name}')">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                    fragment.appendChild(div);
+                }
+                gallery.appendChild(fragment);
 
             } catch (e) {
                 setStatus(`❌ ${e.message}`, 'error');
@@ -1129,119 +1181,122 @@
         listBtn.addEventListener('click', listFiles);
 
         // ============================================
-        // SIRALAMA, FİLTRELEME VE ARAMA (Hızlandırılmış)
+        // SLAYT GÖSTERİSİ
         // ============================================
-        function siralaVeGoster() {
+        function startSlideshow() {
             if (!tumDosyalar || !tumDosyalar.length) {
-                gallery.innerHTML =
-                    `
-                    <div class="gallery-empty">
-                        <img src="https://i.postimg.cc/TY1HR0Dk/e625067c-560b-4f86-a39c-725239da40f1-(1)(3).png" alt="Boş" class="icon-img-lg" style="margin-bottom:8px;">
-                        <br>Henüz fotoğraf yok
-                    </div>
-                `;
+                setStatus('⚠️ Gösterilecek dosya yok', 'error');
                 return;
             }
 
-            const cfg = getConfig();
-            const sorted = [...tumDosyalar];
-            const secim = sortSelect.value;
+            slideshowIndex = 0;
+            slideshowOverlay.classList.add('active');
+            showSlide();
+            startSlideshowTimer();
+        }
 
-            if (secim === 'newest') {
-                sorted.sort((a, b) => (b.sha || '').localeCompare(a.sha || ''));
-            } else if (secim === 'oldest') {
-                sorted.sort((a, b) => (a.sha || '').localeCompare(b.sha || ''));
-            } else if (secim === 'az') {
-                sorted.sort((a, b) => a.name.localeCompare(b.name));
-            } else if (secim === 'za') {
-                sorted.sort((a, b) => b.name.localeCompare(a.name));
+        function showSlide() {
+            const items = tumDosyalar;
+            if (!items || !items.length) return;
+
+            const item = items[slideshowIndex];
+            const rawUrl =
+                `https://raw.githubusercontent.com/${username.value.trim()}/${repo.value.trim()}/main/fotolar/${encodeURIComponent(item.name)}`;
+            const isVideo = /\.(mp4|webm|mov|avi|mkv|3gp)$/i.test(item.name);
+
+            slideshowContent.innerHTML = '';
+            if (isVideo) {
+                const video = document.createElement('video');
+                video.src = rawUrl;
+                video.controls = true;
+                video.autoplay = true;
+                video.className = 'slide-video';
+                slideshowContent.appendChild(video);
+            } else {
+                const img = document.createElement('img');
+                img.src = rawUrl;
+                img.className = 'slide-img';
+                img.alt = item.name;
+                slideshowContent.appendChild(img);
             }
 
-            gallery.innerHTML = '';
-            let gosterilen = 0;
-            const arama = searchInput.value.toLowerCase().trim();
+            slideshowInfo.textContent = item.name;
+            slideshowCounter.textContent = `${slideshowIndex + 1} / ${items.length}`;
+        }
 
-            // DocumentFragment ile hızlandır
-            const fragment = document.createDocumentFragment();
+        function startSlideshowTimer() {
+            if (slideshowTimer) clearInterval(slideshowTimer);
+            slideshowPlaying = true;
+            slideshowPlayBtn.textContent = '⏸ Durdur';
+            slideshowTimer = setInterval(() => {
+                if (!slideshowPlaying) return;
+                slideshowIndex = (slideshowIndex + 1) % tumDosyalar.length;
+                showSlide();
+            }, slideshowSpeed);
+        }
 
-            for (const item of sorted) {
-                const rawUrl =
-                    `https://raw.githubusercontent.com/${cfg.user}/${cfg.repo}/main/fotolar/${encodeURIComponent(item.name)}`;
-                const isVideo = /\.(mp4|webm|mov|avi|mkv|3gp)$/i.test(item.name);
-                const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i.test(item.name);
-
-                let filtreGecer = true;
-                if (aktifFiltre === 'image' && !isImage) filtreGecer = false;
-                if (aktifFiltre === 'video' && !isVideo) filtreGecer = false;
-
-                let aramaGecer = true;
-                if (arama && !item.name.toLowerCase().includes(arama)) aramaGecer = false;
-
-                if (!filtreGecer || !aramaGecer) continue;
-
-                gosterilen++;
-                const div = document.createElement('div');
-                div.className = 'gallery-item';
-
-                let mediaHtml = '';
-                if (isVideo) {
-                    mediaHtml = `
-                        <div class="media" onclick="openModal('${rawUrl}','${item.name}',true)">
-                            <video src="${rawUrl}" preload="metadata" playsinline muted></video>
-                        </div>
-                    `;
-                } else if (isImage) {
-                    mediaHtml = `
-                        <div class="media" onclick="openModal('${rawUrl}','${item.name}',false)">
-                            <img src="${rawUrl}" loading="lazy" 
-                                 onerror="this.parentElement.innerHTML='<span style=color:#4a5268;font-size:20px;>⚠️</span>'">
-                        </div>
-                    `;
-                } else {
-                    mediaHtml =
-                        `<div class="media" style="color:#4a5268;font-size:13px;text-align:center;padding:10px;">📄 ${item.name}</div>`;
-                }
-
-                div.innerHTML = `
-                    ${mediaHtml}
-                    <div class="info">
-                        <span class="name" title="${item.name}">${item.name}</span>
-                        <div class="actions">
-                            <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">
-                                <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="İndir" class="icon-img-sm">
-                                İndir
-                            </button>
-                            <button class="delete-btn" onclick="deleteFile('${item.name}')">🗑️</button>
-                        </div>
-                    </div>
-                `;
-                fragment.appendChild(div);
+        function stopSlideshowTimer() {
+            if (slideshowTimer) {
+                clearInterval(slideshowTimer);
+                slideshowTimer = null;
             }
+            slideshowPlaying = false;
+            slideshowPlayBtn.textContent = '▶️ Devam';
+        }
 
-            gallery.appendChild(fragment);
-
-            if (gosterilen === 0) {
-                gallery.innerHTML =
-                    `
-                    <div class="gallery-empty">
-                        <img src="https://i.postimg.cc/TY1HR0Dk/e625067c-560b-4f86-a39c-725239da40f1-(1)(3).png" alt="Boş" class="icon-img-lg" style="margin-bottom:8px;">
-                        <br>Sonuç bulunamadı
-                    </div>
-                `;
+        function toggleSlideshowPlay() {
+            if (slideshowPlaying) {
+                stopSlideshowTimer();
+            } else {
+                startSlideshowTimer();
             }
         }
 
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                aktifFiltre = this.dataset.filter;
-                siralaVeGoster();
-            });
+        function changeSlideshowSpeed() {
+            const speeds = [2000, 3000, 5000, 8000];
+            const labels = ['2sn', '3sn', '5sn', '8sn'];
+            let idx = speeds.indexOf(slideshowSpeed);
+            idx = (idx + 1) % speeds.length;
+            slideshowSpeed = speeds[idx];
+            slideshowSpeedBtn.textContent = `⏱ ${labels[idx]}`;
+            if (slideshowPlaying) {
+                startSlideshowTimer();
+            }
+        }
+
+        slideshowBtn.addEventListener('click', startSlideshow);
+
+        slideshowClose.addEventListener('click', () => {
+            slideshowOverlay.classList.remove('active');
+            stopSlideshowTimer();
         });
 
-        searchInput.addEventListener('input', siralaVeGoster);
-        sortSelect.addEventListener('change', siralaVeGoster);
+        slideshowPrev.addEventListener('click', () => {
+            if (tumDosyalar && tumDosyalar.length) {
+                slideshowIndex = (slideshowIndex - 1 + tumDosyalar.length) % tumDosyalar.length;
+                showSlide();
+            }
+        });
+
+        slideshowNext.addEventListener('click', () => {
+            if (tumDosyalar && tumDosyalar.length) {
+                slideshowIndex = (slideshowIndex + 1) % tumDosyalar.length;
+                showSlide();
+            }
+        });
+
+        slideshowPlayBtn.addEventListener('click', toggleSlideshowPlay);
+        slideshowSpeedBtn.addEventListener('click', changeSlideshowSpeed);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                slideshowOverlay.classList.remove('active');
+                stopSlideshowTimer();
+            }
+            if (e.key === 'ArrowLeft') slideshowPrev.click();
+            if (e.key === 'ArrowRight') slideshowNext.click();
+            if (e.key === ' ') { e.preventDefault(); toggleSlideshowPlay(); }
+        });
 
         // ============================================
         // MODAL
@@ -1279,7 +1334,7 @@
         });
 
         // ============================================
-        // İNDİRME (Hızlı)
+        // İNDİRME
         // ============================================
         function downloadFile(url, filename) {
             const link = document.createElement('a');
