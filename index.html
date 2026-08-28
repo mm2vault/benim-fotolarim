@@ -24,7 +24,6 @@
             background-image: radial-gradient(ellipse at 50% 0%, #1a2332 0%, #0b0e14 70%);
         }
 
-        /* ===== ANA KART ===== */
         .app {
             max-width: 900px;
             width: 100%;
@@ -37,7 +36,6 @@
             border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        /* ===== HEADER ===== */
         .header {
             display: flex;
             align-items: center;
@@ -85,7 +83,6 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* ===== GİRİŞ ALANLARI ===== */
         .input-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -129,7 +126,6 @@
             color: #4a5268;
         }
 
-        /* ===== DURUM ===== */
         .status {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 14px;
@@ -171,7 +167,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* ===== DOSYA ALANI ===== */
         .file-area {
             border: 2px dashed rgba(255, 255, 255, 0.08);
             border-radius: 18px;
@@ -227,7 +222,6 @@
             color: #8892a8;
         }
 
-        /* ===== BUTONLAR ===== */
         .buttons {
             display: grid;
             grid-template-columns: 1fr 1fr 0.7fr;
@@ -288,7 +282,6 @@
             transform: translateY(-2px);
         }
 
-        /* ===== GALERİ ===== */
         .gallery-header {
             display: flex;
             justify-content: space-between;
@@ -431,7 +424,6 @@
             background: rgba(248, 81, 73, 0.1);
         }
 
-        /* ===== MODAL ===== */
         .modal {
             display: none;
             position: fixed;
@@ -543,7 +535,6 @@
             box-shadow: 0 4px 24px rgba(240, 147, 62, 0.4);
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 700px) {
             .app { padding: 18px 14px; border-radius: 24px; }
             .input-grid { grid-template-columns: 1fr; gap: 10px; }
@@ -568,7 +559,6 @@
 
 <div class="app">
 
-    <!-- HEADER -->
     <div class="header">
         <div class="header-left">
             <div class="header-logo">📸</div>
@@ -577,7 +567,6 @@
         <span class="header-badge">✦ Premium</span>
     </div>
 
-    <!-- GİRİŞ -->
     <div class="input-grid">
         <div class="input-group">
             <label>👤 Kullanıcı Adı</label>
@@ -593,13 +582,11 @@
         </div>
     </div>
 
-    <!-- STATUS -->
     <div class="status" id="status">
         <span class="spinner"></span>
         <span class="msg">✨ Hazır</span>
     </div>
 
-    <!-- DOSYA ALANI -->
     <div class="file-area" id="fileArea">
         <span class="icon">🖼️</span>
         <div class="text">
@@ -609,20 +596,17 @@
         <input type="file" id="fileInput" multiple accept="image/*,video/*">
     </div>
 
-    <!-- BUTONLAR -->
     <div class="buttons">
         <button class="btn btn-upload" id="uploadBtn">📤 Yükle</button>
         <button class="btn btn-list" id="listBtn">📋 Listele</button>
         <button class="btn btn-clear" id="clearBtn">🗑️ Temizle</button>
     </div>
 
-    <!-- GALERİ HEADER -->
     <div class="gallery-header">
         <span>📸 Galeri</span>
         <span class="count" id="galleryCount">0 dosya</span>
     </div>
 
-    <!-- GALERİ -->
     <div class="gallery" id="gallery">
         <div class="gallery-empty">📭 Henüz fotoğraf yok</div>
     </div>
@@ -642,7 +626,6 @@
 </div>
 
 <script>
-// ===== DOM =====
 const username = document.getElementById('username');
 const repo = document.getElementById('repo');
 const token = document.getElementById('token');
@@ -694,7 +677,6 @@ function updateFileCount() {
 
 fileInput.addEventListener('change', updateFileCount);
 
-// ===== DRAG & DROP =====
 fileArea.addEventListener('dragover', e => { e.preventDefault(); fileArea.classList.add('dragover'); });
 fileArea.addEventListener('dragleave', () => fileArea.classList.remove('dragover'));
 fileArea.addEventListener('drop', e => {
@@ -848,15 +830,33 @@ modalClose.addEventListener('click', () => { modal.classList.remove('active'); m
 modal.addEventListener('click', (e) => { if (e.target === modal) { modal.classList.remove('active'); modalMedia.innerHTML = ''; } });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { modal.classList.remove('active'); modalMedia.innerHTML = ''; } });
 
-// ===== İNDİR =====
+// ===== İNDİR - DÜZELTİLDİ =====
 function downloadFile(url, filename) {
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    link.target = '_blank';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Önce fetch ile dosyayı al, sonra blob olarak indir
+    fetch(url)
+        .then(response => {
+            if (!response.ok) throw new Error('Dosya alınamadı');
+            return response.blob();
+        })
+        .then(blob => {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        })
+        .catch(() => {
+            // Fallback: direkt link ile indir
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
 }
 
 modalDownload.addEventListener('click', () => {
