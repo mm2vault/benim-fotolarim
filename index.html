@@ -397,14 +397,30 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            background: #000;
         }
 
         .gallery-item .media .play-icon {
             position: absolute;
-            font-size: 40px;
-            color: rgba(255, 255, 255, 0.8);
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+            font-size: 44px;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.7);
             pointer-events: none;
+            z-index: 2;
+        }
+
+        .gallery-item .media .video-duration {
+            position: absolute;
+            bottom: 8px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            font-size: 11px;
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-weight: 500;
+            z-index: 2;
+            backdrop-filter: blur(4px);
         }
 
         .gallery-item .info {
@@ -470,7 +486,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.92);
+            background: rgba(0, 0, 0, 0.94);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             z-index: 999;
@@ -497,7 +513,7 @@
 
         .modal-content {
             max-width: 94vw;
-            max-height: 90vh;
+            max-height: 92vh;
             border-radius: 20px;
             position: relative;
             background: #0b0e14;
@@ -511,17 +527,23 @@
         .modal-content img,
         .modal-content video {
             max-width: 94vw;
-            max-height: 82vh;
+            max-height: 85vh;
             display: block;
             object-fit: contain;
             border-radius: 16px;
+        }
+
+        .modal-content video {
+            background: #000;
+            width: auto;
+            height: auto;
         }
 
         .modal-close {
             position: absolute;
             top: 14px;
             right: 18px;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             border: none;
             color: #fff;
             font-size: 22px;
@@ -535,34 +557,36 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 5;
         }
 
         .modal-close:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.1);
             transform: rotate(90deg) scale(1.05);
         }
 
         .modal-bottom {
             position: absolute;
-            bottom: 20px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             align-items: center;
             gap: 14px;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 8px 16px 8px 22px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 10px 18px 10px 24px;
             border-radius: 50px;
             border: 1px solid rgba(255, 255, 255, 0.06);
             max-width: 90%;
+            z-index: 5;
         }
 
         .modal-filename {
-            color: #7a879f;
+            color: #9aabbf;
             font-size: 13px;
-            max-width: 160px;
+            max-width: 180px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -573,8 +597,8 @@
             color: #fff;
             border: none;
             border-radius: 30px;
-            padding: 8px 22px;
-            font-size: 13px;
+            padding: 9px 24px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: 0.25s;
@@ -586,8 +610,8 @@
         }
 
         .modal-download:hover {
-            transform: scale(1.04);
-            box-shadow: 0 4px 24px rgba(240, 147, 62, 0.35);
+            transform: scale(1.05);
+            box-shadow: 0 4px 28px rgba(240, 147, 62, 0.4);
         }
 
         /* ============================================
@@ -635,7 +659,7 @@
                 bottom: 14px;
             }
             .modal-filename {
-                max-width: 90px;
+                max-width: 80px;
                 font-size: 12px;
             }
             .modal-download {
@@ -953,33 +977,34 @@
                     let mediaHtml = '';
                     if (isVideo) {
                         mediaHtml = `
-                                    <div class="media" onclick="openModal('${rawUrl}','${item.name}',true)">
-                                        <video src="${rawUrl}" muted></video>
-                                        <span class="play-icon">▶️</span>
-                                    </div>
-                                `;
+                            <div class="media" onclick="openModal('${rawUrl}','${item.name}',true)">
+                                <video src="${rawUrl}" muted preload="metadata"></video>
+                                <span class="play-icon">▶️</span>
+                                <span class="video-duration">🎬</span>
+                            </div>
+                        `;
                     } else if (isImage) {
                         mediaHtml = `
-                                    <div class="media" onclick="openModal('${rawUrl}','${item.name}',false)">
-                                        <img src="${rawUrl}" loading="lazy" 
-                                             onerror="this.parentElement.innerHTML='<span style=color:#4a5268;font-size:20px;>⚠️</span>'">
-                                    </div>
-                                `;
+                            <div class="media" onclick="openModal('${rawUrl}','${item.name}',false)">
+                                <img src="${rawUrl}" loading="lazy" 
+                                     onerror="this.parentElement.innerHTML='<span style=color:#4a5268;font-size:20px;>⚠️</span>'">
+                            </div>
+                        `;
                     } else {
                         mediaHtml =
                             `<div class="media" style="color:#4a5268;font-size:13px;text-align:center;padding:10px;">📄 ${item.name}</div>`;
                     }
 
                     div.innerHTML = `
-                                ${mediaHtml}
-                                <div class="info">
-                                    <span class="name" title="${item.name}">${item.name}</span>
-                                    <div class="actions">
-                                        <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">⬇️</button>
-                                        <button class="delete-btn" onclick="deleteFile('${item.name}')">🗑️</button>
-                                    </div>
-                                </div>
-                            `;
+                        ${mediaHtml}
+                        <div class="info">
+                            <span class="name" title="${item.name}">${item.name}</span>
+                            <div class="actions">
+                                <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">⬇️</button>
+                                <button class="delete-btn" onclick="deleteFile('${item.name}')">🗑️</button>
+                            </div>
+                        </div>
+                    `;
                     gallery.appendChild(div);
                 }
             } catch (e) {
@@ -997,9 +1022,12 @@
             currentModalName = name;
             modalFilename.textContent = name;
             modal.classList.add('active');
-            modalMedia.innerHTML = isVideo ?
-                `<video src="${url}" controls autoplay></video>` :
-                `<img src="${url}" alt="Fotoğraf">`;
+
+            if (isVideo) {
+                modalMedia.innerHTML = `<video src="${url}" controls autoplay style="max-width:94vw;max-height:85vh;border-radius:16px;background:#000;"></video>`;
+            } else {
+                modalMedia.innerHTML = `<img src="${url}" alt="Fotoğraf" style="max-width:94vw;max-height:85vh;border-radius:16px;">`;
+            }
         }
 
         modalClose.addEventListener('click', () => {
@@ -1038,7 +1066,6 @@
                     setTimeout(() => URL.revokeObjectURL(link.href), 2000);
                 })
                 .catch(() => {
-                    // Fallback
                     const link = document.createElement('a');
                     link.href = url;
                     link.download = filename;
