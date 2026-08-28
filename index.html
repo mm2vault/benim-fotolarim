@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Gallery Cloud</title>
+    <!-- JSZip ve FileSaver Kütüphaneleri -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -326,6 +329,7 @@
             transform: translateY(-2px);
         }
 
+        /* ===== GALERİ HEADER (GÜNCELLENDİ) ===== */
         .gallery-header {
             display: flex;
             justify-content: space-between;
@@ -333,15 +337,25 @@
             padding: 12px 0 14px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
             margin-top: 2px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
-        .gallery-header span {
-            font-size: 13px;
-            color: #6b7a93;
-            font-weight: 500;
+        .gallery-header .left {
             display: flex;
             align-items: center;
             gap: 6px;
+            font-size: 13px;
+            color: #6b7a93;
+            font-weight: 500;
+            flex-wrap: wrap;
+        }
+
+        .gallery-header .right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .gallery-header .count {
@@ -349,6 +363,104 @@
             padding: 2px 14px;
             border-radius: 20px;
             font-size: 12px;
+        }
+
+        /* ===== ARAMA KUTUSU ===== */
+        .search-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 5px 12px;
+            font-size: 13px;
+            color: #e8edf5;
+            outline: none;
+            transition: 0.25s;
+            font-family: inherit;
+            width: 140px;
+        }
+
+        .search-input:focus {
+            border-color: #f0933e;
+            box-shadow: 0 0 0 3px rgba(240, 147, 62, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #4a5268;
+        }
+
+        /* ===== FİLTRE BUTONLARI ===== */
+        .filter-buttons {
+            display: flex;
+            gap: 4px;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 13px;
+            color: #6b7a93;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .filter-btn.active {
+            background: rgba(240, 147, 62, 0.15);
+            border-color: #f0933e;
+            color: #f0933e;
+        }
+
+        /* ===== SIRALAMA ===== */
+        .sort-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 5px 10px;
+            font-size: 12px;
+            color: #e8edf5;
+            outline: none;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .sort-select option {
+            background: #1a2332;
+            color: #e8edf5;
+        }
+
+        /* ===== ZIP BUTONU ===== */
+        .btn-download-all {
+            background: rgba(46, 160, 67, 0.12);
+            color: #4cda6c;
+            border: 1px solid rgba(46, 160, 67, 0.15);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .btn-download-all:hover:not(:disabled) {
+            background: rgba(46, 160, 67, 0.2);
+            transform: scale(1.02);
+        }
+
+        .btn-download-all:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .gallery {
@@ -404,7 +516,6 @@
             transform: scale(1.03);
         }
 
-        /* ===== VİDEO - TAM EKRAN, TEMİZ ===== */
         .gallery-item .media video {
             width: 100%;
             height: 100%;
@@ -413,7 +524,6 @@
             display: block;
         }
 
-        /* ===== VİDEO ÜZERİNDE HİÇBİR ŞEY YOK ===== */
         .gallery-item .media .play-icon,
         .gallery-item .media .video-duration {
             display: none !important;
@@ -674,6 +784,20 @@
                 width: 36px;
                 height: 36px;
             }
+            .gallery-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .gallery-header .left {
+                justify-content: center;
+            }
+            .gallery-header .right {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .search-input {
+                width: 100%;
+            }
         }
 
         @media (min-width: 769px) and (max-width: 1024px) {
@@ -781,13 +905,35 @@
             </button>
         </div>
 
-        <!-- GALERİ HEADER -->
+        <!-- ===== GALERİ HEADER (GÜNCELLENDİ) ===== -->
         <div class="gallery-header">
-            <span>
+            <div class="left">
                 <img src="https://i.postimg.cc/T29c5b6r/e625067c-560b-4f86-a39c-725239da40f1.png" alt="Galeri" class="icon-img-sm">
-                Galeri
-            </span>
-            <span class="count" id="galleryCount">0 dosya</span>
+                <span>Galeri</span>
+                <span class="count" id="galleryCount">0 dosya</span>
+            </div>
+            <div class="right">
+                <!-- ARAMA -->
+                <input type="text" id="searchInput" placeholder="🔍 Dosya ara..." class="search-input">
+                <!-- FİLTRE -->
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">Tümü</button>
+                    <button class="filter-btn" data-filter="image">🖼️</button>
+                    <button class="filter-btn" data-filter="video">🎬</button>
+                </div>
+                <!-- SIRALAMA -->
+                <select id="sortSelect" class="sort-select">
+                    <option value="newest">🕐 En Yeni</option>
+                    <option value="oldest">🕐 En Eski</option>
+                    <option value="az">A-Z</option>
+                    <option value="za">Z-A</option>
+                </select>
+                <!-- ZIP İNDİR -->
+                <button class="btn-download-all" id="downloadAllBtn">
+                    <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm">
+                    ZIP
+                </button>
+            </div>
         </div>
 
         <!-- GALERİ -->
@@ -816,6 +962,9 @@
     </div>
 
     <script>
+        // ============================================
+        // DOM REFERANSLARI
+        // ============================================
         const username = document.getElementById('username');
         const repo = document.getElementById('repo');
         const token = document.getElementById('token');
@@ -828,15 +977,25 @@
         const uploadBtn = document.getElementById('uploadBtn');
         const listBtn = document.getElementById('listBtn');
         const clearBtn = document.getElementById('clearBtn');
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
         const gallery = document.getElementById('gallery');
         const modal = document.getElementById('modal');
         const modalMedia = document.getElementById('modalMedia');
         const modalFilename = document.getElementById('modalFilename');
         const modalClose = document.getElementById('modalClose');
         const modalDownload = document.getElementById('modalDownload');
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const sortSelect = document.getElementById('sortSelect');
+
         let currentModalUrl = '';
         let currentModalName = '';
+        let tumDosyalar = [];
+        let aktifFiltre = 'all';
 
+        // ============================================
+        // YARDIMCI FONKSİYONLAR
+        // ============================================
         function setStatus(text, type = '') {
             statusEl.className = 'status' + (type ? ' ' + type : '');
             statusMsg.innerHTML = text;
@@ -867,6 +1026,9 @@
 
         fileInput.addEventListener('change', updateFileCount);
 
+        // ============================================
+        // DRAG & DROP
+        // ============================================
         fileArea.addEventListener('dragover', e => {
             e.preventDefault();
             fileArea.classList.add('dragover');
@@ -881,6 +1043,9 @@
             }
         });
 
+        // ============================================
+        // YÜKLEME
+        // ============================================
         async function uploadFiles() {
             const cfg = validateConfig();
             if (!cfg) return;
@@ -946,6 +1111,9 @@
 
         uploadBtn.addEventListener('click', uploadFiles);
 
+        // ============================================
+        // LİSTELEME
+        // ============================================
         async function listFiles() {
             const cfg = validateConfig();
             if (!cfg) return;
@@ -969,6 +1137,7 @@
                         </div>
                     `;
                     galleryCount.textContent = '0 dosya';
+                    tumDosyalar = [];
                     return;
                 }
                 if (!res.ok) {
@@ -988,56 +1157,17 @@
                         </div>
                     `;
                     galleryCount.textContent = '0 dosya';
+                    tumDosyalar = [];
                     return;
                 }
 
+                tumDosyalar = data;
                 setStatus(`📸 ${data.length} dosya bulundu`, 'success');
                 galleryCount.textContent = `${data.length} dosya`;
-                data.sort((a, b) => a.name.localeCompare(b.name)).reverse();
 
-                for (const item of data) {
-                    const rawUrl =
-                        `https://raw.githubusercontent.com/${cfg.user}/${cfg.repo}/main/fotolar/${encodeURIComponent(item.name)}`;
-                    const isVideo = /\.(mp4|webm|mov|avi|mkv|3gp)$/i.test(item.name);
-                    const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i.test(item.name);
+                // Sıralamayı uygula
+                siralaVeGoster();
 
-                    const div = document.createElement('div');
-                    div.className = 'gallery-item';
-
-                    let mediaHtml = '';
-                    if (isVideo) {
-                        mediaHtml = `
-                            <div class="media" onclick="openModal('${rawUrl}','${item.name}',true)">
-                                <video src="${rawUrl}" preload="metadata" playsinline muted></video>
-                            </div>
-                        `;
-                    } else if (isImage) {
-                        mediaHtml = `
-                            <div class="media" onclick="openModal('${rawUrl}','${item.name}',false)">
-                                <img src="${rawUrl}" loading="lazy" 
-                                     onerror="this.parentElement.innerHTML='<span style=color:#4a5268;font-size:20px;>⚠️</span>'">
-                            </div>
-                        `;
-                    } else {
-                        mediaHtml =
-                            `<div class="media" style="color:#4a5268;font-size:13px;text-align:center;padding:10px;">📄 ${item.name}</div>`;
-                    }
-
-                    div.innerHTML = `
-                        ${mediaHtml}
-                        <div class="info">
-                            <span class="name" title="${item.name}">${item.name}</span>
-                            <div class="actions">
-                                <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">
-                                    <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="İndir" class="icon-img-sm">
-                                    İndir
-                                </button>
-                                <button class="delete-btn" onclick="deleteFile('${item.name}')">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                    gallery.appendChild(div);
-                }
             } catch (e) {
                 setStatus(`❌ ${e.message}`, 'error');
             }
@@ -1045,6 +1175,209 @@
 
         listBtn.addEventListener('click', listFiles);
 
+        // ============================================
+        // SIRALAMA, FİLTRELEME VE ARAMA
+        // ============================================
+        function siralaVeGoster() {
+            if (!tumDosyalar || !tumDosyalar.length) {
+                gallery.innerHTML =
+                    `
+                    <div class="gallery-empty">
+                        <img src="https://i.postimg.cc/TY1HR0Dk/e625067c-560b-4f86-a39c-725239da40f1-(1)(3).png" alt="Boş" class="icon-img-lg" style="margin-bottom:8px;">
+                        <br>Henüz fotoğraf yok
+                    </div>
+                `;
+                return;
+            }
+
+            // 1. Sıralama
+            const sorted = [...tumDosyalar];
+            const secim = sortSelect.value;
+
+            if (secim === 'newest') {
+                sorted.sort((a, b) => (b.sha || '').localeCompare(a.sha || ''));
+            } else if (secim === 'oldest') {
+                sorted.sort((a, b) => (a.sha || '').localeCompare(b.sha || ''));
+            } else if (secim === 'az') {
+                sorted.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (secim === 'za') {
+                sorted.sort((a, b) => b.name.localeCompare(a.name));
+            }
+
+            // 2. Galeriyi oluştur
+            const cfg = getConfig();
+            gallery.innerHTML = '';
+
+            let gosterilen = 0;
+            const arama = searchInput.value.toLowerCase().trim();
+
+            for (const item of sorted) {
+                const rawUrl =
+                    `https://raw.githubusercontent.com/${cfg.user}/${cfg.repo}/main/fotolar/${encodeURIComponent(item.name)}`;
+                const isVideo = /\.(mp4|webm|mov|avi|mkv|3gp)$/i.test(item.name);
+                const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i.test(item.name);
+
+                // Filtre kontrolü
+                let filtreGecer = true;
+                if (aktifFiltre === 'image' && !isImage) filtreGecer = false;
+                if (aktifFiltre === 'video' && !isVideo) filtreGecer = false;
+
+                // Arama kontrolü
+                let aramaGecer = true;
+                if (arama && !item.name.toLowerCase().includes(arama)) aramaGecer = false;
+
+                if (!filtreGecer || !aramaGecer) continue;
+
+                gosterilen++;
+
+                const div = document.createElement('div');
+                div.className = 'gallery-item';
+
+                let mediaHtml = '';
+                if (isVideo) {
+                    mediaHtml = `
+                        <div class="media" onclick="openModal('${rawUrl}','${item.name}',true)">
+                            <video src="${rawUrl}" preload="metadata" playsinline muted></video>
+                        </div>
+                    `;
+                } else if (isImage) {
+                    mediaHtml = `
+                        <div class="media" onclick="openModal('${rawUrl}','${item.name}',false)">
+                            <img src="${rawUrl}" loading="lazy" 
+                                 onerror="this.parentElement.innerHTML='<span style=color:#4a5268;font-size:20px;>⚠️</span>'">
+                        </div>
+                    `;
+                } else {
+                    mediaHtml =
+                        `<div class="media" style="color:#4a5268;font-size:13px;text-align:center;padding:10px;">📄 ${item.name}</div>`;
+                }
+
+                div.innerHTML = `
+                    ${mediaHtml}
+                    <div class="info">
+                        <span class="name" title="${item.name}">${item.name}</span>
+                        <div class="actions">
+                            <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">
+                                <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="İndir" class="icon-img-sm">
+                                İndir
+                            </button>
+                            <button class="delete-btn" onclick="deleteFile('${item.name}')">🗑️</button>
+                        </div>
+                    </div>
+                `;
+                gallery.appendChild(div);
+            }
+
+            if (gosterilen === 0) {
+                gallery.innerHTML =
+                    `
+                    <div class="gallery-empty">
+                        <img src="https://i.postimg.cc/TY1HR0Dk/e625067c-560b-4f86-a39c-725239da40f1-(1)(3).png" alt="Boş" class="icon-img-lg" style="margin-bottom:8px;">
+                        <br>Sonuç bulunamadı
+                    </div>
+                `;
+            }
+        }
+
+        // Filtre butonları
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                aktifFiltre = this.dataset.filter;
+                siralaVeGoster();
+            });
+        });
+
+        // Arama
+        searchInput.addEventListener('input', siralaVeGoster);
+
+        // Sıralama
+        sortSelect.addEventListener('change', siralaVeGoster);
+
+        // ============================================
+        // TÜMÜNÜ İNDİR (ZIP)
+        // ============================================
+        downloadAllBtn.addEventListener('click', async function() {
+            const cfg = getConfig();
+            if (!cfg.user || !cfg.repo || !cfg.token) {
+                setStatus('❌ Önce bilgileri gir', 'error');
+                return;
+            }
+
+            this.disabled = true;
+            this.innerHTML = '⏳ Hazırlanıyor...';
+
+            try {
+                const url = `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar`;
+                const res = await fetch(url, {
+                    headers: { 'Authorization': `token ${cfg.token}` }
+                });
+
+                if (!res.ok) {
+                    setStatus('❌ Dosyalar listelenemedi', 'error');
+                    this.disabled = false;
+                    this.innerHTML =
+                        '<img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm"> ZIP';
+                    return;
+                }
+
+                const data = await res.json();
+                if (!data || !data.length) {
+                    setStatus('📭 Hiç dosya yok', '');
+                    this.disabled = false;
+                    this.innerHTML =
+                        '<img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm"> ZIP';
+                    return;
+                }
+
+                this.innerHTML = `⏳ ${data.length} dosya taranıyor...`;
+                setStatus(`⏳ ${data.length} dosya taranıyor...`, 'loading');
+
+                const zip = new JSZip();
+                let indirilen = 0;
+                let hatali = 0;
+
+                for (const item of data) {
+                    const rawUrl =
+                        `https://raw.githubusercontent.com/${cfg.user}/${cfg.repo}/main/fotolar/${encodeURIComponent(item.name)}`;
+                    this.innerHTML = `⏳ ${indirilen + 1}/${data.length}: ${item.name}`;
+
+                    try {
+                        const response = await fetch(rawUrl);
+                        if (response.ok) {
+                            const blob = await response.blob();
+                            zip.file(item.name, blob);
+                            indirilen++;
+                        } else {
+                            hatali++;
+                        }
+                    } catch (e) {
+                        hatali++;
+                    }
+                }
+
+                this.innerHTML = '⏳ ZIP oluşturuluyor...';
+
+                const zipBlob = await zip.generateAsync({ type: 'blob' });
+                saveAs(zipBlob, `galeri_${new Date().toISOString().slice(0,10)}.zip`);
+
+                setStatus(`✅ ${indirilen} dosya indirildi (${hatali} hata)`, 'success');
+                this.innerHTML =
+                    '<img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm"> ZIP';
+                this.disabled = false;
+
+            } catch (e) {
+                setStatus(`❌ ${e.message}`, 'error');
+                this.innerHTML =
+                    '<img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm"> ZIP';
+                this.disabled = false;
+            }
+        });
+
+        // ============================================
+        // MODAL
+        // ============================================
         function openModal(url, name, isVideo) {
             currentModalUrl = url;
             currentModalName = name;
@@ -1077,6 +1410,9 @@
             }
         });
 
+        // ============================================
+        // İNDİRME
+        // ============================================
         function downloadFile(url, filename) {
             fetch(url)
                 .then(response => {
@@ -1107,6 +1443,9 @@
             if (currentModalUrl) downloadFile(currentModalUrl, currentModalName);
         });
 
+        // ============================================
+        // SİLME
+        // ============================================
         async function deleteFile(filename) {
             if (!confirm(`"${filename}" kalıcı olarak silinsin mi?`)) return;
             const cfg = getConfig();
@@ -1147,6 +1486,9 @@
             }
         }
 
+        // ============================================
+        // TÜMÜNÜ TEMİZLE
+        // ============================================
         async function clearAll() {
             const cfg = getConfig();
             if (!cfg.user || !cfg.repo || !cfg.token) {
@@ -1189,6 +1531,9 @@
 
         clearBtn.addEventListener('click', clearAll);
 
+        // ============================================
+        // LOCAL STORAGE
+        // ============================================
         try {
             const saved = localStorage.getItem('fotoApp');
             if (saved) {
@@ -1211,8 +1556,11 @@
             });
         });
 
+        // ============================================
+        // BAŞLANGIÇ
+        // ============================================
         setStatus('✨ Premium sürüm hazır', 'success');
     </script>
 
 </body>
-</html>
+    </html>
