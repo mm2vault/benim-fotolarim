@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Benim Fotoğraflarım</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        .btn { padding: 10px 20px; margin: 5px; cursor: pointer; background: #2ea44f; color: white; border: none; border-radius: 5px; }
+        .btn2 { background: #0366d6; }
+        .img-item { display: inline-block; margin: 10px; border: 1px solid #ddd; padding: 10px; border-radius: 5px; }
+        .img-item img { width: 200px; height: auto; }
+        #durum { margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📸 Fotoğraf Yedekleme</h1>
+        
+        <div>
+            <label>GitHub Kullanıcı Adı:</label>
+            <input type="text" id="kullanici" placeholder="kullaniciadin" style="width: 200px;">
+        </div>
+        <div>
+            <label>Repo Adı:</label>
+            <input type="text" id="repo" placeholder="repo-adi" style="width: 200px;">
+        </div>
+        <div>
+            <label>Token:</label>
+            <input type="password" id="token" placeholder="ghp_..." style="width: 300px;">
+        </div>
+        
+        <hr>
+        
+        <input type="file" id="dosyaSec" multiple>
+        <button class="btn" onclick="yukle()">📤 Yükle</button>
+        <button class="btn btn2" onclick="listele()">📋 Listele</button>
+        
+        <div id="durum">Hazır...</div>
+        <div id="liste"></div>
+    </div>
+
+    <script>
+        const durum = document.getElementById('durum');
+        
+        async function yukle() {
+            const dosyalar = document.getElementById('dosyaSec').files;
+            const kullanici = document.getElementById('kullanici').value;
+            const repo = document.getElementById('repo').value;
+            const token = document.getElementById('token').value;
+            
+            if (!kullanici || !repo || !token) {
+                durum.innerText = '❌ Lütfen tüm alanları doldur!';
+                return;
+            }
+            
+            for (let dosya of dosyalar) {
+                durum.innerText = `⏳ Yükleniyor: ${dosya.name}`;
+                
+                const reader = new FileReader();
+                const base64 = await new Promise(resolve => {
+                    reader.onload = e => resolve(e.target.result.split(',')[1]);
+                    reader.readAsDataURL(dosya);
+                });
+                
+                const url = `https://api.github.com/repos/${kullanici}/${repo}/contents/fotolar/${dosya.name}`;
+                
+                try {
+                    const response = await fetch(url, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: `Yükle: ${dosya.name}`,
+                            content: base64
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        durum.innerText = `✅ Yüklendi: ${dosya.name}`;
+                    } else {
+                        const hata = await response.json();
+                        durum.innerText = `❌ Hata: ${hata.message || 'Bilinmeyen hata'}`;
+                    }
+                } catch (e) {
+                    durum.innerText = `❌ Hata: ${e.message}`;
+                }
+            }
+            
+            durum.innerText = '✅ Tüm dosyalar yüklendi!';
+        }
+        
+        async function listele() {
+            const kullanici = document.getElementById('kullanici').value;
+            const repo = document.getElementById('repo').value;
+            const token = document.getElementById('token').value;
+            
+            if (!kullanici || !repo || !token) {
+                durum.innerText = '❌ Lütfen tüm alanları doldur!';
+                return;
+            }
+            
+            durum.innerText = '⏳ Liste alınıyor...';
+            
+            const url = `https://api.github.com/repos/${kullanici}/${repo}/contents/fotolar`;
+            
+            try {
+                const response = await fetch(url, {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+                
+                if (response.ok) {
+                    const dosyalar = await response.json();
+                    const listeDiv = document.getElementById('liste');
+                    listeDiv.innerHTML = '';
+                    
+                    for (let dosya of dosyalar) {
+                        const rawUrl = `https://raw.githubusercontent.com/${kullanici}/${repo}/main/fotolar/${dosya.name}`;
+                        listeDiv.innerHTML += `
+                            <div class="img-item">
+                                <img src="${rawUrl}" onerror="this.style.display='none'">
+                                <br><strong>${dosya.name}</strong>
+                                <br><a href="${rawUrl}" target="_blank">🔗 Link</a>
+                                <button onclick="sil('${dosya.name}')" style="background:red;color:white;border:none;border-radius:3px;padding:3px 8px;">🗑️</button>
+                            </div>
+                        `;
+                    }
+                    
+                    durum.innerText = `✅ ${dosyalar.length} dosya bulundu.`;
+                } else {
+                    const hata = await response.json();
+                    durum.innerText = `❌ Hata: ${hata.message || 'Liste alınamadı'}`;
+                }
+            } catch (e) {
+                durum.innerText = `❌ Hata: ${e.message}`;
+            }
+        }
+        
+        async function sil(dosyaAdi) {
+            if (!confirm(`"${dosyaAdi}" silinsin mi?`)) return;
+            
+            const kullanici = document.getElementById('kullanici').value;
+            const repo = document.getElementById('repo').value;
+            const token = document.getElementById('token').value;
+            
+            try {
+                // Önce dosyanın SHA'sını al
+                const bilgiUrl = `https://api.github.com/repos/${kullanici}/${repo}/contents/fotolar/${dosyaAdi}`;
+                const bilgi = await fetch(bilgiUrl, {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+                const data = await bilgi.json();
+                
+                // Sil
+                const silUrl = `https://api.github.com/repos/${kullanici}/${repo}/contents/fotolar/${dosyaAdi}`;
+                await fetch(silUrl, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Sil: ${dosyaAdi}`,
+                        sha: data.sha
+                    })
+                });
+                
+                durum.innerText = `🗑️ Silindi: ${dosyaAdi}`;
+                listele();
+            } catch (e) {
+                durum.innerText = `❌ Silme hatası: ${e.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
