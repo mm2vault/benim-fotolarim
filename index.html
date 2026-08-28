@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Gallery Cloud</title>
-    <!-- JSZip ve FileSaver Kütüphaneleri -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -428,34 +425,6 @@
         .sort-select option {
             background: #1a2332;
             color: #e8edf5;
-        }
-
-        .btn-download-all {
-            background: rgba(46, 160, 67, 0.12);
-            color: #4cda6c;
-            border: 1px solid rgba(46, 160, 67, 0.15);
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.25s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-family: inherit;
-            white-space: nowrap;
-        }
-
-        .btn-download-all:hover:not(:disabled) {
-            background: rgba(46, 160, 67, 0.2);
-            transform: scale(1.02);
-        }
-
-        .btn-download-all:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
         }
 
         .gallery {
@@ -920,10 +889,6 @@
                     <option value="az">A-Z</option>
                     <option value="za">Z-A</option>
                 </select>
-                <button class="btn-download-all" id="downloadAllBtn">
-                    <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm">
-                    ZIP
-                </button>
             </div>
         </div>
 
@@ -968,7 +933,6 @@
         const uploadBtn = document.getElementById('uploadBtn');
         const listBtn = document.getElementById('listBtn');
         const clearBtn = document.getElementById('clearBtn');
-        const downloadAllBtn = document.getElementById('downloadAllBtn');
         const gallery = document.getElementById('gallery');
         const modal = document.getElementById('modal');
         const modalMedia = document.getElementById('modalMedia');
@@ -1103,7 +1067,7 @@
         uploadBtn.addEventListener('click', uploadFiles);
 
         // ============================================
-        // LİSTELEME
+        // LİSTELEME (Hızlandırılmış)
         // ============================================
         async function listFiles() {
             const cfg = validateConfig();
@@ -1155,7 +1119,6 @@
                 tumDosyalar = data;
                 setStatus(`📸 ${data.length} dosya bulundu`, 'success');
                 galleryCount.textContent = `${data.length} dosya`;
-
                 siralaVeGoster();
 
             } catch (e) {
@@ -1166,7 +1129,7 @@
         listBtn.addEventListener('click', listFiles);
 
         // ============================================
-        // SIRALAMA, FİLTRELEME VE ARAMA
+        // SIRALAMA, FİLTRELEME VE ARAMA (Hızlandırılmış)
         // ============================================
         function siralaVeGoster() {
             if (!tumDosyalar || !tumDosyalar.length) {
@@ -1197,6 +1160,9 @@
             gallery.innerHTML = '';
             let gosterilen = 0;
             const arama = searchInput.value.toLowerCase().trim();
+
+            // DocumentFragment ile hızlandır
+            const fragment = document.createDocumentFragment();
 
             for (const item of sorted) {
                 const rawUrl =
@@ -1249,8 +1215,10 @@
                         </div>
                     </div>
                 `;
-                gallery.appendChild(div);
+                fragment.appendChild(div);
             }
+
+            gallery.appendChild(fragment);
 
             if (gosterilen === 0) {
                 gallery.innerHTML =
@@ -1274,101 +1242,6 @@
 
         searchInput.addEventListener('input', siralaVeGoster);
         sortSelect.addEventListener('change', siralaVeGoster);
-
-        // ============================================
-        // TÜMÜNÜ İNDİR (ZIP - Düzeltilmiş)
-        // ============================================
-        downloadAllBtn.addEventListener('click', async function() {
-            const cfg = getConfig();
-            if (!cfg.user || !cfg.repo || !cfg.token) {
-                setStatus('❌ Önce bilgileri gir', 'error');
-                return;
-            }
-
-            this.disabled = true;
-            this.innerHTML = '⏳ Dosyalar taranıyor...';
-
-            try {
-                const url = `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar`;
-                const res = await fetch(url, {
-                    headers: { 'Authorization': `token ${cfg.token}` }
-                });
-
-                if (!res.ok) {
-                    setStatus('❌ Dosyalar listelenemedi', 'error');
-                    this.disabled = false;
-                    this.innerHTML =
-                        '<img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm"> ZIP';
-                    return;
-                }
-
-                const data = await res.json();
-                if (!data || !data.length) {
-                    setStatus('📭 Hiç dosya yok', '');
-                    this.disabled = false;
-                    this.innerHTML =
-                        '<img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm"> ZIP';
-                    return;
-                }
-
-                if (data.length > 500) {
-                    if (!confirm(`⚠️ ${data.length} dosya var. Bu kadar dosyayı ZIP olarak indirmek uzun sürebilir. Devam etmek istiyor musunuz?`)) {
-                        this.disabled = false;
-                        this.innerHTML =
-                            '<img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm"> ZIP';
-                        return;
-                    }
-                }
-
-                this.innerHTML = `⏳ ${data.length} dosya indiriliyor...`;
-                setStatus(`⏳ ${data.length} dosya taranıyor...`, 'loading');
-
-                const zip = new JSZip();
-                let indirilen = 0;
-                let hatali = 0;
-
-                for (let i = 0; i < data.length; i++) {
-                    const item = data[i];
-                    const rawUrl =
-                        `https://raw.githubusercontent.com/${cfg.user}/${cfg.repo}/main/fotolar/${encodeURIComponent(item.name)}`;
-                    
-                    this.innerHTML = `⏳ ${i + 1}/${data.length}: ${item.name}`;
-
-                    try {
-                        const response = await fetch(rawUrl);
-                        if (response.ok) {
-                            const blob = await response.blob();
-                            zip.file(item.name, blob);
-                            indirilen++;
-                        } else {
-                            hatali++;
-                        }
-                    } catch (e) {
-                        hatali++;
-                    }
-
-                    if (i % 50 === 0 && i > 0) {
-                        await new Promise(r => setTimeout(r, 100));
-                    }
-                }
-
-                this.innerHTML = '⏳ ZIP oluşturuluyor...';
-
-                const zipBlob = await zip.generateAsync({ type: 'blob' });
-                saveAs(zipBlob, `galeri_${new Date().toISOString().slice(0,10)}.zip`);
-
-                setStatus(`✅ ${indirilen} dosya ZIP olarak indirildi (${hatali} hata)`, 'success');
-                this.innerHTML =
-                    '<img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm"> ZIP';
-                this.disabled = false;
-
-            } catch (e) {
-                setStatus(`❌ ${e.message}`, 'error');
-                this.innerHTML =
-                    '<img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Tümünü İndir" class="icon-img-sm"> ZIP';
-                this.disabled = false;
-            }
-        });
 
         // ============================================
         // MODAL
@@ -1406,32 +1279,16 @@
         });
 
         // ============================================
-        // İNDİRME
+        // İNDİRME (Hızlı)
         // ============================================
         function downloadFile(url, filename) {
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) throw new Error('Dosya alınamadı');
-                    return response.blob();
-                })
-                .then(blob => {
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = filename;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    setTimeout(() => URL.revokeObjectURL(link.href), 2000);
-                })
-                .catch(() => {
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = filename;
-                    link.target = '_blank';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                });
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         modalDownload.addEventListener('click', () => {
