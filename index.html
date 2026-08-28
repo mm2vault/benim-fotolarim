@@ -1,177 +1,743 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-    <title>Benim Fotoğraflarım</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>📸 Fotoğraf Yedekleme</title>
     <style>
-        body { font-family: Arial; padding: 20px; }
-        .container { max-width: 800px; margin: auto; }
-        .btn { padding: 10px 20px; margin: 5px; cursor: pointer; background: #2ea44f; color: white; border: none; border-radius: 5px; }
-        .btn2 { background: #0366d6; }
-        .img-item { display: inline-block; margin: 10px; border: 1px solid #ddd; padding: 10px; border-radius: 5px; }
-        .img-item img { width: 200px; height: auto; }
-        #durum { margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 5px; }
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            min-height: 100vh;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .app {
+            max-width: 700px;
+            width: 100%;
+            background: #161b22;
+            border-radius: 24px;
+            padding: 24px 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            border: 1px solid #30363d;
+        }
+
+        /* ===== BAŞLIK ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #f0883e, #f6a85b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header span {
+            font-size: 28px;
+        }
+
+        /* ===== GİRİŞ ALANLARI ===== */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .input-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #8b949e;
+            letter-spacing: 0.3px;
+        }
+
+        .input-group input {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 15px;
+            color: #e6edf3;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: #f0883e;
+            box-shadow: 0 0 0 3px rgba(240, 136, 62, 0.15);
+        }
+
+        .input-group input::placeholder {
+            color: #484f58;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* ===== DURUM ÇUBUĞU ===== */
+        .status {
+            background: #0d1117;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin: 16px 0;
+            font-size: 14px;
+            color: #8b949e;
+            border: 1px solid #21262d;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            word-break: break-all;
+        }
+
+        .status .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #30363d;
+            border-top-color: #f0883e;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        .status.loading .spinner {
+            display: block;
+        }
+
+        .status.success {
+            border-color: #2ea043;
+            color: #3fb950;
+        }
+
+        .status.error {
+            border-color: #f85149;
+            color: #f85149;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== DOSYA SEÇ ===== */
+        .file-area {
+            border: 2px dashed #30363d;
+            border-radius: 14px;
+            padding: 32px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.25s;
+            background: #0d1117;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .file-area:hover {
+            border-color: #f0883e;
+            background: #161b22;
+        }
+
+        .file-area.dragover {
+            border-color: #f0883e;
+            background: #1c2333;
+        }
+
+        .file-area .icon {
+            font-size: 42px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .file-area .text {
+            font-size: 15px;
+            color: #8b949e;
+        }
+
+        .file-area .text strong {
+            color: #e6edf3;
+        }
+
+        .file-area input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-area .file-count {
+            display: inline-block;
+            margin-top: 8px;
+            background: #21262d;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #8b949e;
+        }
+
+        /* ===== BUTONLAR ===== */
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-upload {
+            background: #f0883e;
+            color: #0d1117;
+        }
+
+        .btn-upload:hover {
+            background: #f6a85b;
+            transform: scale(1.01);
+        }
+
+        .btn-upload:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-list {
+            background: #21262d;
+            color: #e6edf3;
+        }
+
+        .btn-list:hover {
+            background: #30363d;
+        }
+
+        .btn-clear {
+            background: transparent;
+            color: #8b949e;
+            border: 1px solid #30363d;
+            grid-column: span 2;
+        }
+
+        .btn-clear:hover {
+            border-color: #f85149;
+            color: #f85149;
+        }
+
+        /* ===== FOTOĞRAF LİSTESİ ===== */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #21262d;
+        }
+
+        .gallery-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #484f58;
+            padding: 32px 0;
+            font-size: 14px;
+        }
+
+        .gallery-item {
+            background: #0d1117;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #21262d;
+            transition: 0.2s;
+            position: relative;
+        }
+
+        .gallery-item:hover {
+            border-color: #30363d;
+            transform: translateY(-2px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            display: block;
+            background: #0d1117;
+        }
+
+        .gallery-item .info {
+            padding: 8px 10px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .gallery-item .info .name {
+            font-size: 11px;
+            color: #8b949e;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        .gallery-item .info .actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .gallery-item .info .actions a,
+        .gallery-item .info .actions button {
+            background: none;
+            border: none;
+            color: #8b949e;
+            cursor: pointer;
+            font-size: 15px;
+            padding: 2px 4px;
+            border-radius: 6px;
+            transition: 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+        }
+
+        .gallery-item .info .actions a:hover {
+            color: #f0883e;
+            background: #21262d;
+        }
+
+        .gallery-item .info .actions button:hover {
+            color: #f85149;
+            background: #21262d;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 500px) {
+            .app { padding: 16px; }
+            .row { grid-template-columns: 1fr; }
+            .buttons { grid-template-columns: 1fr; }
+            .btn-clear { grid-column: span 1; }
+            .gallery { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+            .gallery-item img { height: 110px; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📸 Fotoğraf Yedekleme</h1>
-        
-        <div>
-            <label>GitHub Kullanıcı Adı:</label>
-            <input type="text" id="kullanici" placeholder="kullaniciadin" style="width: 200px;">
-        </div>
-        <div>
-            <label>Repo Adı:</label>
-            <input type="text" id="repo" placeholder="repo-adi" style="width: 200px;">
-        </div>
-        <div>
-            <label>Token:</label>
-            <input type="password" id="token" placeholder="ghp_..." style="width: 300px;">
-        </div>
-        
-        <hr>
-        
-        <input type="file" id="dosyaSec" multiple>
-        <button class="btn" onclick="yukle()">📤 Yükle</button>
-        <button class="btn btn2" onclick="listele()">📋 Listele</button>
-        
-        <div id="durum">Hazır...</div>
-        <div id="liste"></div>
+
+<div class="app">
+
+    <!-- BAŞLIK -->
+    <div class="header">
+        <span>📸</span>
+        <h1>Fotoğraf Yedekleme</h1>
     </div>
 
-    <script>
-        const durum = document.getElementById('durum');
+    <!-- GİRİŞ ALANLARI -->
+    <div class="row">
+        <div class="input-group">
+            <label>👤 GitHub Kullanıcı Adı</label>
+            <input type="text" id="username" placeholder="kullaniciadin">
+        </div>
+        <div class="input-group">
+            <label>📁 Repo Adı</label>
+            <input type="text" id="repo" placeholder="repo-adi">
+        </div>
+    </div>
+
+    <div class="input-group">
+        <label>🔑 Token (ghp_ ile başlar)</label>
+        <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxxxxxx">
+    </div>
+
+    <!-- DURUM -->
+    <div class="status" id="status">
+        <span class="spinner"></span>
+        <span class="msg">Hazır</span>
+    </div>
+
+    <!-- DOSYA SEÇ -->
+    <div class="file-area" id="fileArea">
+        <span class="icon">🖼️</span>
+        <div class="text">
+            <strong>Dosya seç</strong> veya buraya sürükle
+        </div>
+        <div class="file-count" id="fileCount">Hiç dosya seçilmedi</div>
+        <input type="file" id="fileInput" multiple accept="image/*">
+    </div>
+
+    <!-- BUTONLAR -->
+    <div class="buttons">
+        <button class="btn btn-upload" id="uploadBtn">📤 Yükle</button>
+        <button class="btn btn-list" id="listBtn">📋 Listele</button>
+        <button class="btn btn-clear" id="clearBtn">🗑️ Tümünü Temizle</button>
+    </div>
+
+    <!-- GALERİ -->
+    <div class="gallery" id="gallery">
+        <div class="gallery-empty">📭 Fotoğraf yok, yüklemeye başla</div>
+    </div>
+
+</div>
+
+<script>
+// ===== DOM REFERANSLARI =====
+const username = document.getElementById('username');
+const repo = document.getElementById('repo');
+const token = document.getElementById('token');
+const statusEl = document.getElementById('status');
+const statusMsg = statusEl.querySelector('.msg');
+const fileInput = document.getElementById('fileInput');
+const fileArea = document.getElementById('fileArea');
+const fileCount = document.getElementById('fileCount');
+const uploadBtn = document.getElementById('uploadBtn');
+const listBtn = document.getElementById('listBtn');
+const clearBtn = document.getElementById('clearBtn');
+const gallery = document.getElementById('gallery');
+
+// ===== YARDIMCI FONKSİYONLAR =====
+function setStatus(text, type = '') {
+    statusEl.className = 'status' + (type ? ' ' + type : '');
+    statusMsg.textContent = text;
+}
+
+function getConfig() {
+    return {
+        user: username.value.trim(),
+        repo: repo.value.trim(),
+        token: token.value.trim()
+    };
+}
+
+function validateConfig() {
+    const c = getConfig();
+    if (!c.user) { setStatus('❌ Kullanıcı adını gir', 'error'); return null; }
+    if (!c.repo) { setStatus('❌ Repo adını gir', 'error'); return null; }
+    if (!c.token || !c.token.startsWith('ghp_')) { setStatus('❌ Geçerli bir token gir (ghp_ ile başlar)', 'error'); return null; }
+    return c;
+}
+
+function getFileList() {
+    return Array.from(fileInput.files);
+}
+
+function updateFileCount() {
+    const files = getFileList();
+    fileCount.textContent = files.length === 0 ? 'Hiç dosya seçilmedi' : `${files.length} dosya seçildi`;
+}
+
+fileInput.addEventListener('change', updateFileCount);
+
+// Sürükle-bırak
+fileArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    fileArea.classList.add('dragover');
+});
+fileArea.addEventListener('dragleave', () => {
+    fileArea.classList.remove('dragover');
+});
+fileArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    fileArea.classList.remove('dragover');
+    if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        updateFileCount();
+    }
+});
+
+// ===== YÜKLEME =====
+async function uploadFiles() {
+    const cfg = validateConfig();
+    if (!cfg) return;
+
+    const files = getFileList();
+    if (files.length === 0) {
+        setStatus('⚠️ Lütfen dosya seç', 'error');
+        return;
+    }
+
+    uploadBtn.disabled = true;
+    let success = 0;
+    let failed = 0;
+
+    for (const file of files) {
+        setStatus(`⏳ Yükleniyor: ${file.name} (${success+failed+1}/${files.length})`, 'loading');
         
-        async function yukle() {
-            const dosyalar = document.getElementById('dosyaSec').files;
-            const kullanici = document.getElementById('kullanici').value;
-            const repo = document.getElementById('repo').value;
-            const token = document.getElementById('token').value;
+        try {
+            const base64 = await toBase64(file);
+            const url = `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar/${encodeURIComponent(file.name)}`;
             
-            if (!kullanici || !repo || !token) {
-                durum.innerText = '❌ Lütfen tüm alanları doldur!';
-                return;
-            }
-            
-            for (let dosya of dosyalar) {
-                durum.innerText = `⏳ Yükleniyor: ${dosya.name}`;
-                
-                const reader = new FileReader();
-                const base64 = await new Promise(resolve => {
-                    reader.onload = e => resolve(e.target.result.split(',')[1]);
-                    reader.readAsDataURL(dosya);
-                });
-                
-                const url = `https://api.github.com/repos/${kullanici}/${repo}/contents/fotolar/${dosya.name}`;
-                
-                try {
-                    const response = await fetch(url, {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: `Yükle: ${dosya.name}`,
-                            content: base64
-                        })
-                    });
-                    
-                    if (response.ok) {
-                        durum.innerText = `✅ Yüklendi: ${dosya.name}`;
-                    } else {
-                        const hata = await response.json();
-                        durum.innerText = `❌ Hata: ${hata.message || 'Bilinmeyen hata'}`;
-                    }
-                } catch (e) {
-                    durum.innerText = `❌ Hata: ${e.message}`;
-                }
-            }
-            
-            durum.innerText = '✅ Tüm dosyalar yüklendi!';
-        }
-        
-        async function listele() {
-            const kullanici = document.getElementById('kullanici').value;
-            const repo = document.getElementById('repo').value;
-            const token = document.getElementById('token').value;
-            
-            if (!kullanici || !repo || !token) {
-                durum.innerText = '❌ Lütfen tüm alanları doldur!';
-                return;
-            }
-            
-            durum.innerText = '⏳ Liste alınıyor...';
-            
-            const url = `https://api.github.com/repos/${kullanici}/${repo}/contents/fotolar`;
-            
-            try {
-                const response = await fetch(url, {
-                    headers: { 'Authorization': `token ${token}` }
-                });
-                
-                if (response.ok) {
-                    const dosyalar = await response.json();
-                    const listeDiv = document.getElementById('liste');
-                    listeDiv.innerHTML = '';
-                    
-                    for (let dosya of dosyalar) {
-                        const rawUrl = `https://raw.githubusercontent.com/${kullanici}/${repo}/main/fotolar/${dosya.name}`;
-                        listeDiv.innerHTML += `
-                            <div class="img-item">
-                                <img src="${rawUrl}" onerror="this.style.display='none'">
-                                <br><strong>${dosya.name}</strong>
-                                <br><a href="${rawUrl}" target="_blank">🔗 Link</a>
-                                <button onclick="sil('${dosya.name}')" style="background:red;color:white;border:none;border-radius:3px;padding:3px 8px;">🗑️</button>
-                            </div>
-                        `;
-                    }
-                    
-                    durum.innerText = `✅ ${dosyalar.length} dosya bulundu.`;
+            const res = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${cfg.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `Yükle: ${file.name}`,
+                    content: base64
+                })
+            });
+
+            if (res.ok) {
+                success++;
+            } else {
+                const err = await res.json();
+                if (err.message && err.message.includes('already exists')) {
+                    setStatus(`⚠️ "${file.name}" zaten var (atlandı)`, 'error');
+                    failed++;
                 } else {
-                    const hata = await response.json();
-                    durum.innerText = `❌ Hata: ${hata.message || 'Liste alınamadı'}`;
+                    setStatus(`❌ ${file.name}: ${err.message || 'Hata'}`, 'error');
+                    failed++;
                 }
-            } catch (e) {
-                durum.innerText = `❌ Hata: ${e.message}`;
             }
+        } catch (e) {
+            setStatus(`❌ ${file.name}: ${e.message}`, 'error');
+            failed++;
         }
+    }
+
+    uploadBtn.disabled = false;
+    if (failed === 0 && success > 0) {
+        setStatus(`✅ ${success} dosya yüklendi!`, 'success');
+        fileInput.value = '';
+        updateFileCount();
+        listFiles();
+    } else if (success > 0) {
+        setStatus(`⚠️ ${success} başarılı, ${failed} hata`, 'error');
+    } else {
+        setStatus(`❌ Hiçbir dosya yüklenemedi`, 'error');
+    }
+}
+
+function toBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+uploadBtn.addEventListener('click', uploadFiles);
+
+// ===== LİSTELEME =====
+async function listFiles() {
+    const cfg = validateConfig();
+    if (!cfg) return;
+
+    setStatus('⏳ Yükleniyor...', 'loading');
+    gallery.innerHTML = '';
+
+    try {
+        const url = `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar`;
+        const res = await fetch(url, {
+            headers: { 'Authorization': `token ${cfg.token}` }
+        });
+
+        if (res.status === 404) {
+            setStatus('📭 "fotolar" klasörü henüz oluşturulmamış', '');
+            gallery.innerHTML = `<div class="gallery-empty">📭 Henüz fotoğraf yok</div>`;
+            return;
+        }
+
+        if (!res.ok) {
+            const err = await res.json();
+            setStatus(`❌ ${err.message || 'Listeleme hatası'}`, 'error');
+            return;
+        }
+
+        const data = await res.json();
+        if (!data || data.length === 0) {
+            setStatus('📭 Hiç fotoğraf yok', '');
+            gallery.innerHTML = `<div class="gallery-empty">📭 Henüz fotoğraf yok</div>`;
+            return;
+        }
+
+        setStatus(`📸 ${data.length} fotoğraf bulundu`, 'success');
         
-        async function sil(dosyaAdi) {
-            if (!confirm(`"${dosyaAdi}" silinsin mi?`)) return;
-            
-            const kullanici = document.getElementById('kullanici').value;
-            const repo = document.getElementById('repo').value;
-            const token = document.getElementById('token').value;
-            
-            try {
-                // Önce dosyanın SHA'sını al
-                const bilgiUrl = `https://api.github.com/repos/${kullanici}/${repo}/contents/fotolar/${dosyaAdi}`;
-                const bilgi = await fetch(bilgiUrl, {
-                    headers: { 'Authorization': `token ${token}` }
-                });
-                const data = await bilgi.json();
-                
-                // Sil
-                const silUrl = `https://api.github.com/repos/${kullanici}/${repo}/contents/fotolar/${dosyaAdi}`;
-                await fetch(silUrl, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: `Sil: ${dosyaAdi}`,
-                        sha: data.sha
-                    })
-                });
-                
-                durum.innerText = `🗑️ Silindi: ${dosyaAdi}`;
-                listele();
-            } catch (e) {
-                durum.innerText = `❌ Silme hatası: ${e.message}`;
-            }
+        // Dosyaları isme göre sırala (en yeni en üstte)
+        data.sort((a, b) => a.name.localeCompare(b.name)).reverse();
+
+        for (const item of data) {
+            const rawUrl = `https://raw.githubusercontent.com/${cfg.user}/${cfg.repo}/main/fotolar/${encodeURIComponent(item.name)}`;
+            const div = document.createElement('div');
+            div.className = 'gallery-item';
+            div.innerHTML = `
+                <img src="${rawUrl}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect width=%22200%22 height=%22200%22 fill=%22%23161b22%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23484f58%22 font-size=%2214%22%3E⚠️%3C/text%3E%3C/svg%3E'">
+                <div class="info">
+                    <span class="name" title="${item.name}">${item.name}</span>
+                    <div class="actions">
+                        <a href="${rawUrl}" target="_blank" title="İndir">⬇️</a>
+                        <button onclick="deleteFile('${item.name}')" title="Sil">🗑️</button>
+                    </div>
+                </div>
+            `;
+            gallery.appendChild(div);
         }
-    </script>
+    } catch (e) {
+        setStatus(`❌ ${e.message}`, 'error');
+    }
+}
+
+listBtn.addEventListener('click', listFiles);
+
+// ===== SİLME =====
+async function deleteFile(filename) {
+    if (!confirm(`"${filename}" kalıcı olarak silinsin mi?`)) return;
+    
+    const cfg = getConfig();
+    if (!cfg.user || !cfg.repo || !cfg.token) {
+        setStatus('❌ Önce bilgileri gir', 'error');
+        return;
+    }
+
+    setStatus(`⏳ Siliniyor: ${filename}`, 'loading');
+
+    try {
+        // Önce SHA'yı al
+        const infoUrl = `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar/${encodeURIComponent(filename)}`;
+        const infoRes = await fetch(infoUrl, {
+            headers: { 'Authorization': `token ${cfg.token}` }
+        });
+        if (!infoRes.ok) {
+            setStatus('❌ Dosya bulunamadı', 'error');
+            return;
+        }
+        const info = await infoRes.json();
+
+        // Sil
+        const delRes = await fetch(infoUrl, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `token ${cfg.token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: `Sil: ${filename}`,
+                sha: info.sha
+            })
+        });
+
+        if (delRes.ok) {
+            setStatus(`🗑️ "${filename}" silindi`, 'success');
+            listFiles();
+        } else {
+            const err = await delRes.json();
+            setStatus(`❌ Silinemedi: ${err.message || 'Hata'}`, 'error');
+        }
+    } catch (e) {
+        setStatus(`❌ ${e.message}`, 'error');
+    }
+}
+
+// ===== TÜMÜNÜ TEMİZLE =====
+async function clearAll() {
+    const cfg = getConfig();
+    if (!cfg.user || !cfg.repo || !cfg.token) {
+        setStatus('❌ Önce bilgileri gir', 'error');
+        return;
+    }
+
+    if (!confirm('⚠️ TÜM fotoğraflar silinecek! Devam et?')) return;
+
+    setStatus('⏳ Tüm dosyalar taranıyor...', 'loading');
+
+    try {
+        const url = `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar`;
+        const res = await fetch(url, {
+            headers: { 'Authorization': `token ${cfg.token}` }
+        });
+        if (!res.ok) {
+            setStatus('❌ Liste alınamadı', 'error');
+            return;
+        }
+        const data = await res.json();
+        if (data.length === 0) {
+            setStatus('📭 Zaten boş', '');
+            return;
+        }
+
+        let deleted = 0;
+        for (const item of data) {
+            const delRes = await fetch(`${url}/${encodeURIComponent(item.name)}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `token ${cfg.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `Toplu sil: ${item.name}`,
+                    sha: item.sha
+                })
+            });
+            if (delRes.ok) deleted++;
+        }
+
+        setStatus(`🗑️ ${deleted} dosya silindi`, 'success');
+        listFiles();
+    } catch (e) {
+        setStatus(`❌ ${e.message}`, 'error');
+    }
+}
+
+clearBtn.addEventListener('click', clearAll);
+
+// ===== BAŞLANGIÇ =====
+// localStorage'dan bilgileri yükle (isteğe bağlı)
+try {
+    const saved = localStorage.getItem('fotoApp');
+    if (saved) {
+        const data = JSON.parse(saved);
+        username.value = data.username || '';
+        repo.value = data.repo || '';
+        token.value = data.token || '';
+    }
+} catch(e) {}
+
+// Bilgileri kaydet (her değişiklikte)
+[username, repo, token].forEach(el => {
+    el.addEventListener('change', () => {
+        try {
+            localStorage.setItem('fotoApp', JSON.stringify({
+                username: username.value,
+                repo: repo.value,
+                token: token.value
+            }));
+        } catch(e) {}
+    });
+});
+
+setStatus('✅ Hazır, fotoğraf yüklemeye başla!', 'success');
+</script>
+
 </body>
 </html>
