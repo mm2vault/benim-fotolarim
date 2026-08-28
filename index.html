@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>📸 Gallery Cloud</title>
+    <title>Gallery Cloud</title>
     <style>
-        /* ============================================
-                   RESET & BASE
-                ============================================ */
         * {
             margin: 0;
             padding: 0;
@@ -15,7 +12,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0b0e14;
             color: #e8edf5;
             min-height: 100vh;
@@ -24,12 +21,8 @@
             justify-content: center;
             align-items: flex-start;
             background-image: radial-gradient(ellipse at 50% 0%, #1a2332 0%, #0b0e14 70%);
-            line-height: 1.5;
         }
 
-        /* ============================================
-                   ANA KART
-                ============================================ */
         .app {
             max-width: 920px;
             width: 100%;
@@ -38,16 +31,46 @@
             -webkit-backdrop-filter: blur(24px);
             border-radius: 32px;
             padding: 28px 28px 32px;
-            box-shadow:
-                0 25px 60px rgba(0, 0, 0, 0.7),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.2s;
         }
 
-        /* ============================================
-                   HEADER
-                ============================================ */
+        /* ===== ICON STILLERI ===== */
+        .icon-img {
+            width: 18px;
+            height: 18px;
+            vertical-align: middle;
+            display: inline-block;
+            object-fit: contain;
+        }
+
+        .icon-img-sm {
+            width: 14px;
+            height: 14px;
+            vertical-align: middle;
+        }
+
+        .icon-img-lg {
+            width: 40px;
+            height: 40px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .icon-img-xl {
+            width: 44px;
+            height: 44px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .header-logo img {
+            width: 28px;
+            height: 28px;
+            display: block;
+        }
+
+        /* ===== HEADER ===== */
         .header {
             display: flex;
             align-items: center;
@@ -71,7 +94,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
             box-shadow: 0 4px 16px rgba(240, 147, 62, 0.25);
             flex-shrink: 0;
         }
@@ -95,11 +117,12 @@
             letter-spacing: 0.4px;
             border: 1px solid rgba(255, 255, 255, 0.04);
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        /* ============================================
-                   GİRİŞ ALANLARI
-                ============================================ */
+        /* ===== GİRİŞ ALANLARI ===== */
         .input-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -119,6 +142,9 @@
             color: #6b7a93;
             text-transform: uppercase;
             letter-spacing: 0.6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .input-group input {
@@ -144,9 +170,7 @@
             color: #3e485a;
         }
 
-        /* ============================================
-                   DURUM
-                ============================================ */
+        /* ===== DURUM ===== */
         .status {
             background: rgba(255, 255, 255, 0.02);
             border-radius: 14px;
@@ -191,9 +215,7 @@
             }
         }
 
-        /* ============================================
-                   DOSYA ALANI
-                ============================================ */
+        /* ===== DOSYA ALANI ===== */
         .file-area {
             border: 2px dashed rgba(255, 255, 255, 0.06);
             border-radius: 18px;
@@ -217,7 +239,6 @@
         }
 
         .file-area .icon {
-            font-size: 40px;
             display: block;
             margin-bottom: 4px;
             opacity: 0.9;
@@ -250,9 +271,7 @@
             color: #5a687e;
         }
 
-        /* ============================================
-                   BUTONLAR
-                ============================================ */
+        /* ===== BUTONLAR ===== */
         .buttons {
             display: grid;
             grid-template-columns: 1fr 1fr 0.7fr;
@@ -313,9 +332,7 @@
             transform: translateY(-2px);
         }
 
-        /* ============================================
-                   GALERİ HEADER
-                ============================================ */
+        /* ===== GALERİ ===== */
         .gallery-header {
             display: flex;
             justify-content: space-between;
@@ -329,6 +346,9 @@
             font-size: 13px;
             color: #6b7a93;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .gallery-header .count {
@@ -338,9 +358,6 @@
             font-size: 12px;
         }
 
-        /* ============================================
-                   GALERİ
-                ============================================ */
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -387,6 +404,7 @@
             height: 100%;
             object-fit: cover;
             transition: 0.4s;
+            display: block;
         }
 
         .gallery-item:hover .media img {
@@ -398,13 +416,11 @@
             height: 100%;
             object-fit: cover;
             background: #000;
+            display: block;
         }
 
         .gallery-item .media .play-icon {
             position: absolute;
-            font-size: 44px;
-            color: rgba(255, 255, 255, 0.85);
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.7);
             pointer-events: none;
             z-index: 2;
         }
@@ -421,6 +437,9 @@
             font-weight: 500;
             z-index: 2;
             backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .gallery-item .info {
@@ -457,6 +476,7 @@
             transition: 0.2s;
             display: inline-flex;
             align-items: center;
+            gap: 4px;
         }
 
         .gallery-item .info .actions .download-btn {
@@ -466,7 +486,6 @@
             font-size: 12px;
             color: #b8c4d4;
             font-weight: 500;
-            gap: 4px;
         }
 
         .gallery-item .info .actions .download-btn:hover {
@@ -479,9 +498,7 @@
             background: rgba(248, 81, 73, 0.08);
         }
 
-        /* ============================================
-                   MODAL
-                ============================================ */
+        /* ===== MODAL ===== */
         .modal {
             display: none;
             position: fixed;
@@ -614,9 +631,7 @@
             box-shadow: 0 4px 28px rgba(240, 147, 62, 0.4);
         }
 
-        /* ============================================
-                   RESPONSIVE
-                ============================================ */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .app {
                 padding: 18px 14px 22px;
@@ -639,7 +654,10 @@
             .header-logo {
                 width: 38px;
                 height: 38px;
-                font-size: 18px;
+            }
+            .header-logo img {
+                width: 22px;
+                height: 22px;
             }
             .gallery {
                 grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -673,6 +691,14 @@
                 top: 10px;
                 right: 12px;
             }
+            .icon-img-lg {
+                width: 32px;
+                height: 32px;
+            }
+            .icon-img-xl {
+                width: 36px;
+                height: 36px;
+            }
         }
 
         @media (min-width: 769px) and (max-width: 1024px) {
@@ -684,9 +710,6 @@
             }
         }
 
-        /* ============================================
-                   SCROLL BAR
-                ============================================ */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -710,24 +733,38 @@
         <!-- ===== HEADER ===== -->
         <div class="header">
             <div class="header-left">
-                <div class="header-logo">📸</div>
+                <div class="header-logo">
+                    <img src="https://i.postimg.cc/T29c5b6r/e625067c-560b-4f86-a39c-725239da40f1.png" alt="Gallery">
+                </div>
                 <h1>Gallery Cloud</h1>
             </div>
-            <span class="header-badge">✦ Premium</span>
+            <span class="header-badge">
+                <img src="https://i.postimg.cc/9F0NWb7z/e625067c-560b-4f86-a39c-725239da40f1-(1)(2).png" alt="Premium" class="icon-img-sm">
+                Premium
+            </span>
         </div>
 
         <!-- ===== GİRİŞ ===== -->
         <div class="input-grid">
             <div class="input-group">
-                <label>👤 Kullanıcı Adı</label>
+                <label>
+                    <img src="https://i.postimg.cc/g2wy7B6M/e625067c-560b-4f86-a39c-725239da40f1(1).png" alt="Kullanıcı" class="icon-img">
+                    Kullanıcı Adı
+                </label>
                 <input type="text" id="username" placeholder="kullaniciadin">
             </div>
             <div class="input-group">
-                <label>📁 Repo Adı</label>
+                <label>
+                    <img src="https://i.postimg.cc/k4yWS0k7/e625067c-560b-4f86-a39c-725239da40f1(2).png" alt="Repo" class="icon-img">
+                    Repo Adı
+                </label>
                 <input type="text" id="repo" placeholder="repo-adi">
             </div>
             <div class="input-group">
-                <label>🔑 Token</label>
+                <label>
+                    <img src="https://i.postimg.cc/pdbj6VvW/e625067c-560b-4f86-a39c-725239da40f1(3).png" alt="Token" class="icon-img">
+                    Token
+                </label>
                 <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxx">
             </div>
         </div>
@@ -735,12 +772,17 @@
         <!-- ===== DURUM ===== -->
         <div class="status" id="status">
             <span class="spinner"></span>
-            <span class="msg">✨ Hazır</span>
+            <span class="msg">
+                <img src="https://i.postimg.cc/9F0NWb7z/e625067c-560b-4f86-a39c-725239da40f1-(1)(2).png" alt="Hazır" class="icon-img-sm">
+                Hazır
+            </span>
         </div>
 
         <!-- ===== DOSYA ALANI ===== -->
         <div class="file-area" id="fileArea">
-            <span class="icon">🖼️</span>
+            <span class="icon">
+                <img src="https://i.postimg.cc/TY1HR0Dk/e625067c-560b-4f86-a39c-725239da40f1-(1)(3).png" alt="Dosya" class="icon-img-lg">
+            </span>
             <div class="text">
                 <strong>Dosya seç</strong> veya buraya sürükle
             </div>
@@ -750,34 +792,50 @@
 
         <!-- ===== BUTONLAR ===== -->
         <div class="buttons">
-            <button class="btn btn-upload" id="uploadBtn">📤 Yükle</button>
-            <button class="btn btn-list" id="listBtn">📋 Listele</button>
-            <button class="btn btn-clear" id="clearBtn">🗑️ Temizle</button>
+            <button class="btn btn-upload" id="uploadBtn">
+                <img src="https://i.postimg.cc/SKMBmrHH/e625067c-560b-4f86-a39c-725239da40f1-(1)(10).png" alt="Yükle" class="icon-img">
+                Yükle
+            </button>
+            <button class="btn btn-list" id="listBtn">
+                <img src="https://i.postimg.cc/8Pxf7kjM/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Listele" class="icon-img">
+                Listele
+            </button>
+            <button class="btn btn-clear" id="clearBtn">
+                <img src="https://i.postimg.cc/g0WwKMyH/e625067c-560b-4f86-a39c-725239da40f1-(1)(1).png" alt="Temizle" class="icon-img">
+                Temizle
+            </button>
         </div>
 
         <!-- ===== GALERİ HEADER ===== -->
         <div class="gallery-header">
-            <span>📸 Galeri</span>
+            <span>
+                <img src="https://i.postimg.cc/T29c5b6r/e625067c-560b-4f86-a39c-725239da40f1.png" alt="Galeri" class="icon-img-sm">
+                Galeri
+            </span>
             <span class="count" id="galleryCount">0 dosya</span>
         </div>
 
         <!-- ===== GALERİ ===== -->
         <div class="gallery" id="gallery">
-            <div class="gallery-empty">📭 Henüz fotoğraf yok</div>
+            <div class="gallery-empty">
+                <img src="https://i.postimg.cc/TY1HR0Dk/e625067c-560b-4f86-a39c-725239da40f1-(1)(3).png" alt="Boş" class="icon-img-lg" style="margin-bottom:8px;">
+                <br>Henüz fotoğraf yok
+            </div>
         </div>
 
     </div>
 
-    <!-- ==========================================
-    MODAL
-    ========================================== -->
+    <!-- ===== MODAL ===== -->
     <div class="modal" id="modal">
         <div class="modal-content" id="modalContent">
             <button class="modal-close" id="modalClose">✕</button>
             <div id="modalMedia"></div>
             <div class="modal-bottom">
                 <span class="modal-filename" id="modalFilename">dosya</span>
-                <button class="modal-download" id="modalDownload">⬇️ İndir</button>
+                <button class="modal-download" id="modalDownload">
+                    <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="İndir" class="icon-img">
+                    İndir
+                </button>
             </div>
         </div>
     </div>
@@ -812,7 +870,7 @@
         // ============================================
         function setStatus(text, type = '') {
             statusEl.className = 'status' + (type ? ' ' + type : '');
-            statusMsg.textContent = text;
+            statusMsg.innerHTML = text;
         }
 
         function getConfig() {
@@ -903,7 +961,7 @@
 
             uploadBtn.disabled = false;
             if (failed === 0 && success > 0) {
-                setStatus(`✅ ${success} dosya yüklendi ✨`, 'success');
+                setStatus(`✅ ${success} dosya yüklendi`, 'success');
                 fileInput.value = '';
                 updateFileCount();
                 listFiles();
@@ -942,8 +1000,13 @@
                 });
 
                 if (res.status === 404) {
-                    setStatus('📭 "fotolar" klasörü boş', '');
-                    gallery.innerHTML = '<div class="gallery-empty">📭 Henüz fotoğraf yok</div>';
+                    setStatus('📭 Klasör boş', '');
+                    gallery.innerHTML = `
+                        <div class="gallery-empty">
+                            <img src="https://i.postimg.cc/TY1HR0Dk/e625067c-560b-4f86-a39c-725239da40f1-(1)(3).png" alt="Boş" class="icon-img-lg" style="margin-bottom:8px;">
+                            <br>Henüz fotoğraf yok
+                        </div>
+                    `;
                     galleryCount.textContent = '0 dosya';
                     return;
                 }
@@ -956,7 +1019,12 @@
                 const data = await res.json();
                 if (!data || !data.length) {
                     setStatus('📭 Boş', '');
-                    gallery.innerHTML = '<div class="gallery-empty">📭 Henüz fotoğraf yok</div>';
+                    gallery.innerHTML = `
+                        <div class="gallery-empty">
+                            <img src="https://i.postimg.cc/TY1HR0Dk/e625067c-560b-4f86-a39c-725239da40f1-(1)(3).png" alt="Boş" class="icon-img-lg" style="margin-bottom:8px;">
+                            <br>Henüz fotoğraf yok
+                        </div>
+                    `;
                     galleryCount.textContent = '0 dosya';
                     return;
                 }
@@ -979,8 +1047,13 @@
                         mediaHtml = `
                             <div class="media" onclick="openModal('${rawUrl}','${item.name}',true)">
                                 <video src="${rawUrl}" muted preload="metadata"></video>
-                                <span class="play-icon">▶️</span>
-                                <span class="video-duration">🎬</span>
+                                <span class="play-icon">
+                                    <img src="https://i.postimg.cc/W3sXxwV4/e625067c-560b-4f86-a39c-725239da40f1-(1)(4).png" alt="Oynat" class="icon-img-xl">
+                                </span>
+                                <span class="video-duration">
+                                    <img src="https://i.postimg.cc/WbdXR4Bg/e625067c-560b-4f86-a39c-725239da40f1-(1)(5).png" alt="Video" class="icon-img-sm">
+                                    Video
+                                </span>
                             </div>
                         `;
                     } else if (isImage) {
@@ -1000,7 +1073,10 @@
                         <div class="info">
                             <span class="name" title="${item.name}">${item.name}</span>
                             <div class="actions">
-                                <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">⬇️</button>
+                                <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">
+                                    <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="İndir" class="icon-img-sm">
+                                    İndir
+                                </button>
                                 <button class="delete-btn" onclick="deleteFile('${item.name}')">🗑️</button>
                             </div>
                         </div>
@@ -1024,9 +1100,11 @@
             modal.classList.add('active');
 
             if (isVideo) {
-                modalMedia.innerHTML = `<video src="${url}" controls autoplay style="max-width:94vw;max-height:85vh;border-radius:16px;background:#000;"></video>`;
+                modalMedia.innerHTML =
+                    `<video src="${url}" controls autoplay style="max-width:94vw;max-height:85vh;border-radius:16px;background:#000;"></video>`;
             } else {
-                modalMedia.innerHTML = `<img src="${url}" alt="Fotoğraf" style="max-width:94vw;max-height:85vh;border-radius:16px;">`;
+                modalMedia.innerHTML =
+                    `<img src="${url}" alt="Fotoğraf" style="max-width:94vw;max-height:85vh;border-radius:16px;">`;
             }
         }
 
@@ -1169,7 +1247,7 @@
         clearBtn.addEventListener('click', clearAll);
 
         // ============================================
-        // LOCAL STORAGE (Bilgileri hatırla)
+        // LOCAL STORAGE
         // ============================================
         try {
             const saved = localStorage.getItem('fotoApp');
