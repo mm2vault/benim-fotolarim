@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>👨‍👩‍👧‍👦 Aile Galerisi</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -92,53 +97,6 @@
             background: rgba(248, 81, 73, 0.16);
         }
 
-        .input-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .input-group label {
-            font-size: 10px;
-            font-weight: 600;
-            color: #8892a8;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .input-group input {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
-            padding: 11px 14px;
-            font-size: 14px;
-            color: #e8edf5;
-            outline: none;
-            transition: 0.3s;
-            font-family: inherit;
-            width: 100%;
-        }
-
-        .input-group input:focus {
-            border-color: #f0933e;
-            box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .input-group input::placeholder {
-            color: #3e485a;
-        }
-
         .status {
             background: rgba(255, 255, 255, 0.02);
             border-radius: 14px;
@@ -175,27 +133,39 @@
 
         /* ===== GİRİŞ EKRANI ===== */
         .giris-ekrani {
-            margin-top: 16px;
-            padding: 24px;
+            margin-top: 30px;
+            padding: 40px 24px;
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 18px;
+            border-radius: 24px;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            max-width: 400px;
+            max-width: 420px;
             margin-left: auto;
             margin-right: auto;
+            text-align: center;
         }
 
         .giris-ekrani .avatar {
-            font-size: 64px;
+            font-size: 72px;
             display: block;
-            text-align: center;
             margin-bottom: 12px;
         }
 
-        .giris-ekrani .isim-input {
+        .giris-ekrani .baslik {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .giris-ekrani .alt-baslik {
+            color: #6b7a93;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .giris-ekrani .telefon-input {
             width: 100%;
-            padding: 12px 16px;
-            border-radius: 12px;
+            padding: 14px 16px;
+            border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.06);
             background: rgba(255, 255, 255, 0.04);
             color: #e8edf5;
@@ -203,19 +173,19 @@
             outline: none;
             transition: 0.3s;
             font-family: inherit;
-            margin-bottom: 10px;
             text-align: center;
+            margin-bottom: 12px;
         }
 
-        .giris-ekrani .isim-input:focus {
+        .giris-ekrani .telefon-input:focus {
             border-color: #f0933e;
             box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
         }
 
-        .giris-ekrani .sifre-input {
+        .giris-ekrani .kod-input {
             width: 100%;
-            padding: 12px 16px;
-            border-radius: 12px;
+            padding: 14px 16px;
+            border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.06);
             background: rgba(255, 255, 255, 0.04);
             color: #e8edf5;
@@ -225,22 +195,23 @@
             font-family: inherit;
             text-align: center;
             letter-spacing: 4px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
+            display: none;
         }
 
-        .giris-ekrani .sifre-input:focus {
+        .giris-ekrani .kod-input:focus {
             border-color: #f0933e;
             box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
         }
 
         .giris-ekrani .btn-giris {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: linear-gradient(135deg, #f0933e, #e67e22);
             color: #fff;
             border: none;
             border-radius: 14px;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: 0.25s;
@@ -252,11 +223,29 @@
             box-shadow: 0 6px 30px rgba(240, 147, 62, 0.3);
         }
 
+        .giris-ekrani .btn-kod-gonder {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e8edf5;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.25s;
+            font-family: inherit;
+            margin-bottom: 10px;
+        }
+
+        .giris-ekrani .btn-kod-gonder:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
         .giris-ekrani .hata {
             color: #f85149;
             font-size: 13px;
-            text-align: center;
-            margin-top: 10px;
+            margin-top: 12px;
             display: none;
         }
 
@@ -264,18 +253,22 @@
             display: block;
         }
 
-        .giris-ekrani .kayit-bilgi {
+        .giris-ekrani .kullanici-bilgi {
             color: #4a5268;
-            font-size: 12px;
-            text-align: center;
-            margin-top: 8px;
+            font-size: 13px;
+            margin-top: 12px;
         }
 
-        .giris-ekrani .durum-text {
-            text-align: center;
-            font-size: 14px;
+        .giris-ekrani .geri-link {
             color: #6b7a93;
-            margin-bottom: 12px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .giris-ekrani .geri-link:hover {
+            color: #e8edf5;
         }
 
         /* ===== REPO GRİD ===== */
@@ -767,7 +760,7 @@
                 padding: 16px 12px;
             }
             .giris-ekrani {
-                padding: 16px;
+                padding: 20px 16px;
             }
             .giris-ekrani .avatar {
                 font-size: 48px;
@@ -830,31 +823,27 @@
             </span>
         </div>
 
-        <!-- TOKEN -->
-        <div class="input-grid">
-            <div class="input-group">
-                <label>🔑 Token</label>
-                <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxx">
-            </div>
-        </div>
-
         <!-- DURUM -->
         <div class="status" id="status">
             <span class="spinner"></span>
             <span class="msg">✨ Hoş geldiniz</span>
         </div>
 
-        <!-- ANA SAYFA (GİRİŞ) -->
-        <div id="anaSayfa">
-            <div class="giris-ekrani">
-                <span class="avatar">👤</span>
-                <div class="durum-text" id="girisDurum">🔑 Giriş yapmak için isim ve şifre girin</div>
-                <input type="text" class="isim-input" id="isimInput" placeholder="👤 İsminizi girin">
-                <input type="password" class="sifre-input" id="sifreInput" placeholder="🔑 Şifrenizi girin">
-                <button class="btn-giris" id="girisBtn">🔓 Giriş Yap</button>
-                <div class="hata" id="girisHata">❌ İsim veya şifre yanlış! Tekrar deneyin.</div>
-                <div class="kayit-bilgi" id="kayitBilgi">💡 İlk kez giriyorsanız, yeni hesap oluşturulacak.</div>
-            </div>
+        <!-- GİRİŞ EKRANI -->
+        <div id="girisEkrani" class="giris-ekrani">
+            <span class="avatar">📱</span>
+            <div class="baslik">Telefon ile Giriş</div>
+            <div class="alt-bilgi" id="altBilgi">Telefon numaranı gir, doğrulama kodu gelecek</div>
+            
+            <input type="tel" class="telefon-input" id="telefonInput" placeholder="+90 5xx xxx xx xx">
+            <input type="text" class="kod-input" id="kodInput" placeholder="6 haneli kodu gir">
+            
+            <button class="btn-kod-gonder" id="kodGonderBtn">📨 Kod Gönder</button>
+            <button class="btn-giris" id="girisBtn" style="display:none;">🔓 Giriş Yap</button>
+            
+            <div class="geri-link" id="geriLink">← Geri</div>
+            <div class="hata" id="girisHata">❌ Hata! Tekrar deneyin.</div>
+            <div class="kullanici-bilgi" id="kullaniciBilgi"></div>
         </div>
 
         <!-- REPO SAYFASI -->
@@ -919,41 +908,52 @@
 
     <script>
         // ==========================================================
-        // KİŞİ REPO EŞLEŞMESİ
+        // 🔥 FİREBASE KONFIGÜRASYONU
         // ==========================================================
-        const kisiRepolar = {
-            'anne': ['anne-1', 'anne-2'],
-            'baba': ['baba-1', 'baba-2'],
-            'sen': ['mm2-1', 'mm2-2'],
-            'abla': ['abla-1', 'abla-2']
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyPCMSYg14OLTtfgsta94XfU2yDaYee3Y",
+            authDomain: "benim-fotolarim.firebaseapp.com",
+            projectId: "benim-fotolarim",
+            storageBucket: "benim-fotolarim.firebasestorage.app",
+            messagingSenderId: "999858368144",
+            appId: "1:999858368144:web:8fe8de0da97844d67d7215"
         };
 
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        let windowRef = null;
+        let confirmResult = null;
+
         // ==========================================================
-        // DURUM
+        // TELEFON NUMARASI -> REPO EŞLEŞMESİ
         // ==========================================================
-        let aktifKisi = null;
-        let aktifRepo = null;
-        let currentToken = '';
+        const telefonRepolar = {
+            '+994705990606': ['mm2-1', 'mm2-2'], // Sen
+            '+994776367936': ['anne-1', 'anne-2'], // Anne
+            '+994706367936': ['baba-1', 'baba-2'], // Baba
+            '+994556367936': ['abla-1', 'abla-2'] // Abla
+        };
 
         // ==========================================================
         // DOM
         // ==========================================================
-        const tokenInput = document.getElementById('token');
         const statusEl = document.getElementById('status');
         const statusMsg = statusEl.querySelector('.msg');
-        const anaSayfa = document.getElementById('anaSayfa');
+        const girisEkrani = document.getElementById('girisEkrani');
         const repoSayfa = document.getElementById('repoSayfa');
         const galeriSayfa = document.getElementById('galeriSayfa');
         const geriBtn = document.getElementById('geriBtn');
         const galeriGeriBtn = document.getElementById('galeriGeriBtn');
         const cikisBtn = document.getElementById('cikisBtn');
 
-        const isimInput = document.getElementById('isimInput');
-        const sifreInput = document.getElementById('sifreInput');
+        const telefonInput = document.getElementById('telefonInput');
+        const kodInput = document.getElementById('kodInput');
+        const kodGonderBtn = document.getElementById('kodGonderBtn');
         const girisBtn = document.getElementById('girisBtn');
-        const girisDurum = document.getElementById('girisDurum');
+        const geriLink = document.getElementById('geriLink');
         const girisHata = document.getElementById('girisHata');
-        const kayitBilgi = document.getElementById('kayitBilgi');
+        const altBilgi = document.getElementById('altBilgi');
+        const kullaniciBilgi = document.getElementById('kullaniciBilgi');
         const repoGrid = document.getElementById('repoGrid');
 
         const fileInput = document.getElementById('fileInput');
@@ -975,6 +975,8 @@
 
         let currentModalUrl = '';
         let currentModalName = '';
+        let aktifRepo = null;
+        let currentUser = null;
 
         // ==========================================================
         // YARDIMCI
@@ -988,7 +990,7 @@
             return {
                 user: 'mm2vault',
                 repo: aktifRepo,
-                token: currentToken || tokenInput.value.trim() || localStorage.getItem('githubToken') || ''
+                token: localStorage.getItem('githubToken') || ''
             };
         }
 
@@ -1019,94 +1021,130 @@
         });
 
         // ==========================================================
-        // ŞİFRE YÖNETİMİ (localStorage)
+        // 🔐 TELEFON İLE GİRİŞ
         // ==========================================================
-        function kullaniciKaydet(isim, sifre) {
-            const kullanicilar = JSON.parse(localStorage.getItem('aileKullanicilar') || '{}');
-            kullanicilar[isim] = sifre;
-            localStorage.setItem('aileKullanicilar', JSON.stringify(kullanicilar));
-            console.log('✅ Kullanıcı kaydedildi:', isim);
-        }
+        let isCodeSent = false;
 
-        function kullaniciSifreAl(isim) {
-            const kullanicilar = JSON.parse(localStorage.getItem('aileKullanicilar') || '{}');
-            return kullanicilar[isim] || null;
-        }
-
-        function tumKullanicilariSil() {
-            localStorage.removeItem('aileKullanicilar');
-            console.log('🗑️ Tüm kullanıcılar silindi');
-        }
-
-        // ==========================================================
-        // GİRİŞ İŞLEMİ
-        // ==========================================================
-        function girisYap() {
-            const isim = isimInput.value.trim().toLowerCase();
-            const sifre = sifreInput.value.trim();
-
-            if (!isim || !sifre) {
-                girisHata.textContent = '❌ Lütfen isim ve şifre girin!';
+        // Kod Gönder
+        kodGonderBtn.addEventListener('click', () => {
+            const phone = telefonInput.value.trim();
+            if (!phone || phone.length < 10) {
+                girisHata.textContent = '❌ Geçerli bir telefon numarası girin!';
                 girisHata.classList.add('goster');
                 return;
             }
 
-            const kayitliSifre = kullaniciSifreAl(isim);
+            setStatus('⏳ Kod gönderiliyor...', 'loading');
+            girisHata.classList.remove('goster');
 
-            if (kayitliSifre === null) {
-                // Yeni kullanıcı - kaydet
-                kullaniciKaydet(isim, sifre);
-                girisHata.classList.remove('goster');
-                girisDurum.textContent = '✅ Hesap oluşturuldu!';
-                aktifKisi = isim;
-                repoGoster(isim);
-                return;
-            }
+            const appVerifier = new firebase.auth.RecaptchaVerifier('girisEkrani', {
+                size: 'invisible',
+                callback: () => {}
+            });
 
-            if (sifre === kayitliSifre) {
-                // Şifre doğru
-                girisHata.classList.remove('goster');
-                girisDurum.textContent = '✅ Hoş geldin ' + isim + '!';
-                aktifKisi = isim;
-                repoGoster(isim);
-            } else {
-                // Şifre yanlış
-                girisHata.textContent = '❌ Şifre yanlış! Tekrar deneyin.';
-                girisHata.classList.add('goster');
-                sifreInput.value = '';
-                sifreInput.focus();
-            }
-        }
-
-        girisBtn.addEventListener('click', girisYap);
-        sifreInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') girisYap();
+            auth.signInWithPhoneNumber(phone, appVerifier)
+                .then((confirmationResult) => {
+                    confirmResult = confirmationResult;
+                    isCodeSent = true;
+                    kodInput.style.display = 'block';
+                    girisBtn.style.display = 'block';
+                    kodGonderBtn.style.display = 'none';
+                    geriLink.style.display = 'block';
+                    telefonInput.disabled = true;
+                    altBilgi.textContent = '📨 Kod gönderildi! Telefonuna gelen 6 haneli kodu gir.';
+                    setStatus('📨 Kod gönderildi', 'success');
+                    kodInput.focus();
+                })
+                .catch((error) => {
+                    console.error('Kod gönderme hatası:', error);
+                    girisHata.textContent = '❌ Kod gönderilemedi: ' + error.message;
+                    girisHata.classList.add('goster');
+                    setStatus('❌ Kod gönderilemedi', 'error');
+                });
         });
-        isimInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') sifreInput.focus();
+
+        // Kod Doğrula ve Giriş Yap
+        girisBtn.addEventListener('click', () => {
+            const code = kodInput.value.trim();
+            if (!code || code.length < 6) {
+                girisHata.textContent = '❌ 6 haneli kodu girin!';
+                girisHata.classList.add('goster');
+                return;
+            }
+
+            setStatus('⏳ Doğrulanıyor...', 'loading');
+            girisHata.classList.remove('goster');
+
+            confirmResult.confirm(code)
+                .then((result) => {
+                    const user = result.user;
+                    currentUser = user;
+                    const phone = user.phoneNumber;
+
+                    girisHata.classList.remove('goster');
+                    kullaniciBilgi.textContent = `✅ Hoş geldin! (${phone})`;
+                    setStatus(`✅ ${phone} ile giriş yapıldı`, 'success');
+
+                    const repolar = telefonRepolar[phone];
+                    if (repolar) {
+                        repoGoster(repolar, phone);
+                    } else {
+                        girisHata.textContent = '⚠️ Bu numara için kayıtlı repo bulunamadı!';
+                        girisHata.classList.add('goster');
+                        setStatus('⚠️ Repo bulunamadı', 'error');
+                        setTimeout(() => {
+                            auth.signOut();
+                        }, 3000);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Doğrulama hatası:', error);
+                    girisHata.textContent = '❌ Kod yanlış! Tekrar deneyin.';
+                    girisHata.classList.add('goster');
+                    kodInput.value = '';
+                    kodInput.focus();
+                    setStatus('❌ Kod yanlış', 'error');
+                });
+        });
+
+        // Geri (numara değiştir)
+        geriLink.addEventListener('click', () => {
+            isCodeSent = false;
+            confirmResult = null;
+            kodInput.style.display = 'none';
+            girisBtn.style.display = 'none';
+            kodGonderBtn.style.display = 'block';
+            geriLink.style.display = 'none';
+            telefonInput.disabled = false;
+            kodInput.value = '';
+            altBilgi.textContent = 'Telefon numaranı gir, doğrulama kodu gelecek';
+            girisHata.classList.remove('goster');
+            setStatus('✨ Numara girin', '');
+        });
+
+        // Enter tuşu
+        kodInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && isCodeSent) girisBtn.click();
+        });
+        telefonInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') kodGonderBtn.click();
         });
 
         // ==========================================================
         // REPOLARI GÖSTER
         // ==========================================================
-        function repoGoster(isim) {
-            anaSayfa.classList.add('gizli');
+        function repoGoster(repolar, phone) {
+            girisEkrani.classList.add('gizli');
             repoSayfa.classList.remove('gizli');
             galeriSayfa.classList.add('gizli');
             repoGrid.innerHTML = '';
-
-            const repolar = kisiRepolar[isim];
-            if (!repolar) {
-                setStatus('❌ Bu kullanıcı için repo bulunamadı', 'error');
-                return;
-            }
 
             for (const repoAdi of repolar) {
                 const kart = document.createElement('div');
                 kart.className = 'repo-card';
                 kart.innerHTML = `
                     <span class="repo-avatar">📁</span>
-                    <div class="repo-isim">${isim} - ${repoAdi}</div>
+                    <div class="repo-isim">${phone} - ${repoAdi}</div>
                     <div class="repo-ad">${repoAdi}</div>
                 `;
                 kart.addEventListener('click', () => {
@@ -1116,7 +1154,7 @@
                 repoGrid.appendChild(kart);
             }
 
-            setStatus(`📂 ${isim} - Repolar`, '');
+            setStatus(`📂 ${phone} - Repolar`, '');
         }
 
         // ==========================================================
@@ -1130,40 +1168,41 @@
         }
 
         // ==========================================================
-        // GERİ BUTONU (Repolardan Girişe Dön - Şifreyi Sil)
+        // GERİ BUTONU
         // ==========================================================
         function repodanGiriseDon() {
-            if (aktifKisi) {
-                // Kullanıcıyı sil (çıkış yap)
-                const sifreler = JSON.parse(localStorage.getItem('aileKullanicilar') || '{}');
-                delete sifreler[aktifKisi];
-                localStorage.setItem('aileKullanicilar', JSON.stringify(sifreler));
-                console.log('🗑️ Kullanıcı silindi:', aktifKisi);
-            }
-
-            repoSayfa.classList.add('gizli');
-            anaSayfa.classList.remove('gizli');
-            aktifKisi = null;
-            aktifRepo = null;
-            girisDurum.textContent = '🔑 Giriş yapmak için isim ve şifre girin';
-            isimInput.value = '';
-            sifreInput.value = '';
-            girisHata.classList.remove('goster');
-            setStatus('✨ Ana sayfa', '');
+            auth.signOut().then(() => {
+                currentUser = null;
+                repoSayfa.classList.add('gizli');
+                girisEkrani.classList.remove('gizli');
+                kullaniciBilgi.textContent = '';
+                girisHata.classList.remove('goster');
+                telefonInput.disabled = false;
+                kodInput.style.display = 'none';
+                girisBtn.style.display = 'none';
+                kodGonderBtn.style.display = 'block';
+                geriLink.style.display = 'none';
+                altBilgi.textContent = 'Telefon numaranı gir, doğrulama kodu gelecek';
+                setStatus('🔐 Çıkış yapıldı', '');
+            }).catch((error) => {
+                console.error('Çıkış hatası:', error);
+            });
         }
 
         geriBtn.addEventListener('click', repodanGiriseDon);
 
         // ==========================================================
-        // GALERİDEN GERİ (Repolara Dön)
+        // GALERİDEN GERİ
         // ==========================================================
         function galeridenRepolaraDon() {
             galeriSayfa.classList.add('gizli');
             repoSayfa.classList.remove('gizli');
-            if (aktifKisi) {
-                setStatus(`📂 ${aktifKisi} - Repolar`, '');
-            } else {
-                setStatus('📂 Repolar', '');
+            if (currentUser) {
+                const phone = currentUser.phoneNumber;
+                const repolar = telefonRepolar[phone];
+                if (repolar) {
+                    repoGoster(repolar, phone);
+                }
             }
             gallery.innerHTML = '';
             galleryCount.textContent = '0 dosya';
@@ -1174,22 +1213,28 @@
         galeriGeriBtn.addEventListener('click', galeridenRepolaraDon);
 
         // ==========================================================
-        // ÇIKIŞ YAP - Tüm kullanıcıları sil
+        // ÇIKIŞ YAP
         // ==========================================================
         function cikisYap() {
-            if (!confirm('Çıkış yapmak istediğinize emin misiniz? Tüm hesaplar silinecek.')) return;
+            if (!confirm('Çıkış yapmak istediğine emin misin?')) return;
 
-            tumKullanicilariSil();
-            anaSayfa.classList.remove('gizli');
-            repoSayfa.classList.add('gizli');
-            galeriSayfa.classList.add('gizli');
-            aktifKisi = null;
-            aktifRepo = null;
-            girisDurum.textContent = '🔑 Giriş yapmak için isim ve şifre girin';
-            isimInput.value = '';
-            sifreInput.value = '';
-            girisHata.classList.remove('goster');
-            setStatus('🚪 Çıkış yapıldı. Tüm hesaplar silindi.', '');
+            auth.signOut().then(() => {
+                currentUser = null;
+                repoSayfa.classList.add('gizli');
+                galeriSayfa.classList.add('gizli');
+                girisEkrani.classList.remove('gizli');
+                kullaniciBilgi.textContent = '';
+                girisHata.classList.remove('goster');
+                telefonInput.disabled = false;
+                kodInput.style.display = 'none';
+                girisBtn.style.display = 'none';
+                kodGonderBtn.style.display = 'block';
+                geriLink.style.display = 'none';
+                altBilgi.textContent = 'Telefon numaranı gir, doğrulama kodu gelecek';
+                setStatus('🚪 Çıkış yapıldı', '');
+            }).catch((error) => {
+                console.error('Çıkış hatası:', error);
+            });
         }
 
         cikisBtn.addEventListener('click', cikisYap);
@@ -1200,7 +1245,7 @@
         async function listFiles() {
             const cfg = getConfig();
             if (!cfg.token || !cfg.repo) {
-                setStatus('❌ Token veya repo seçili değil', 'error');
+                setStatus('❌ GitHub token gerekli!', 'error');
                 return;
             }
 
@@ -1336,28 +1381,12 @@
         // İNDİRME
         // ==========================================================
         function downloadFile(url, filename) {
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) throw new Error('Dosya alınamadı');
-                    return response.blob();
-                })
-                .then(blob => {
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = filename;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-                })
-                .catch(() => {
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = filename;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                });
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         modalDownload.addEventListener('click', () => {
@@ -1370,7 +1399,7 @@
         async function uploadFiles() {
             const cfg = getConfig();
             if (!cfg.token || !cfg.repo) {
-                setStatus('❌ Token veya repo seçili değil', 'error');
+                setStatus('❌ GitHub token gerekli!', 'error');
                 return;
             }
 
@@ -1505,27 +1534,38 @@
         clearBtn.addEventListener('click', clearAll);
 
         // ==========================================================
-        // TOKEN HATIRLAMA
+        // OTURUM KONTROLÜ
         // ==========================================================
-        tokenInput.addEventListener('change', () => {
-            const token = tokenInput.value.trim();
-            if (token && token.startsWith('ghp_')) {
-                localStorage.setItem('githubToken', token);
-                currentToken = token;
-                setStatus('✅ Token kaydedildi', 'success');
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentUser = user;
+                const phone = user.phoneNumber;
+                const repolar = telefonRepolar[phone];
+                if (repolar) {
+                    girisEkrani.classList.add('gizli');
+                    repoGoster(repolar, phone);
+                    setStatus(`✅ ${phone} ile giriş yapıldı`, 'success');
+                } else {
+                    auth.signOut();
+                    setStatus('⚠️ Bu numara için kayıtlı repo bulunamadı', 'error');
+                }
+            } else {
+                girisEkrani.classList.remove('gizli');
+                repoSayfa.classList.add('gizli');
+                galeriSayfa.classList.add('gizli');
+                setStatus('✨ Lütfen giriş yapın', '');
             }
         });
 
         // ==========================================================
         // BAŞLANGIÇ
         // ==========================================================
+        setStatus('✨ Aile sistemine hoş geldiniz', '');
+
+        // GitHub token kontrolü
         const kayitliToken = localStorage.getItem('githubToken');
-        if (kayitliToken && kayitliToken.startsWith('ghp_')) {
-            currentToken = kayitliToken;
-            tokenInput.value = kayitliToken;
-            setStatus('✨ Aile sistemine hoş geldiniz', 'success');
-        } else {
-            setStatus('🔑 Token girin', '');
+        if (!kayitliToken) {
+            setStatus('⚠️ GitHub token gerekli! Lütfen gir.', 'error');
         }
     </script>
 
