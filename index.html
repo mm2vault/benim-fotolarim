@@ -973,10 +973,15 @@
                 <button class="close-btn" onclick="this.closest('.toast').remove()">✕</button>
             `;
             toastContainer.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.add('hide');
-                setTimeout(() => toast.remove(), 400);
-            }, duration);
+            
+            if (duration > 0) {
+                setTimeout(() => {
+                    toast.classList.add('hide');
+                    setTimeout(() => toast.remove(), 400);
+                }, duration);
+            }
+            
+            return toast;
         }
 
         // ==========================================================
@@ -1140,7 +1145,6 @@
         // ==========================================================
         // GERİ BUTONLARI
         // ==========================================================
-        // Ana sayfaya dön (repo sayfasından)
         function anaSayfayaDon() {
             repoSayfa.classList.add('gizli');
             galeriSayfa.classList.add('gizli');
@@ -1152,7 +1156,6 @@
 
         anaGeriBtn.addEventListener('click', anaSayfayaDon);
 
-        // Repolara dön (galeri sayfasından)
         function repolaraDon() {
             galeriSayfa.classList.add('gizli');
             repoSayfa.classList.remove('gizli');
@@ -1460,20 +1463,157 @@
         });
 
         // ==========================================================
-        // SİLME
+        // ÖZEL ONAY DİYALOĞU
+        // ==========================================================
+        function showConfirmDialog(title, message, subMessage = '') {
+            return new Promise((resolve) => {
+                const overlay = document.createElement('div');
+                overlay.style.cssText = `
+                    position: fixed;
+                    inset: 0;
+                    background: rgba(0, 0, 0, 0.85);
+                    backdrop-filter: blur(12px);
+                    z-index: 10000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 20px;
+                    animation: fadeIn 0.25s ease;
+                `;
+                
+                const dialog = document.createElement('div');
+                dialog.style.cssText = `
+                    background: rgba(22, 30, 44, 0.95);
+                    border: 1px solid rgba(255, 255, 255, 0.08);
+                    border-radius: 24px;
+                    padding: 32px 28px 24px;
+                    max-width: 440px;
+                    width: 100%;
+                    text-align: center;
+                    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.8);
+                    animation: scaleIn 0.3s ease;
+                `;
+                
+                dialog.innerHTML = `
+                    <div style="font-size: 48px; margin-bottom: 12px;">${title.split(' ')[0]}</div>
+                    <h3 style="color: #e8edf5; font-size: 20px; font-weight: 600; margin-bottom: 8px;">${title}</h3>
+                    <p style="color: #b8c4d4; font-size: 15px; margin-bottom: 4px; line-height: 1.5;">${message}</p>
+                    ${subMessage ? `<p style="color: #f85149; font-size: 13px; margin-bottom: 20px; font-weight: 500;">⚠️ ${subMessage}</p>` : '<div style="height: 8px;"></div>'}
+                    <div style="display: flex; gap: 12px;">
+                        <button id="confirmCancel" style="
+                            flex: 1;
+                            padding: 12px;
+                            background: rgba(255, 255, 255, 0.05);
+                            border: 1px solid rgba(255, 255, 255, 0.06);
+                            border-radius: 12px;
+                            color: #7a879f;
+                            font-size: 14px;
+                            font-weight: 500;
+                            cursor: pointer;
+                            transition: 0.25s;
+                            font-family: inherit;
+                        ">Vazgeç</button>
+                        <button id="confirmDelete" style="
+                            flex: 1;
+                            padding: 12px;
+                            background: linear-gradient(135deg, #f85149, #da3633);
+                            border: none;
+                            border-radius: 12px;
+                            color: #fff;
+                            font-size: 14px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: 0.25s;
+                            font-family: inherit;
+                            box-shadow: 0 4px 20px rgba(248, 81, 73, 0.25);
+                        ">🗑️ Sil</button>
+                    </div>
+                `;
+                
+                overlay.appendChild(dialog);
+                document.body.appendChild(overlay);
+                
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                    @keyframes scaleIn {
+                        from { transform: scale(0.9); opacity: 0; }
+                        to { transform: scale(1); opacity: 1; }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                const cancelBtn = dialog.querySelector('#confirmCancel');
+                const deleteBtn = dialog.querySelector('#confirmDelete');
+                
+                cancelBtn.addEventListener('mouseenter', () => {
+                    cancelBtn.style.background = 'rgba(255, 255, 255, 0.08)';
+                });
+                cancelBtn.addEventListener('mouseleave', () => {
+                    cancelBtn.style.background = 'rgba(255, 255, 255, 0.05)';
+                });
+                
+                deleteBtn.addEventListener('mouseenter', () => {
+                    deleteBtn.style.transform = 'scale(1.02)';
+                    deleteBtn.style.boxShadow = '0 6px 30px rgba(248, 81, 73, 0.4)';
+                });
+                deleteBtn.addEventListener('mouseleave', () => {
+                    deleteBtn.style.transform = 'scale(1)';
+                    deleteBtn.style.boxShadow = '0 4px 20px rgba(248, 81, 73, 0.25)';
+                });
+                
+                const cleanup = (result) => {
+                    overlay.style.opacity = '0';
+                    overlay.style.transition = 'opacity 0.25s';
+                    setTimeout(() => {
+                        overlay.remove();
+                        style.remove();
+                        resolve(result);
+                    }, 250);
+                };
+                
+                cancelBtn.addEventListener('click', () => cleanup(false));
+                deleteBtn.addEventListener('click', () => cleanup(true));
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) cleanup(false);
+                });
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') cleanup(false);
+                }, { once: true });
+            });
+        }
+
+        // ==========================================================
+        // SİLME (GÜZEL BİLDİRİM İLE)
         // ==========================================================
         async function deleteFile(filename, sha) {
-            if (!confirm(`"${filename}" kalıcı olarak silinsin mi?`)) return;
+            const confirmed = await showConfirmDialog(
+                '🗑️ Dosyayı Sil',
+                `"${filename}" dosyasını kalıcı olarak silmek istediğinize emin misiniz?`,
+                'Bu işlem geri alınamaz!'
+            );
+            
+            if (!confirmed) {
+                showToast('ℹ️', 'Silme iptal edildi', '', 'info', 2000);
+                return;
+            }
+
             const cfg = getConfig();
             if (!cfg.token || !cfg.repo) {
                 setStatus('❌ Token veya repo seçili değil', 'error');
+                showToast('❌', 'Hata', 'Token veya repo seçili değil.', 'error', 3000);
                 return;
             }
 
             setStatus(`⏳ Siliniyor: ${filename}`, 'loading');
+            
+            const loadingToast = showToast('⏳', `${filename} siliniyor...`, 'Lütfen bekleyin.', 'info', 0);
+            
             try {
-                const url =
-                    `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar/${encodeURIComponent(filename)}`;
+                const url = `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar/${encodeURIComponent(filename)}`;
                 const res = await fetch(url, {
                     method: 'DELETE',
                     headers: {
@@ -1483,19 +1623,25 @@
                     body: JSON.stringify({ message: `Sil: ${filename}`, sha: sha })
                 });
 
+                if (loadingToast) loadingToast.remove();
+
                 if (res.ok) {
                     setStatus(`🗑️ "${filename}" silindi`, 'success');
-                    showToast('🗑️', `"${filename}" silindi`, 'Dosya başarıyla kaldırıldı.', 'success', 3000);
+                    showToast('✅', `"${filename}" silindi`, 'Dosya başarıyla kaldırıldı.', 'success', 3000);
+                    
+                    if (navigator.vibrate) navigator.vibrate(50);
+                    
                     setTimeout(() => {
                         listFiles();
                         renderKisiler();
-                    }, 2000);
+                    }, 1500);
                 } else {
                     const err = await res.json();
                     setStatus(`❌ Silinemedi: ${err.message || 'Hata'}`, 'error');
                     showToast('❌', 'Silme başarısız', err.message || 'Dosya silinemedi.', 'error', 4000);
                 }
             } catch (e) {
+                if (loadingToast) loadingToast.remove();
                 setStatus(`❌ ${e.message}`, 'error');
                 showToast('❌', 'Hata', e.message, 'error', 4000);
             }
@@ -1505,22 +1651,42 @@
         // TÜMÜNÜ TEMİZLE
         // ==========================================================
         async function clearAll() {
+            const confirmed = await showConfirmDialog(
+                '⚠️ Tümünü Temizle',
+                'Tüm dosyaları kalıcı olarak silmek istediğinize emin misiniz?',
+                'Bu işlem geri alınamaz ve tüm dosyalar kaybolacak!'
+            );
+            
+            if (!confirmed) {
+                showToast('ℹ️', 'Temizleme iptal edildi', '', 'info', 2000);
+                return;
+            }
+
             const cfg = getConfig();
             if (!cfg.token || !cfg.repo) {
                 setStatus('❌ Token veya repo seçili değil', 'error');
                 return;
             }
-            if (!confirm('⚠️ TÜM dosyalar silinecek! Devam et?')) return;
 
             setStatus('⏳ Temizleniyor...', 'loading');
+            const loadingToast = showToast('⏳', 'Tüm dosyalar siliniyor...', 'Lütfen bekleyin.', 'info', 0);
+            
             try {
                 const url = `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar`;
                 const res = await fetch(url, {
                     headers: { 'Authorization': `token ${cfg.token}` }
                 });
-                if (!res.ok) { setStatus('❌ Liste alınamadı', 'error'); return; }
+                if (!res.ok) { 
+                    if (loadingToast) loadingToast.remove();
+                    setStatus('❌ Liste alınamadı', 'error'); 
+                    return; 
+                }
                 const data = await res.json();
-                if (!data.length) { setStatus('📭 Zaten boş', ''); return; }
+                if (!data.length) { 
+                    if (loadingToast) loadingToast.remove();
+                    setStatus('📭 Zaten boş', ''); 
+                    return; 
+                }
 
                 let deleted = 0;
                 for (const item of data) {
@@ -1534,13 +1700,19 @@
                     });
                     if (del.ok) deleted++;
                 }
+                
+                if (loadingToast) loadingToast.remove();
                 setStatus(`🗑️ ${deleted} dosya silindi`, 'success');
                 showToast('🗑️', `${deleted} dosya silindi`, 'Tüm dosyalar temizlendi.', 'success', 3000);
+                
+                if (navigator.vibrate) navigator.vibrate(50);
+                
                 setTimeout(() => {
                     listFiles();
                     renderKisiler();
                 }, 2000);
             } catch (e) {
+                if (loadingToast) loadingToast.remove();
                 setStatus(`❌ ${e.message}`, 'error');
                 showToast('❌', 'Hata', e.message, 'error', 4000);
             }
