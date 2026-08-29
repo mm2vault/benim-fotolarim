@@ -869,9 +869,8 @@
 
     <script>
         // ==========================================================
-        // KULLANICI BİLGİLERİ (localStorage)
+        // KULLANICI -> REPO EŞLEŞMESİ (SABİT)
         // ==========================================================
-        // Kullanıcı -> Repo Eşleşmesi
         const kisiRepolar = {
             'anne': ['anne-1', 'anne-2'],
             'baba': ['baba-1', 'baba-2'],
@@ -882,7 +881,6 @@
         // ==========================================================
         // DURUM
         // ==========================================================
-        let aktifKisi = null;
         let aktifRepo = null;
         let currentUser = null;
 
@@ -890,18 +888,29 @@
         // ŞİFRE YÖNETİMİ
         // ==========================================================
         function sifreKaydet(kisiId, sifre) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v8') || '{}');
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v9') || '{}');
             sifreler[kisiId] = sifre;
-            localStorage.setItem('aileSifreler_v8', JSON.stringify(sifreler));
+            localStorage.setItem('aileSifreler_v9', JSON.stringify(sifreler));
+            console.log('✅ Şifre kaydedildi:', kisiId);
         }
 
         function sifreAl(kisiId) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v8') || '{}');
-            return sifreler[kisiId] || null;
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v9') || '{}');
+            const sifre = sifreler[kisiId] || null;
+            console.log('🔍 Şifre okundu:', kisiId, sifre);
+            return sifre;
+        }
+
+        function sifreSil(kisiId) {
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v9') || '{}');
+            delete sifreler[kisiId];
+            localStorage.setItem('aileSifreler_v9', JSON.stringify(sifreler));
+            console.log('🗑️ Şifre silindi:', kisiId);
         }
 
         function tumSifreleriSil() {
-            localStorage.removeItem('aileSifreler_v8');
+            localStorage.removeItem('aileSifreler_v9');
+            console.log('🗑️ Tüm şifreler silindi');
         }
 
         // ==========================================================
@@ -987,7 +996,7 @@
         });
 
         // ==========================================================
-        // GİRİŞ İŞLEMİ
+        // 🔐 GİRİŞ İŞLEMİ (DÜZELTİLDİ)
         // ==========================================================
         function girisYap() {
             const isim = isimInput.value.trim().toLowerCase();
@@ -999,28 +1008,32 @@
                 return;
             }
 
-            // Kayıtlı kullanıcı mı?
+            // Kullanıcı için repo var mı?
+            if (!kisiRepolar[isim]) {
+                girisHata.textContent = '❌ Bu isimde kayıtlı kullanıcı yok!';
+                girisHata.classList.add('goster');
+                return;
+            }
+
             const kayitliSifre = sifreAl(isim);
 
+            // İLK KAYIT (Hiç şifre yoksa)
             if (kayitliSifre === null) {
-                // İLK KAYIT
                 sifreKaydet(isim, sifre);
                 girisHata.classList.remove('goster');
                 kullaniciBilgi.textContent = `✅ Hoş geldin ${isim}! Hesap oluşturuldu.`;
                 setStatus(`✅ ${isim} olarak giriş yapıldı`, 'success');
                 currentUser = isim;
-                aktifKisi = isim;
                 repoGoster(isim);
                 return;
             }
 
+            // ŞİFRE KONTROLÜ (Kayıtlı şifre varsa)
             if (sifre === kayitliSifre) {
-                // ŞİFRE DOĞRU
                 girisHata.classList.remove('goster');
                 kullaniciBilgi.textContent = `✅ Hoş geldin ${isim}!`;
                 setStatus(`✅ ${isim} olarak giriş yapıldı`, 'success');
                 currentUser = isim;
-                aktifKisi = isim;
                 repoGoster(isim);
             } else {
                 // ŞİFRE YANLIŞ
@@ -1086,28 +1099,30 @@
         }
 
         // ==========================================================
-        // GERİ BUTONU (Çıkış Yap - Kullanıcıyı Sil)
+        // GERİ BUTONU (Çıkış Yap - Şifreyi Sil)
         // ==========================================================
         function geriDon() {
             if (currentUser) {
                 // Kullanıcının şifresini sil
-                const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v8') || '{}');
-                delete sifreler[currentUser];
-                localStorage.setItem('aileSifreler_v8', JSON.stringify(sifreler));
+                sifreSil(currentUser);
+                repoSayfa.classList.add('gizli');
+                galeriSayfa.classList.add('gizli');
+                girisEkrani.classList.remove('gizli');
+                const isim = currentUser;
+                currentUser = null;
+                aktifRepo = null;
+                isimInput.value = '';
+                sifreInput.value = '';
+                kullaniciBilgi.textContent = '';
+                girisHata.classList.remove('goster');
+                altBilgi.textContent = 'İsminizi ve şifrenizi girin';
+                setStatus(`🔐 ${isim} çıkış yaptı`, '');
+            } else {
+                repoSayfa.classList.add('gizli');
+                galeriSayfa.classList.add('gizli');
+                girisEkrani.classList.remove('gizli');
+                setStatus('🔐 Çıkış yapıldı', '');
             }
-
-            repoSayfa.classList.add('gizli');
-            galeriSayfa.classList.add('gizli');
-            girisEkrani.classList.remove('gizli');
-            currentUser = null;
-            aktifKisi = null;
-            aktifRepo = null;
-            isimInput.value = '';
-            sifreInput.value = '';
-            kullaniciBilgi.textContent = '';
-            girisHata.classList.remove('goster');
-            altBilgi.textContent = 'İsminizi ve şifrenizi girin';
-            setStatus('🔐 Çıkış yapıldı', '');
         }
 
         geriBtn.addEventListener('click', geriDon);
@@ -1132,7 +1147,7 @@
         galeriGeriBtn.addEventListener('click', galeridenRepolaraDon);
 
         // ==========================================================
-        // ÇIKIŞ YAP - Tüm Kullanıcıları Sil
+        // ÇIKIŞ YAP - Tüm Şifreleri Sil
         // ==========================================================
         function cikisYap() {
             if (!confirm('Çıkış yapmak istediğine emin misin? Tüm şifreler silinecek.')) return;
@@ -1142,7 +1157,6 @@
             galeriSayfa.classList.add('gizli');
             girisEkrani.classList.remove('gizli');
             currentUser = null;
-            aktifKisi = null;
             aktifRepo = null;
             isimInput.value = '';
             sifreInput.value = '';
@@ -1451,7 +1465,6 @@
         // ==========================================================
         // TOKEN HATIRLAMA
         // ==========================================================
-        // GitHub token kontrolü
         const kayitliToken = localStorage.getItem('githubToken');
         if (!kayitliToken) {
             setStatus('⚠️ GitHub token gerekli! Lütfen gir.', 'error');
