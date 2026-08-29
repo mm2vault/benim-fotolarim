@@ -126,7 +126,6 @@
             }
         }
 
-        /* ===== KİŞİ GRİD ===== */
         .kisi-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -191,7 +190,6 @@
             font-size: 16px;
         }
 
-        /* ===== REPO GRİD ===== */
         .repo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -236,7 +234,6 @@
             display: none !important;
         }
 
-        /* ===== ŞİFRE MODAL ===== */
         .sifre-modal {
             display: none;
             position: fixed;
@@ -362,7 +359,6 @@
             display: block;
         }
 
-        /* ===== DOSYA ALANI ===== */
         .btn-geri {
             background: rgba(255, 255, 255, 0.05);
             color: #e8edf5;
@@ -880,18 +876,15 @@
             <span class="msg">✨ Hoş geldiniz</span>
         </div>
 
-        <!-- KİŞİ LİSTESİ -->
         <div id="anaSayfa">
             <div class="kisi-grid" id="kisiGrid"></div>
         </div>
 
-        <!-- REPO SAYFASI -->
         <div id="repoSayfa" class="gizli">
             <button class="btn-geri" id="geriBtn">← Geri</button>
             <div class="repo-grid" id="repoGrid"></div>
         </div>
 
-        <!-- GALERİ SAYFASI -->
         <div id="galeriSayfa" class="gizli">
             <button class="btn-geri" id="galeriGeriBtn">← Geri</button>
 
@@ -933,7 +926,6 @@
 
     </div>
 
-    <!-- ŞİFRE MODAL -->
     <div class="sifre-modal" id="sifreModal">
         <div class="kutu">
             <h2 id="sifreKisi">🔒 Anne</h2>
@@ -947,7 +939,6 @@
         </div>
     </div>
 
-    <!-- MODAL -->
     <div class="modal" id="modal">
         <div class="modal-content" id="modalContent">
             <button class="modal-close" id="modalClose">✕</button>
@@ -977,29 +968,34 @@
         let aktifRepo = null;
         let sifreBekleyenKisi = null;
         let beklemeTimeout = null;
+        let aktifKisiId = null; // Hangi kişinin repoları açık?
 
         // ==========================================================
-        // ŞİFRE YÖNETİMİ (localStorage - Şifre KALICI)
+        // ŞİFRE YÖNETİMİ
         // ==========================================================
         function sifreKaydet(kisiId, sifre) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v6') || '{}');
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v7') || '{}');
             sifreler[kisiId] = sifre;
-            localStorage.setItem('aileSifreler_v6', JSON.stringify(sifreler));
+            localStorage.setItem('aileSifreler_v7', JSON.stringify(sifreler));
             console.log('✅ Şifre kaydedildi:', kisiId);
         }
 
         function sifreAl(kisiId) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v6') || '{}');
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v7') || '{}');
             return sifreler[kisiId] || null;
         }
 
         function tumSifreleriSil() {
-            localStorage.removeItem('aileSifreler_v6');
+            localStorage.removeItem('aileSifreler_v7');
             console.log('🗑️ Tüm şifreler silindi');
         }
 
         function kisiAcikMi(kisiId) {
-            return sifreAl(kisiId) !== null;
+            // Şifre kayıtlıysa ve aktif kişi olarak seçilmemişse kilitli göster
+            const kayitli = sifreAl(kisiId);
+            if (!kayitli) return false;
+            // Eğer bu kişi aktif olarak seçildiyse açık göster
+            return aktifKisiId === kisiId;
         }
 
         // ==========================================================
@@ -1066,16 +1062,23 @@
                 `;
 
                 kart.addEventListener('click', () => {
-                    if (acikMi) {
-                        // Şifre zaten kayıtlı, repoları göster
+                    const kayitli = sifreAl(kisi.id);
+                    if (kayitli && aktifKisiId === kisi.id) {
+                        // Zaten açık, direkt gir
                         aktifKisi = kisi;
                         repoGoster(kisi);
+                    } else if (kayitli) {
+                        // Şifre kayıtlı ama kilitli, doğrudan aç (şifre sormadan)
+                        aktifKisiId = kisi.id;
+                        aktifKisi = kisi;
+                        renderKisiler();
+                        repoGoster(kisi);
                     } else {
-                        // Şifre sor (ilk giriş)
+                        // Hiç şifre yok (ilk giriş)
                         sifreBekleyenKisi = kisi;
                         sifreKisi.textContent = `🔒 ${kisi.isim}`;
                         sifreRepo.textContent = kisi.isim;
-                        sifreDurum.textContent = '🔑 Şifrenizi girin (ilk kez ise belirleyin)';
+                        sifreDurum.textContent = '🔑 Şifrenizi belirleyin (ilk giriş)';
                         sifreInput.value = '';
                         sifreHata.classList.remove('goster');
                         sifreBasarili.classList.remove('goster');
@@ -1114,17 +1117,18 @@
                 if (beklemeTimeout) clearTimeout(beklemeTimeout);
                 beklemeTimeout = setTimeout(() => {
                     sifreModal.classList.remove('active');
+                    aktifKisiId = sifreBekleyenKisi.id;
                     aktifKisi = sifreBekleyenKisi;
-                    repoGoster(sifreBekleyenKisi);
                     renderKisiler();
+                    repoGoster(sifreBekleyenKisi);
                     sifreBekleyenKisi = null;
                     beklemeTimeout = null;
                 }, 800);
                 return;
             }
 
+            // Şifre kontrolü (zaten kayıtlıysa buraya gelmez ama yine de kontrol)
             if (girilen === kayitli) {
-                // ŞİFRE DOĞRU
                 sifreBasarili.textContent = '✅ Şifre doğru!';
                 sifreBasarili.classList.add('goster');
                 sifreHata.classList.remove('goster');
@@ -1132,14 +1136,14 @@
                 if (beklemeTimeout) clearTimeout(beklemeTimeout);
                 beklemeTimeout = setTimeout(() => {
                     sifreModal.classList.remove('active');
+                    aktifKisiId = sifreBekleyenKisi.id;
                     aktifKisi = sifreBekleyenKisi;
-                    repoGoster(sifreBekleyenKisi);
                     renderKisiler();
+                    repoGoster(sifreBekleyenKisi);
                     sifreBekleyenKisi = null;
                     beklemeTimeout = null;
                 }, 800);
             } else {
-                // ŞİFRE YANLIŞ
                 sifreHata.textContent = '❌ Şifre yanlış! Tekrar deneyin.';
                 sifreHata.classList.add('goster');
                 sifreBasarili.classList.remove('goster');
@@ -1200,17 +1204,17 @@
         }
 
         // ==========================================================
-        // GERİ BUTONU - SADECE KİLİTLE (Şifre KALICI)
+        // GERİ BUTONU - KİLİTLE (Şifre KALICI)
         // ==========================================================
         function repodanKisilereDon() {
             if (aktifKisi) {
-                // Şifre SİLİNMİYOR! Sadece repo sayfasından çıkılıyor.
-                // Aktif kişiyi sıfırla ama şifre kalıcı
+                // Aktif kişiyi kaldır, şifre KALICI
                 repoSayfa.classList.add('gizli');
                 anaSayfa.classList.remove('gizli');
                 const kisiAdi = aktifKisi.isim;
                 aktifKisi = null;
-                renderKisiler(); // Kartlar yeniden çizilir, kilit durumu güncellenir
+                aktifKisiId = null; // Bu satır repo'yu kilitler!
+                renderKisiler();
                 setStatus(`🔒 ${kisiAdi} kilitlendi`, '');
             } else {
                 repoSayfa.classList.add('gizli');
@@ -1242,7 +1246,7 @@
         galeriGeriBtn.addEventListener('click', galeridenRepolaraDon);
 
         // ==========================================================
-        // ÇIKIŞ YAP - Tüm şifreleri sil
+        // ÇIKIŞ YAP
         // ==========================================================
         function cikisYap() {
             if (!confirm('Çıkış yapmak istediğine emin misin? Tüm şifreler silinecek.')) return;
@@ -1252,6 +1256,7 @@
             repoSayfa.classList.add('gizli');
             galeriSayfa.classList.add('gizli');
             aktifKisi = null;
+            aktifKisiId = null;
             aktifRepo = null;
             renderKisiler();
             setStatus('🚪 Çıkış yapıldı. Tüm şifreler silindi.', '');
