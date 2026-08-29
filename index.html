@@ -156,7 +156,7 @@
             margin-bottom: 4px;
         }
 
-        .giris-ekrani .alt-baslik {
+        .giris-ekrani .alt-bilgi {
             color: #6b7a93;
             font-size: 14px;
             margin-bottom: 20px;
@@ -216,6 +216,7 @@
             cursor: pointer;
             transition: 0.25s;
             font-family: inherit;
+            display: none;
         }
 
         .giris-ekrani .btn-giris:hover {
@@ -835,11 +836,11 @@
             <div class="baslik">Telefon ile Giriş</div>
             <div class="alt-bilgi" id="altBilgi">Telefon numaranı gir, doğrulama kodu gelecek</div>
             
-            <input type="tel" class="telefon-input" id="telefonInput" placeholder="+90 5xx xxx xx xx">
+            <input type="tel" class="telefon-input" id="telefonInput" placeholder="+994 50 xxx xx xx">
             <input type="text" class="kod-input" id="kodInput" placeholder="6 haneli kodu gir">
             
             <button class="btn-kod-gonder" id="kodGonderBtn">📨 Kod Gönder</button>
-            <button class="btn-giris" id="girisBtn" style="display:none;">🔓 Giriş Yap</button>
+            <button class="btn-giris" id="girisBtn">🔓 Giriş Yap</button>
             
             <div class="geri-link" id="geriLink">← Geri</div>
             <div class="hata" id="girisHata">❌ Hata! Tekrar deneyin.</div>
@@ -921,17 +922,17 @@
 
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        let windowRef = null;
         let confirmResult = null;
+        let isCodeSent = false;
 
         // ==========================================================
-        // TELEFON NUMARASI -> REPO EŞLEŞMESİ
+        // TELEFON NUMARASI -> REPO EŞLEŞMESİ (AZERBAYCAN)
         // ==========================================================
         const telefonRepolar = {
-            '+994705990606': ['mm2-1', 'mm2-2'], // Sen
-            '+994776367936': ['anne-1', 'anne-2'], // Anne
-            '+994706367936': ['baba-1', 'baba-2'], // Baba
-            '+994556367936': ['abla-1', 'abla-2'] // Abla
+            '+994705990606': ['mm2-1', 'mm2-2'], // Senin numaran
+            '+994776367936': ['anne-1', 'anne-2'], // Annenin numarası
+            '+994706367936': ['baba-1', 'baba-2'], // Babanın numarası
+            '+994556367936': ['abla-1', 'abla-2'] // Ablanın numarası
         };
 
         // ==========================================================
@@ -1021,12 +1022,11 @@
         });
 
         // ==========================================================
-        // 🔐 TELEFON İLE GİRİŞ
+        // 🔐 TELEFON İLE GİRİŞ (DÜZELTİLDİ)
         // ==========================================================
-        let isCodeSent = false;
-
+        
         // Kod Gönder
-        kodGonderBtn.addEventListener('click', () => {
+        kodGonderBtn.addEventListener('click', function() {
             const phone = telefonInput.value.trim();
             if (!phone || phone.length < 10) {
                 girisHata.textContent = '❌ Geçerli bir telefon numarası girin!';
@@ -1034,12 +1034,18 @@
                 return;
             }
 
+            // Butonu devre dışı bırak
+            this.disabled = true;
+            this.textContent = '⏳ Gönderiliyor...';
             setStatus('⏳ Kod gönderiliyor...', 'loading');
             girisHata.classList.remove('goster');
 
-            const appVerifier = new firebase.auth.RecaptchaVerifier('girisEkrani', {
+            // reCAPTCHA'yı doğru şekilde başlat
+            const appVerifier = new firebase.auth.RecaptchaVerifier('girisBtn', {
                 size: 'invisible',
-                callback: () => {}
+                callback: () => {
+                    // reCAPTCHA çözüldü
+                }
             });
 
             auth.signInWithPhoneNumber(phone, appVerifier)
@@ -1054,17 +1060,21 @@
                     altBilgi.textContent = '📨 Kod gönderildi! Telefonuna gelen 6 haneli kodu gir.';
                     setStatus('📨 Kod gönderildi', 'success');
                     kodInput.focus();
+                    this.disabled = false;
+                    this.textContent = '📨 Kod Gönder';
                 })
                 .catch((error) => {
                     console.error('Kod gönderme hatası:', error);
                     girisHata.textContent = '❌ Kod gönderilemedi: ' + error.message;
                     girisHata.classList.add('goster');
                     setStatus('❌ Kod gönderilemedi', 'error');
+                    this.disabled = false;
+                    this.textContent = '📨 Kod Gönder';
                 });
         });
 
         // Kod Doğrula ve Giriş Yap
-        girisBtn.addEventListener('click', () => {
+        girisBtn.addEventListener('click', function() {
             const code = kodInput.value.trim();
             if (!code || code.length < 6) {
                 girisHata.textContent = '❌ 6 haneli kodu girin!';
@@ -1108,7 +1118,7 @@
         });
 
         // Geri (numara değiştir)
-        geriLink.addEventListener('click', () => {
+        geriLink.addEventListener('click', function() {
             isCodeSent = false;
             confirmResult = null;
             kodInput.style.display = 'none';
