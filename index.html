@@ -836,7 +836,7 @@
             <div class="baslik">Telefon ile Giriş</div>
             <div class="alt-bilgi" id="altBilgi">Telefon numaranı gir, doğrulama kodu gelecek</div>
             
-            <input type="tel" class="telefon-input" id="telefonInput" placeholder="+994 50 xxx xx xx">
+            <input type="tel" class="telefon-input" id="telefonInput" placeholder="+994 50 xxx xx xx" value="+994705990606">
             <input type="text" class="kod-input" id="kodInput" placeholder="6 haneli kodu gir">
             
             <button class="btn-kod-gonder" id="kodGonderBtn">📨 Kod Gönder</button>
@@ -924,6 +924,7 @@
         const auth = firebase.auth();
         let confirmResult = null;
         let isCodeSent = false;
+        let recaptchaVerifier = null;
 
         // ==========================================================
         // TELEFON NUMARASI -> REPO EŞLEŞMESİ (AZERBAYCAN)
@@ -1022,7 +1023,21 @@
         });
 
         // ==========================================================
-        // 🔐 TELEFON İLE GİRİŞ (DÜZELTİLDİ)
+        // reCAPTCHA Başlat (Sadece bir kere)
+        // ==========================================================
+        function initRecaptcha() {
+            if (!recaptchaVerifier) {
+                recaptchaVerifier = new firebase.auth.RecaptchaVerifier('girisBtn', {
+                    size: 'invisible',
+                    callback: function() {
+                        // reCAPTCHA çözüldü
+                    }
+                });
+            }
+        }
+
+        // ==========================================================
+        // 🔐 TELEFON İLE GİRİŞ
         // ==========================================================
         
         // Kod Gönder
@@ -1040,37 +1055,35 @@
             setStatus('⏳ Kod gönderiliyor...', 'loading');
             girisHata.classList.remove('goster');
 
-            // reCAPTCHA'yı doğru şekilde başlat
-            const appVerifier = new firebase.auth.RecaptchaVerifier('girisBtn', {
-                size: 'invisible',
-                callback: () => {
-                    // reCAPTCHA çözüldü
-                }
-            });
+            // reCAPTCHA'yı başlat (sadece bir kere)
+            initRecaptcha();
 
-            auth.signInWithPhoneNumber(phone, appVerifier)
-                .then((confirmationResult) => {
-                    confirmResult = confirmationResult;
-                    isCodeSent = true;
-                    kodInput.style.display = 'block';
-                    girisBtn.style.display = 'block';
-                    kodGonderBtn.style.display = 'none';
-                    geriLink.style.display = 'block';
-                    telefonInput.disabled = true;
-                    altBilgi.textContent = '📨 Kod gönderildi! Telefonuna gelen 6 haneli kodu gir.';
-                    setStatus('📨 Kod gönderildi', 'success');
-                    kodInput.focus();
-                    this.disabled = false;
-                    this.textContent = '📨 Kod Gönder';
-                })
-                .catch((error) => {
-                    console.error('Kod gönderme hatası:', error);
-                    girisHata.textContent = '❌ Kod gönderilemedi: ' + error.message;
-                    girisHata.classList.add('goster');
-                    setStatus('❌ Kod gönderilemedi', 'error');
-                    this.disabled = false;
-                    this.textContent = '📨 Kod Gönder';
-                });
+            // reCAPTCHA'yı yeniden render etme
+            if (recaptchaVerifier) {
+                auth.signInWithPhoneNumber(phone, recaptchaVerifier)
+                    .then((confirmationResult) => {
+                        confirmResult = confirmationResult;
+                        isCodeSent = true;
+                        kodInput.style.display = 'block';
+                        girisBtn.style.display = 'block';
+                        kodGonderBtn.style.display = 'none';
+                        geriLink.style.display = 'block';
+                        telefonInput.disabled = true;
+                        altBilgi.textContent = '📨 Kod gönderildi! Telefonuna gelen 6 haneli kodu gir.';
+                        setStatus('📨 Kod gönderildi', 'success');
+                        kodInput.focus();
+                        this.disabled = false;
+                        this.textContent = '📨 Kod Gönder';
+                    })
+                    .catch((error) => {
+                        console.error('Kod gönderme hatası:', error);
+                        girisHata.textContent = '❌ Kod gönderilemedi: ' + error.message;
+                        girisHata.classList.add('goster');
+                        setStatus('❌ Kod gönderilemedi', 'error');
+                        this.disabled = false;
+                        this.textContent = '📨 Kod Gönder';
+                    });
+            }
         });
 
         // Kod Doğrula ve Giriş Yap
@@ -1130,6 +1143,12 @@
             altBilgi.textContent = 'Telefon numaranı gir, doğrulama kodu gelecek';
             girisHata.classList.remove('goster');
             setStatus('✨ Numara girin', '');
+            
+            // reCAPTCHA'yı sıfırla
+            if (recaptchaVerifier) {
+                recaptchaVerifier.clear();
+                recaptchaVerifier = null;
+            }
         });
 
         // Enter tuşu
@@ -1194,6 +1213,12 @@
                 geriLink.style.display = 'none';
                 altBilgi.textContent = 'Telefon numaranı gir, doğrulama kodu gelecek';
                 setStatus('🔐 Çıkış yapıldı', '');
+                
+                // reCAPTCHA'yı sıfırla
+                if (recaptchaVerifier) {
+                    recaptchaVerifier.clear();
+                    recaptchaVerifier = null;
+                }
             }).catch((error) => {
                 console.error('Çıkış hatası:', error);
             });
@@ -1242,6 +1267,12 @@
                 geriLink.style.display = 'none';
                 altBilgi.textContent = 'Telefon numaranı gir, doğrulama kodu gelecek';
                 setStatus('🚪 Çıkış yapıldı', '');
+                
+                // reCAPTCHA'yı sıfırla
+                if (recaptchaVerifier) {
+                    recaptchaVerifier.clear();
+                    recaptchaVerifier = null;
+                }
             }).catch((error) => {
                 console.error('Çıkış hatası:', error);
             });
@@ -1577,6 +1608,11 @@
         if (!kayitliToken) {
             setStatus('⚠️ GitHub token gerekli! Lütfen gir.', 'error');
         }
+
+        // reCAPTCHA'yı sayfa yüklendiğinde başlat
+        window.addEventListener('load', function() {
+            initRecaptcha();
+        });
     </script>
 
 </body>
