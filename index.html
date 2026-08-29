@@ -169,31 +169,10 @@
             transition: 0.3s;
             font-family: inherit;
             text-align: center;
-            margin-bottom: 12px;
-        }
-
-        .giris-ekrani .isim-input:focus {
-            border-color: #f0933e;
-            box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
-        }
-
-        .giris-ekrani .sifre-input {
-            width: 100%;
-            padding: 14px 16px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            background: rgba(255, 255, 255, 0.04);
-            color: #e8edf5;
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
-            font-family: inherit;
-            text-align: center;
-            letter-spacing: 4px;
             margin-bottom: 14px;
         }
 
-        .giris-ekrani .sifre-input:focus {
+        .giris-ekrani .isim-input:focus {
             border-color: #f0933e;
             box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
         }
@@ -796,14 +775,13 @@
         <div id="girisEkrani" class="giris-ekrani">
             <span class="avatar">👤</span>
             <div class="baslik">Giriş Yap</div>
-            <div class="alt-bilgi" id="altBilgi">İsminizi ve şifrenizi girin</div>
+            <div class="alt-bilgi" id="altBilgi">İsminizi girin</div>
             
-            <input type="text" class="isim-input" id="isimInput" placeholder="👤 İsminiz">
-            <input type="password" class="sifre-input" id="sifreInput" placeholder="🔑 Şifreniz">
+            <input type="text" class="isim-input" id="isimInput" placeholder="👤 İsminiz (örn: anne, baba, sen, abla)">
             
             <button class="btn-giris" id="girisBtn">🔓 Giriş Yap</button>
             
-            <div class="hata" id="girisHata">❌ İsim veya şifre yanlış!</div>
+            <div class="hata" id="girisHata">❌ Bu isim zaten kullanılıyor veya geçersiz!</div>
             <div class="kullanici-bilgi" id="kullaniciBilgi"></div>
         </div>
 
@@ -885,32 +863,25 @@
         let currentUser = null;
 
         // ==========================================================
-        // ŞİFRE YÖNETİMİ
+        // KULLANICI YÖNETİMİ (localStorage)
         // ==========================================================
-        function sifreKaydet(kisiId, sifre) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v9') || '{}');
-            sifreler[kisiId] = sifre;
-            localStorage.setItem('aileSifreler_v9', JSON.stringify(sifreler));
-            console.log('✅ Şifre kaydedildi:', kisiId);
+        function kullaniciKaydet(isim) {
+            const kullanicilar = JSON.parse(localStorage.getItem('aileKullanicilar_v2') || '[]');
+            if (!kullanicilar.includes(isim)) {
+                kullanicilar.push(isim);
+                localStorage.setItem('aileKullanicilar_v2', JSON.stringify(kullanicilar));
+                return true;
+            }
+            return false;
         }
 
-        function sifreAl(kisiId) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v9') || '{}');
-            const sifre = sifreler[kisiId] || null;
-            console.log('🔍 Şifre okundu:', kisiId, sifre);
-            return sifre;
+        function kullaniciVarmi(isim) {
+            const kullanicilar = JSON.parse(localStorage.getItem('aileKullanicilar_v2') || '[]');
+            return kullanicilar.includes(isim);
         }
 
-        function sifreSil(kisiId) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v9') || '{}');
-            delete sifreler[kisiId];
-            localStorage.setItem('aileSifreler_v9', JSON.stringify(sifreler));
-            console.log('🗑️ Şifre silindi:', kisiId);
-        }
-
-        function tumSifreleriSil() {
-            localStorage.removeItem('aileSifreler_v9');
-            console.log('🗑️ Tüm şifreler silindi');
+        function tumKullanicilariSil() {
+            localStorage.removeItem('aileKullanicilar_v2');
         }
 
         // ==========================================================
@@ -926,7 +897,6 @@
         const cikisBtn = document.getElementById('cikisBtn');
 
         const isimInput = document.getElementById('isimInput');
-        const sifreInput = document.getElementById('sifreInput');
         const girisBtn = document.getElementById('girisBtn');
         const girisHata = document.getElementById('girisHata');
         const altBilgi = document.getElementById('altBilgi');
@@ -996,62 +966,44 @@
         });
 
         // ==========================================================
-        // 🔐 GİRİŞ İŞLEMİ (DÜZELTİLDİ)
+        // GİRİŞ İŞLEMİ
         // ==========================================================
         function girisYap() {
             const isim = isimInput.value.trim().toLowerCase();
-            const sifre = sifreInput.value.trim();
 
-            if (!isim || !sifre) {
-                girisHata.textContent = '❌ Lütfen isim ve şifre girin!';
+            if (!isim) {
+                girisHata.textContent = '❌ Lütfen bir isim girin!';
                 girisHata.classList.add('goster');
                 return;
             }
 
-            // Kullanıcı için repo var mı?
+            // Sadece izin verilen isimler
             if (!kisiRepolar[isim]) {
-                girisHata.textContent = '❌ Bu isimde kayıtlı kullanıcı yok!';
+                girisHata.textContent = '❌ Geçersiz isim! (anne, baba, sen, abla)';
                 girisHata.classList.add('goster');
                 return;
             }
 
-            const kayitliSifre = sifreAl(isim);
-
-            // İLK KAYIT (Hiç şifre yoksa)
-            if (kayitliSifre === null) {
-                sifreKaydet(isim, sifre);
-                girisHata.classList.remove('goster');
-                kullaniciBilgi.textContent = `✅ Hoş geldin ${isim}! Hesap oluşturuldu.`;
-                setStatus(`✅ ${isim} olarak giriş yapıldı`, 'success');
-                currentUser = isim;
-                repoGoster(isim);
+            // Bu isim zaten kullanılıyor mu?
+            if (kullaniciVarmi(isim)) {
+                girisHata.textContent = '❌ Bu isim zaten kullanılıyor! Başka bir isim seçin.';
+                girisHata.classList.add('goster');
                 return;
             }
 
-            // ŞİFRE KONTROLÜ (Kayıtlı şifre varsa)
-            if (sifre === kayitliSifre) {
-                girisHata.classList.remove('goster');
-                kullaniciBilgi.textContent = `✅ Hoş geldin ${isim}!`;
-                setStatus(`✅ ${isim} olarak giriş yapıldı`, 'success');
-                currentUser = isim;
-                repoGoster(isim);
-            } else {
-                // ŞİFRE YANLIŞ
-                girisHata.textContent = '❌ Şifre yanlış! Tekrar deneyin.';
-                girisHata.classList.add('goster');
-                sifreInput.value = '';
-                sifreInput.focus();
-                setStatus('❌ Giriş başarısız', 'error');
-            }
+            // İsmi kaydet (ilk giriş)
+            kullaniciKaydet(isim);
+            girisHata.classList.remove('goster');
+            kullaniciBilgi.textContent = `✅ Hoş geldin ${isim}!`;
+            setStatus(`✅ ${isim} olarak giriş yapıldı`, 'success');
+            currentUser = isim;
+            repoGoster(isim);
         }
 
         girisBtn.addEventListener('click', girisYap);
 
         // Enter tuşu
         isimInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') sifreInput.focus();
-        });
-        sifreInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') girisYap();
         });
 
@@ -1099,12 +1051,17 @@
         }
 
         // ==========================================================
-        // GERİ BUTONU (Çıkış Yap - Şifreyi Sil)
+        // GERİ BUTONU (Çıkış Yap - Kullanıcıyı Sil)
         // ==========================================================
         function geriDon() {
             if (currentUser) {
-                // Kullanıcının şifresini sil
-                sifreSil(currentUser);
+                // Kullanıcıyı sil
+                const kullanicilar = JSON.parse(localStorage.getItem('aileKullanicilar_v2') || '[]');
+                const index = kullanicilar.indexOf(currentUser);
+                if (index > -1) {
+                    kullanicilar.splice(index, 1);
+                    localStorage.setItem('aileKullanicilar_v2', JSON.stringify(kullanicilar));
+                }
                 repoSayfa.classList.add('gizli');
                 galeriSayfa.classList.add('gizli');
                 girisEkrani.classList.remove('gizli');
@@ -1112,10 +1069,9 @@
                 currentUser = null;
                 aktifRepo = null;
                 isimInput.value = '';
-                sifreInput.value = '';
                 kullaniciBilgi.textContent = '';
                 girisHata.classList.remove('goster');
-                altBilgi.textContent = 'İsminizi ve şifrenizi girin';
+                altBilgi.textContent = 'İsminizi girin';
                 setStatus(`🔐 ${isim} çıkış yaptı`, '');
             } else {
                 repoSayfa.classList.add('gizli');
@@ -1147,23 +1103,22 @@
         galeriGeriBtn.addEventListener('click', galeridenRepolaraDon);
 
         // ==========================================================
-        // ÇIKIŞ YAP - Tüm Şifreleri Sil
+        // ÇIKIŞ YAP - Tüm Kullanıcıları Sil
         // ==========================================================
         function cikisYap() {
-            if (!confirm('Çıkış yapmak istediğine emin misin? Tüm şifreler silinecek.')) return;
+            if (!confirm('Çıkış yapmak istediğine emin misin? Tüm kullanıcılar silinecek.')) return;
 
-            tumSifreleriSil();
+            tumKullanicilariSil();
             repoSayfa.classList.add('gizli');
             galeriSayfa.classList.add('gizli');
             girisEkrani.classList.remove('gizli');
             currentUser = null;
             aktifRepo = null;
             isimInput.value = '';
-            sifreInput.value = '';
             kullaniciBilgi.textContent = '';
             girisHata.classList.remove('goster');
-            altBilgi.textContent = 'İsminizi ve şifrenizi girin';
-            setStatus('🚪 Çıkış yapıldı. Tüm şifreler silindi.', '');
+            altBilgi.textContent = 'İsminizi girin';
+            setStatus('🚪 Çıkış yapıldı. Tüm kullanıcılar silindi.', '');
         }
 
         cikisBtn.addEventListener('click', cikisYap);
