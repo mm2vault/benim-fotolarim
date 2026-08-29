@@ -1072,7 +1072,7 @@
         });
 
         // ==========================================================
-        // ŞİFRE YÖNETİMİ (localStorage ile)
+        // ŞİFRE YÖNETİMİ
         // ==========================================================
         function sifreKaydet(repoId, sifre) {
             const sifreler = JSON.parse(localStorage.getItem('aileSifreler') || '{}');
@@ -1223,6 +1223,38 @@
         }
 
         // ==========================================================
+        // GERİ BUTONU (KİLİTLEME VE ANA SAYFAYA DÖN)
+        // ==========================================================
+        function geriDonVeKilitle() {
+            if (aktifRepoInfo) {
+                // O anki repo'nun şifresini sil (kilitle)
+                sifreSil(aktifRepoInfo.id);
+                // Ana sayfaya dön
+                repoSayfa.classList.add('gizli');
+                anaSayfa.classList.remove('gizli');
+                aktifRepo = null;
+                aktifRepoInfo = null;
+                renderRepos();
+                setStatus(`🔒 Kilitlendi`, '');
+                // Küçük bir geri bildirim
+                const msg = statusEl.querySelector('.msg');
+                msg.innerHTML = '🔒 Kilitlendi';
+                setTimeout(() => {
+                    if (!aktifRepoInfo) {
+                        msg.innerHTML = '✨ Ana sayfa';
+                    }
+                }, 1500);
+            } else {
+                repoSayfa.classList.add('gizli');
+                anaSayfa.classList.remove('gizli');
+                renderRepos();
+                setStatus('✨ Ana sayfa', '');
+            }
+        }
+
+        geriBtn.addEventListener('click', geriDonVeKilitle);
+
+        // ==========================================================
         // ÇIKIŞ YAP (Tüm şifreleri sil, ana sayfaya dön)
         // ==========================================================
         function cikisYap() {
@@ -1238,18 +1270,6 @@
         }
 
         cikisBtn.addEventListener('click', cikisYap);
-
-        // ==========================================================
-        // GERİ BUTONU
-        // ==========================================================
-        geriBtn.addEventListener('click', () => {
-            repoSayfa.classList.add('gizli');
-            anaSayfa.classList.remove('gizli');
-            aktifRepo = null;
-            aktifRepoInfo = null;
-            renderRepos();
-            setStatus('✨ Ana sayfa', '');
-        });
 
         // ==========================================================
         // LİSTELEME
