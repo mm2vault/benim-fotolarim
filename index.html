@@ -506,6 +506,41 @@
             transform: translateY(-2px);
         }
 
+        .btn-download-all {
+            background: linear-gradient(135deg, #4cda6c, #2ea043);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(76, 218, 108, 0.25);
+            grid-column: span 1;
+        }
+
+        .btn-download-all:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(76, 218, 108, 0.35);
+        }
+
+        .btn-download-all:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-download-missing {
+            background: linear-gradient(135deg, #58a6ff, #1f6feb);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(88, 166, 255, 0.25);
+        }
+
+        .btn-download-missing:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(88, 166, 255, 0.35);
+        }
+
+        .btn-download-missing:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .gallery-header {
             display: flex;
             justify-content: space-between;
@@ -571,6 +606,7 @@
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            position: relative;
         }
 
         .gallery-item:active {
@@ -666,6 +702,20 @@
         .gallery-item .info .actions .delete-btn:active {
             color: #f85149;
             background: rgba(248, 81, 73, 0.08);
+        }
+
+        .gallery-item .indirildi-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(76, 218, 108, 0.9);
+            color: #fff;
+            font-size: 9px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
         }
 
         /* ===== İKON BOYUT ===== */
@@ -798,6 +848,44 @@
             transform: scale(0.95);
         }
 
+        /* ===== İLERLEME ÇUBUĞU ===== */
+        .progress-container {
+            display: none;
+            margin: 10px 0 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .progress-container.active {
+            display: block;
+        }
+
+        .progress-container .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #6b7a93;
+            margin-bottom: 6px;
+        }
+
+        .progress-container .progress-track {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-container .progress-track .progress-fill {
+            height: 100%;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #4cda6c, #f0933e);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
         /* ===== MOBİL ÖZEL ===== */
         @media (max-width: 480px) {
             body { padding: 8px; }
@@ -817,8 +905,9 @@
             .gallery-item { border-radius: 12px; }
             .gallery-item .info { padding: 6px 8px 8px; }
             .gallery-item .info .name { font-size: 10px; }
-            .buttons { grid-template-columns: 1fr; gap: 6px; }
+            .buttons { grid-template-columns: 1fr 1fr; gap: 6px; }
             .btn { padding: 10px 12px; font-size: 12px; min-height: 42px; }
+            .btn-download-all { grid-column: span 2; }
             .file-area { padding: 18px 12px 16px; border-radius: 14px; }
             .file-area .text { font-size: 13px; }
             .file-area .icon img { width: 32px !important; height: 32px !important; }
@@ -840,6 +929,8 @@
             .repo-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
             .gallery { grid-template-columns: 1fr 1fr; gap: 6px; }
             .gallery-item .media { height: 80px; }
+            .buttons { grid-template-columns: 1fr; gap: 6px; }
+            .btn-download-all { grid-column: span 1; }
         }
     </style>
 </head>
@@ -902,6 +993,19 @@
                 <button class="btn btn-upload" id="uploadBtn">📤 Yükle</button>
                 <button class="btn btn-list" id="listBtn">📋 Listele</button>
                 <button class="btn btn-clear" id="clearBtn">🗑️ Temizle</button>
+                <button class="btn btn-download-all" id="downloadAllBtn">📦 Tümünü İndir</button>
+                <button class="btn btn-download-missing" id="downloadMissingBtn">⬇️ Eksikleri İndir</button>
+            </div>
+
+            <!-- İlerleme Çubuğu -->
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-info">
+                    <span id="progressText">Hazırlanıyor...</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
             </div>
 
             <div class="gallery-header">
@@ -911,6 +1015,7 @@
                     <div class="gallery-stats">
                         <span>🖼️ <span id="imageCount">0</span></span>
                         <span>🎬 <span id="videoCount">0</span></span>
+                        <span>✅ <span id="downloadedCount">0</span></span>
                     </div>
                 </div>
             </div>
@@ -990,9 +1095,12 @@
         const galleryCount = document.getElementById('galleryCount');
         const imageCount = document.getElementById('imageCount');
         const videoCount = document.getElementById('videoCount');
+        const downloadedCount = document.getElementById('downloadedCount');
         const uploadBtn = document.getElementById('uploadBtn');
         const listBtn = document.getElementById('listBtn');
         const clearBtn = document.getElementById('clearBtn');
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
+        const downloadMissingBtn = document.getElementById('downloadMissingBtn');
         const gallery = document.getElementById('gallery');
 
         const modal = document.getElementById('modal');
@@ -1002,8 +1110,68 @@
         const modalDownload = document.getElementById('modalDownload');
         const toastContainer = document.getElementById('toastContainer');
 
+        // İlerleme çubuğu
+        const progressContainer = document.getElementById('progressContainer');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const progressPercent = document.getElementById('progressPercent');
+
         let currentModalUrl = '';
         let currentModalName = '';
+        let mevcutDosyalar = [];
+
+        // ==========================================================
+        // İNDİRİLENLERİ YÖNET
+        // ==========================================================
+        function getIndirilenler() {
+            const key = `indirilenler_${aktifRepo || 'default'}`;
+            try {
+                return JSON.parse(localStorage.getItem(key)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function setIndirilenler(dosyalar) {
+            const key = `indirilenler_${aktifRepo || 'default'}`;
+            localStorage.setItem(key, JSON.stringify(dosyalar));
+        }
+
+        function dosyaIndirildiMi(dosyaAdi) {
+            const indirilenler = getIndirilenler();
+            return indirilenler.includes(dosyaAdi);
+        }
+
+        function dosyaIndirildiOlarakIsaretle(dosyaAdi) {
+            const indirilenler = getIndirilenler();
+            if (!indirilenler.includes(dosyaAdi)) {
+                indirilenler.push(dosyaAdi);
+                setIndirilenler(indirilenler);
+            }
+        }
+
+        function dosyaIndirildiKaldir(dosyaAdi) {
+            const indirilenler = getIndirilenler();
+            const index = indirilenler.indexOf(dosyaAdi);
+            if (index > -1) {
+                indirilenler.splice(index, 1);
+                setIndirilenler(indirilenler);
+            }
+        }
+
+        function indirilenleriTemizle() {
+            const key = `indirilenler_${aktifRepo || 'default'}`;
+            localStorage.removeItem(key);
+        }
+
+        function getIndirilenSayisi() {
+            return getIndirilenler().length;
+        }
+
+        function getEksikDosyalar(tumDosyalar) {
+            const indirilenler = getIndirilenler();
+            return tumDosyalar.filter(d => !indirilenler.includes(d.name));
+        }
 
         // ==========================================================
         // TOAST BİLDİRİM
@@ -1213,6 +1381,8 @@
             galleryCount.textContent = '0 dosya';
             imageCount.textContent = '0';
             videoCount.textContent = '0';
+            downloadedCount.textContent = '0';
+            progressContainer.classList.remove('active');
         }
 
         repoGeriBtn.addEventListener('click', repolaraDon);
@@ -1249,6 +1419,8 @@
                     galleryCount.textContent = '0 dosya';
                     imageCount.textContent = '0';
                     videoCount.textContent = '0';
+                    downloadedCount.textContent = '0';
+                    mevcutDosyalar = [];
                     return;
                 }
 
@@ -1260,6 +1432,8 @@
                 }
 
                 const data = await res.json();
+                mevcutDosyalar = data || [];
+                
                 if (!data || !data.length) {
                     setStatus('📭 Boş', '');
                     gallery.innerHTML =
@@ -1267,6 +1441,7 @@
                     galleryCount.textContent = '0 dosya';
                     imageCount.textContent = '0';
                     videoCount.textContent = '0';
+                    downloadedCount.textContent = '0';
                     return;
                 }
 
@@ -1278,8 +1453,11 @@
                 });
                 imageCount.textContent = imgSay;
                 videoCount.textContent = vidSay;
+                
+                const indirilenSayisi = getIndirilenSayisi();
+                downloadedCount.textContent = indirilenSayisi;
 
-                setStatus(`📸 ${data.length} dosya bulundu`, 'success');
+                setStatus(`📸 ${data.length} dosya bulundu (${indirilenSayisi} indirildi)`, 'success');
                 galleryCount.textContent = `${data.length} dosya`;
 
                 const fragment = document.createDocumentFragment();
@@ -1290,6 +1468,7 @@
                         `https://raw.githubusercontent.com/${cfg.user}/${cfg.repo}/main/fotolar/${encodeURIComponent(item.name)}`;
                     const isVideo = /\.(mp4|webm|mov|avi|mkv|3gp)$/i.test(item.name);
                     const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i.test(item.name);
+                    const indirildi = dosyaIndirildiMi(item.name);
 
                     const div = document.createElement('div');
                     div.className = 'gallery-item';
@@ -1315,6 +1494,7 @@
 
                     div.innerHTML = `
                         ${mediaHtml}
+                        ${indirildi ? '<span class="indirildi-badge">✅ İndirildi</span>' : ''}
                         <div class="info">
                             <span class="name" title="${item.name}">${item.name}</span>
                             <div class="actions">
@@ -1339,6 +1519,238 @@
         }
 
         listBtn.addEventListener('click', listFiles);
+
+        // ==========================================================
+        // TÜMÜNÜ İNDİR (ZIP)
+        // ==========================================================
+        async function downloadAll() {
+            if (!mevcutDosyalar || mevcutDosyalar.length === 0) {
+                showToast('⚠️', 'İndirilecek dosya yok', 'Galeri boş.', 'warning', 3000);
+                return;
+            }
+
+            const cfg = getConfig();
+            if (!cfg.token || !cfg.repo) {
+                showToast('❌', 'Token veya repo seçili değil', '', 'error', 3000);
+                return;
+            }
+
+            progressContainer.classList.add('active');
+            downloadAllBtn.disabled = true;
+            downloadAllBtn.textContent = '⏳ İndiriliyor...';
+
+            try {
+                const total = mevcutDosyalar.length;
+                let downloaded = 0;
+                const files = [];
+
+                for (const item of mevcutDosyalar) {
+                    // Zaten indirilmişse atla
+                    if (dosyaIndirildiMi(item.name)) {
+                        downloaded++;
+                        continue;
+                    }
+
+                    const rawUrl =
+                        `https://raw.githubusercontent.com/${cfg.user}/${cfg.repo}/main/fotolar/${encodeURIComponent(item.name)}`;
+                    
+                    progressText.textContent = `${item.name} indiriliyor... (${downloaded+1}/${total})`;
+                    const percent = Math.round((downloaded / total) * 100);
+                    progressFill.style.width = `${percent}%`;
+                    progressPercent.textContent = `${percent}%`;
+
+                    try {
+                        const response = await fetch(rawUrl);
+                        if (response.ok) {
+                            const blob = await response.blob();
+                            files.push({
+                                name: item.name,
+                                blob: blob
+                            });
+                            dosyaIndirildiOlarakIsaretle(item.name);
+                        }
+                    } catch (e) {
+                        console.error(`${item.name} indirilemedi:`, e);
+                    }
+
+                    downloaded++;
+                    const newPercent = Math.round((downloaded / total) * 100);
+                    progressFill.style.width = `${newPercent}%`;
+                    progressPercent.textContent = `${newPercent}%`;
+                }
+
+                if (files.length === 0) {
+                    progressText.textContent = '✅ Tüm dosyalar zaten indirilmiş!';
+                    showToast('✅', 'Tüm dosyalar zaten indirilmiş!', '', 'success', 3000);
+                    setTimeout(() => {
+                        progressContainer.classList.remove('active');
+                        progressFill.style.width = '0%';
+                        progressPercent.textContent = '0%';
+                    }, 2000);
+                    return;
+                }
+
+                progressText.textContent = 'ZIP oluşturuluyor...';
+
+                const zip = new JSZip();
+                for (const file of files) {
+                    zip.file(file.name, file.blob);
+                }
+
+                const zipBlob = await zip.generateAsync({ type: 'blob' });
+                const zipUrl = URL.createObjectURL(zipBlob);
+                
+                const link = document.createElement('a');
+                link.href = zipUrl;
+                link.download = `${cfg.repo}-galeri.zip`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                setTimeout(() => URL.revokeObjectURL(zipUrl), 5000);
+
+                progressText.textContent = '✅ Tamamlandı!';
+                progressFill.style.width = '100%';
+                progressPercent.textContent = '100%';
+
+                const yeniIndirilen = getIndirilenSayisi();
+                downloadedCount.textContent = yeniIndirilen;
+
+                showToast('📦', 'Tüm dosyalar indirildi!', `${files.length} yeni dosya ZIP olarak kaydedildi.`, 'success', 4000);
+                
+                setTimeout(() => {
+                    progressContainer.classList.remove('active');
+                    progressFill.style.width = '0%';
+                    progressPercent.textContent = '0%';
+                    listFiles();
+                }, 3000);
+
+            } catch (e) {
+                console.error('İndirme hatası:', e);
+                showToast('❌', 'İndirme hatası', e.message || 'Bilinmeyen hata.', 'error', 4000);
+            } finally {
+                downloadAllBtn.disabled = false;
+                downloadAllBtn.textContent = '📦 Tümünü İndir';
+            }
+        }
+
+        downloadAllBtn.addEventListener('click', downloadAll);
+
+        // ==========================================================
+        // EKSİKLERİ İNDİR
+        // ==========================================================
+        async function downloadMissing() {
+            if (!mevcutDosyalar || mevcutDosyalar.length === 0) {
+                showToast('⚠️', 'İndirilecek dosya yok', 'Galeri boş.', 'warning', 3000);
+                return;
+            }
+
+            const eksikler = getEksikDosyalar(mevcutDosyalar);
+            if (eksikler.length === 0) {
+                showToast('✅', 'Hiç eksik dosya yok!', 'Tüm dosyalar indirilmiş.', 'success', 3000);
+                return;
+            }
+
+            const cfg = getConfig();
+            if (!cfg.token || !cfg.repo) {
+                showToast('❌', 'Token veya repo seçili değil', '', 'error', 3000);
+                return;
+            }
+
+            progressContainer.classList.add('active');
+            downloadMissingBtn.disabled = true;
+            downloadMissingBtn.textContent = '⏳ İndiriliyor...';
+
+            try {
+                const total = eksikler.length;
+                let downloaded = 0;
+                const files = [];
+
+                for (const item of eksikler) {
+                    const rawUrl =
+                        `https://raw.githubusercontent.com/${cfg.user}/${cfg.repo}/main/fotolar/${encodeURIComponent(item.name)}`;
+                    
+                    progressText.textContent = `${item.name} indiriliyor... (${downloaded+1}/${total})`;
+                    const percent = Math.round((downloaded / total) * 100);
+                    progressFill.style.width = `${percent}%`;
+                    progressPercent.textContent = `${percent}%`;
+
+                    try {
+                        const response = await fetch(rawUrl);
+                        if (response.ok) {
+                            const blob = await response.blob();
+                            files.push({
+                                name: item.name,
+                                blob: blob
+                            });
+                            dosyaIndirildiOlarakIsaretle(item.name);
+                        }
+                    } catch (e) {
+                        console.error(`${item.name} indirilemedi:`, e);
+                    }
+
+                    downloaded++;
+                    const newPercent = Math.round((downloaded / total) * 100);
+                    progressFill.style.width = `${newPercent}%`;
+                    progressPercent.textContent = `${newPercent}%`;
+                }
+
+                if (files.length === 0) {
+                    progressText.textContent = '⚠️ Hiçbir dosya indirilemedi!';
+                    showToast('⚠️', 'Hiçbir dosya indirilemedi!', 'Bağlantıyı kontrol edin.', 'warning', 3000);
+                    setTimeout(() => {
+                        progressContainer.classList.remove('active');
+                        progressFill.style.width = '0%';
+                        progressPercent.textContent = '0%';
+                    }, 2000);
+                    return;
+                }
+
+                progressText.textContent = 'ZIP oluşturuluyor...';
+
+                const zip = new JSZip();
+                for (const file of files) {
+                    zip.file(file.name, file.blob);
+                }
+
+                const zipBlob = await zip.generateAsync({ type: 'blob' });
+                const zipUrl = URL.createObjectURL(zipBlob);
+                
+                const link = document.createElement('a');
+                link.href = zipUrl;
+                link.download = `${cfg.repo}-eksikler.zip`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                setTimeout(() => URL.revokeObjectURL(zipUrl), 5000);
+
+                progressText.textContent = '✅ Tamamlandı!';
+                progressFill.style.width = '100%';
+                progressPercent.textContent = '100%';
+
+                const yeniIndirilen = getIndirilenSayisi();
+                downloadedCount.textContent = yeniIndirilen;
+
+                showToast('📦', `${files.length} eksik dosya indirildi!`, 'ZIP olarak kaydedildi.', 'success', 4000);
+                
+                setTimeout(() => {
+                    progressContainer.classList.remove('active');
+                    progressFill.style.width = '0%';
+                    progressPercent.textContent = '0%';
+                    listFiles();
+                }, 3000);
+
+            } catch (e) {
+                console.error('İndirme hatası:', e);
+                showToast('❌', 'İndirme hatası', e.message || 'Bilinmeyen hata.', 'error', 4000);
+            } finally {
+                downloadMissingBtn.disabled = false;
+                downloadMissingBtn.textContent = '⬇️ Eksikleri İndir';
+            }
+        }
+
+        downloadMissingBtn.addEventListener('click', downloadMissing);
 
         // ==========================================================
         // YÜKLEME
@@ -1367,8 +1779,17 @@
             let success = 0,
                 failed = 0;
 
-            for (const file of files) {
-                setStatus(`⏳ ${file.name} (${success + failed + 1}/${files.length})`, 'loading');
+            progressContainer.classList.add('active');
+            const totalFiles = files.length;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const percent = Math.round((i / totalFiles) * 100);
+                progressFill.style.width = `${percent}%`;
+                progressPercent.textContent = `${percent}%`;
+                progressText.textContent = `${file.name} yükleniyor... (${i+1}/${totalFiles})`;
+                
+                setStatus(`⏳ ${file.name} (${i + 1}/${totalFiles})`, 'loading');
                 try {
                     const base64 = await toBase64(file);
                     const url =
@@ -1389,7 +1810,6 @@
                     } else {
                         const err = await res.json();
                         if (err.message && err.message.includes('already exists')) {
-                            setStatus(`⚠️ "${file.name}" zaten var`, 'error');
                             showToast('⚠️', `${file.name} zaten var`, 'Aynı isimli dosya mevcut.', 'warning', 3000);
                         }
                         failed++;
@@ -1399,7 +1819,17 @@
                 }
             }
 
+            progressFill.style.width = '100%';
+            progressPercent.textContent = '100%';
+            progressText.textContent = '✅ Tamamlandı!';
+
             uploadBtn.disabled = false;
+
+            setTimeout(() => {
+                progressContainer.classList.remove('active');
+                progressFill.style.width = '0%';
+                progressPercent.textContent = '0%';
+            }, 2000);
 
             if (failed === 0 && success > 0) {
                 setStatus(`✅ ${success} dosya yüklendi`, 'success');
@@ -1472,7 +1902,7 @@
         });
 
         // ==========================================================
-        // İNDİRME
+        // İNDİRME (TEK DOSYA)
         // ==========================================================
         function downloadFile(url, filename) {
             showToast('⏳', `${filename} indiriliyor...`, 'Lütfen bekleyin.', 'info', 2000);
@@ -1491,7 +1921,12 @@
                     document.body.removeChild(link);
                     setTimeout(() => URL.revokeObjectURL(link.href), 1000);
 
+                    dosyaIndirildiOlarakIsaretle(filename);
+                    const yeniIndirilen = getIndirilenSayisi();
+                    downloadedCount.textContent = yeniIndirilen;
+                    
                     showToast('✅', `"${filename}" indirildi!`, 'Dosya başarıyla kaydedildi.', 'success', 3000);
+                    listFiles();
                 })
                 .catch(() => {
                     const link = document.createElement('a');
@@ -1501,7 +1936,12 @@
                     link.click();
                     document.body.removeChild(link);
 
+                    dosyaIndirildiOlarakIsaretle(filename);
+                    const yeniIndirilen = getIndirilenSayisi();
+                    downloadedCount.textContent = yeniIndirilen;
+
                     showToast('⚠️', `"${filename}" indirildi`, 'Alternatif yöntem kullanıldı.', 'warning', 3000);
+                    listFiles();
                 });
         }
 
@@ -1617,7 +2057,6 @@
                     deleteBtn.style.boxShadow = '0 4px 20px rgba(248, 81, 73, 0.25)';
                 });
                 
-                // Mobil dokunmatik için
                 cancelBtn.addEventListener('touchstart', () => {
                     cancelBtn.style.background = 'rgba(255, 255, 255, 0.12)';
                 });
@@ -1654,7 +2093,7 @@
         }
 
         // ==========================================================
-        // SİLME (GÜZEL BİLDİRİM İLE)
+        // SİLME
         // ==========================================================
         async function deleteFile(filename, sha) {
             const confirmed = await showConfirmDialog(
@@ -1693,6 +2132,10 @@
                 if (loadingToast) loadingToast.remove();
 
                 if (res.ok) {
+                    dosyaIndirildiKaldir(filename);
+                    const yeniIndirilen = getIndirilenSayisi();
+                    downloadedCount.textContent = yeniIndirilen;
+                    
                     setStatus(`🗑️ "${filename}" silindi`, 'success');
                     showToast('✅', `"${filename}" silindi`, 'Dosya başarıyla kaldırıldı.', 'success', 3000);
                     
@@ -1769,6 +2212,9 @@
                 }
                 
                 if (loadingToast) loadingToast.remove();
+                indirilenleriTemizle();
+                downloadedCount.textContent = '0';
+                
                 setStatus(`🗑️ ${deleted} dosya silindi`, 'success');
                 showToast('🗑️', `${deleted} dosya silindi`, 'Tüm dosyalar temizlendi.', 'success', 3000);
                 
@@ -1815,6 +2261,9 @@
             showToast('🔑', 'Token gerekli', 'Lütfen GitHub token\'ınızı girin.', 'info', 4000);
         }
     </script>
+
+    <!-- JSZip Kütüphanesi -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 </body>
 </html>
