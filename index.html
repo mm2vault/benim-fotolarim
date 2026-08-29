@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>👨‍👩‍👧‍👦 Aile Galerisi</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -157,7 +162,7 @@
             margin-bottom: 20px;
         }
 
-        .giris-ekrani .isim-input {
+        .giris-ekrani .email-input {
             width: 100%;
             padding: 14px 16px;
             border-radius: 14px;
@@ -169,15 +174,15 @@
             transition: 0.3s;
             font-family: inherit;
             text-align: center;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
-        .giris-ekrani .isim-input:focus {
+        .giris-ekrani .email-input:focus {
             border-color: #f0933e;
             box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
         }
 
-        .giris-ekrani .btn-giris {
+        .giris-ekrani .btn-kod-gonder {
             width: 100%;
             padding: 14px;
             background: linear-gradient(135deg, #f0933e, #e67e22);
@@ -189,11 +194,18 @@
             cursor: pointer;
             transition: 0.25s;
             font-family: inherit;
+            margin-bottom: 10px;
         }
 
-        .giris-ekrani .btn-giris:hover {
+        .giris-ekrani .btn-kod-gonder:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 30px rgba(240, 147, 62, 0.3);
+        }
+
+        .giris-ekrani .btn-kod-gonder:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .giris-ekrani .hata {
@@ -207,10 +219,15 @@
             display: block;
         }
 
-        .giris-ekrani .kullanici-bilgi {
-            color: #4a5268;
+        .giris-ekrani .basarili {
+            color: #4cda6c;
             font-size: 13px;
             margin-top: 12px;
+            display: none;
+        }
+
+        .giris-ekrani .basarili.goster {
+            display: block;
         }
 
         /* ===== REPO GRİD ===== */
@@ -279,7 +296,6 @@
             background: rgba(255, 255, 255, 0.08);
         }
 
-        /* ===== DOSYA ALANI ===== */
         .file-area {
             border: 2px dashed rgba(255, 255, 255, 0.06);
             border-radius: 18px;
@@ -773,15 +789,16 @@
 
         <!-- GİRİŞ EKRANI -->
         <div id="girisEkrani" class="giris-ekrani">
-            <span class="avatar">👤</span>
-            <div class="baslik">Giriş Yap</div>
-            <div class="alt-bilgi" id="altBilgi">İsminizi girin</div>
+            <span class="avatar">📧</span>
+            <div class="baslik">E-posta ile Giriş</div>
+            <div class="alt-bilgi" id="altBilgi">E-posta adresine doğrulama kodu gönder</div>
             
-            <input type="text" class="isim-input" id="isimInput" placeholder="👤 İsminiz (örn: anne, baba, sen, abla)">
+            <input type="email" class="email-input" id="emailInput" placeholder="ornek@email.com">
             
-            <button class="btn-giris" id="girisBtn">🔓 Giriş Yap</button>
+            <button class="btn-kod-gonder" id="kodGonderBtn">📨 Kod Gönder</button>
             
-            <div class="hata" id="girisHata">❌ Bu isim zaten kullanılıyor veya geçersiz!</div>
+            <div class="hata" id="girisHata">❌ Hata! Tekrar deneyin.</div>
+            <div class="basarili" id="girisBasarili">✅ Kod gönderildi! E-postanı kontrol et.</div>
             <div class="kullanici-bilgi" id="kullaniciBilgi"></div>
         </div>
 
@@ -847,41 +864,141 @@
 
     <script>
         // ==========================================================
-        // KULLANICI -> REPO EŞLEŞMESİ (SABİT)
+        // 🔥 FİREBASE KONFIGÜRASYONU
         // ==========================================================
-        const kisiRepolar = {
-            'anne': ['anne-1', 'anne-2'],
-            'baba': ['baba-1', 'baba-2'],
-            'sen': ['mm2-1', 'mm2-2'],
-            'abla': ['abla-1', 'abla-2']
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyPCMSYg14OLTtfgsta94XfU2yDaYee3Y",
+            authDomain: "benim-fotolarim.firebaseapp.com",
+            projectId: "benim-fotolarim",
+            storageBucket: "benim-fotolarim.firebasestorage.app",
+            messagingSenderId: "999858368144",
+            appId: "1:999858368144:web:8fe8de0da97844d67d7215"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        let actionCodeSettings = {
+            url: window.location.href,
+            handleCodeInApp: true
         };
 
         // ==========================================================
-        // DURUM
+        // E-POSTA İLE GİRİŞ (Şifresiz)
         // ==========================================================
-        let aktifRepo = null;
-        let currentUser = null;
+        const emailInput = document.getElementById('emailInput');
+        const kodGonderBtn = document.getElementById('kodGonderBtn');
+        const girisHata = document.getElementById('girisHata');
+        const girisBasarili = document.getElementById('girisBasarili');
+        const kullaniciBilgi = document.getElementById('kullaniciBilgi');
 
         // ==========================================================
-        // KULLANICI YÖNETİMİ (localStorage)
+        // KULLANICI -> REPO EŞLEŞMESİ
         // ==========================================================
-        function kullaniciKaydet(isim) {
-            const kullanicilar = JSON.parse(localStorage.getItem('aileKullanicilar_v2') || '[]');
-            if (!kullanicilar.includes(isim)) {
-                kullanicilar.push(isim);
-                localStorage.setItem('aileKullanicilar_v2', JSON.stringify(kullanicilar));
-                return true;
+        const kisiRepolar = {
+            'mm2vault@gmail.com': ['mm2-1', 'mm2-2'],
+            'anne@gmail.com': ['anne-1', 'anne-2'],
+            'baba@gmail.com': ['baba-1', 'baba-2'],
+            'abla@gmail.com': ['abla-1', 'abla-2']
+        };
+
+        // ==========================================================
+        // KOD GÖNDER (E-posta ile)
+        // ==========================================================
+        kodGonderBtn.addEventListener('click', function() {
+            const email = emailInput.value.trim();
+            if (!email) {
+                girisHata.textContent = '❌ Lütfen e-posta adresinizi girin!';
+                girisHata.classList.add('goster');
+                girisBasarili.classList.remove('goster');
+                return;
             }
-            return false;
-        }
 
-        function kullaniciVarmi(isim) {
-            const kullanicilar = JSON.parse(localStorage.getItem('aileKullanicilar_v2') || '[]');
-            return kullanicilar.includes(isim);
-        }
+            this.disabled = true;
+            this.textContent = '⏳ Gönderiliyor...';
+            setStatus('⏳ Kod gönderiliyor...', 'loading');
+            girisHata.classList.remove('goster');
+            girisBasarili.classList.remove('goster');
 
-        function tumKullanicilariSil() {
-            localStorage.removeItem('aileKullanicilar_v2');
+            // E-posta ile giriş linki gönder
+            auth.sendSignInLinkToEmail(email, actionCodeSettings)
+                .then(() => {
+                    girisBasarili.textContent = `✅ Kod gönderildi! (${email})`;
+                    girisBasarili.classList.add('goster');
+                    setStatus('📨 Kod gönderildi', 'success');
+                    this.textContent = '📨 Kod Gönderildi';
+                    this.disabled = false;
+                    
+                    // Email'i localStorage'a kaydet
+                    window.localStorage.setItem('emailForSignIn', email);
+                    
+                    // Kullanıcıyı bilgilendir
+                    kullaniciBilgi.textContent = `📧 ${email} adresine gelen linke tıkla!`;
+                })
+                .catch((error) => {
+                    console.error('Kod gönderme hatası:', error);
+                    girisHata.textContent = `❌ ${error.message}`;
+                    girisHata.classList.add('goster');
+                    setStatus('❌ Kod gönderilemedi', 'error');
+                    this.textContent = '📨 Kod Gönder';
+                    this.disabled = false;
+                });
+        });
+
+        // ==========================================================
+        // LİNK İLE GİRİŞ KONTROLÜ
+        // ==========================================================
+        function epostaIleGiris() {
+            // URL'de link var mı kontrol et
+            if (auth.isSignInWithEmailLink(window.location.href)) {
+                // Email'i localStorage'dan al
+                let email = window.localStorage.getItem('emailForSignIn');
+                if (!email) {
+                    // Kullanıcıdan email iste
+                    email = prompt('Lütfen e-posta adresinizi girin:');
+                }
+                
+                if (email) {
+                    setStatus('⏳ Giriş yapılıyor...', 'loading');
+                    
+                    auth.signInWithEmailLink(email, window.location.href)
+                        .then((result) => {
+                            // Giriş başarılı
+                            const user = result.user;
+                            const userEmail = user.email;
+                            
+                            // Email'i temizle
+                            window.localStorage.removeItem('emailForSignIn');
+                            
+                            // URL'deki link parametrelerini temizle
+                            const url = new URL(window.location);
+                            url.searchParams.delete('mode');
+                            url.searchParams.delete('oobCode');
+                            url.searchParams.delete('apiKey');
+                            window.history.replaceState({}, document.title, url);
+                            
+                            girisBasarili.classList.remove('goster');
+                            girisHata.classList.remove('goster');
+                            kullaniciBilgi.textContent = `✅ Hoş geldin ${userEmail}!`;
+                            setStatus(`✅ ${userEmail} olarak giriş yapıldı`, 'success');
+                            
+                            // Repoları göster
+                            const repolar = kisiRepolar[userEmail];
+                            if (repolar) {
+                                repoGoster(userEmail);
+                            } else {
+                                girisHata.textContent = '⚠️ Bu e-posta için kayıtlı repo bulunamadı!';
+                                girisHata.classList.add('goster');
+                                setStatus('⚠️ Repo bulunamadı', 'error');
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Giriş hatası:', error);
+                            girisHata.textContent = `❌ ${error.message}`;
+                            girisHata.classList.add('goster');
+                            setStatus('❌ Giriş başarısız', 'error');
+                        });
+                }
+            }
         }
 
         // ==========================================================
@@ -895,12 +1012,6 @@
         const geriBtn = document.getElementById('geriBtn');
         const galeriGeriBtn = document.getElementById('galeriGeriBtn');
         const cikisBtn = document.getElementById('cikisBtn');
-
-        const isimInput = document.getElementById('isimInput');
-        const girisBtn = document.getElementById('girisBtn');
-        const girisHata = document.getElementById('girisHata');
-        const altBilgi = document.getElementById('altBilgi');
-        const kullaniciBilgi = document.getElementById('kullaniciBilgi');
         const repoGrid = document.getElementById('repoGrid');
 
         const fileInput = document.getElementById('fileInput');
@@ -922,6 +1033,8 @@
 
         let currentModalUrl = '';
         let currentModalName = '';
+        let aktifRepo = null;
+        let currentUser = null;
 
         // ==========================================================
         // YARDIMCI
@@ -966,61 +1079,17 @@
         });
 
         // ==========================================================
-        // GİRİŞ İŞLEMİ
-        // ==========================================================
-        function girisYap() {
-            const isim = isimInput.value.trim().toLowerCase();
-
-            if (!isim) {
-                girisHata.textContent = '❌ Lütfen bir isim girin!';
-                girisHata.classList.add('goster');
-                return;
-            }
-
-            // Sadece izin verilen isimler
-            if (!kisiRepolar[isim]) {
-                girisHata.textContent = '❌ Geçersiz isim! (anne, baba, sen, abla)';
-                girisHata.classList.add('goster');
-                return;
-            }
-
-            // Bu isim zaten kullanılıyor mu?
-            if (kullaniciVarmi(isim)) {
-                girisHata.textContent = '❌ Bu isim zaten kullanılıyor! Başka bir isim seçin.';
-                girisHata.classList.add('goster');
-                return;
-            }
-
-            // İsmi kaydet (ilk giriş)
-            kullaniciKaydet(isim);
-            girisHata.classList.remove('goster');
-            kullaniciBilgi.textContent = `✅ Hoş geldin ${isim}!`;
-            setStatus(`✅ ${isim} olarak giriş yapıldı`, 'success');
-            currentUser = isim;
-            repoGoster(isim);
-        }
-
-        girisBtn.addEventListener('click', girisYap);
-
-        // Enter tuşu
-        isimInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') girisYap();
-        });
-
-        // ==========================================================
         // REPOLARI GÖSTER
         // ==========================================================
-        function repoGoster(isim) {
+        function repoGoster(email) {
             girisEkrani.classList.add('gizli');
             repoSayfa.classList.remove('gizli');
             galeriSayfa.classList.add('gizli');
             repoGrid.innerHTML = '';
 
-            const repolar = kisiRepolar[isim];
-            if (!repolar) {
-                setStatus('❌ Bu kullanıcı için repo bulunamadı', 'error');
-                return;
-            }
+            const repolar = kisiRepolar[email];
+            // Email'den isim çıkart
+            const isim = email.split('@')[0];
 
             for (const repoAdi of repolar) {
                 const kart = document.createElement('div');
@@ -1051,34 +1120,22 @@
         }
 
         // ==========================================================
-        // GERİ BUTONU (Çıkış Yap - Kullanıcıyı Sil)
+        // GERİ BUTONU (Çıkış Yap)
         // ==========================================================
         function geriDon() {
-            if (currentUser) {
-                // Kullanıcıyı sil
-                const kullanicilar = JSON.parse(localStorage.getItem('aileKullanicilar_v2') || '[]');
-                const index = kullanicilar.indexOf(currentUser);
-                if (index > -1) {
-                    kullanicilar.splice(index, 1);
-                    localStorage.setItem('aileKullanicilar_v2', JSON.stringify(kullanicilar));
-                }
+            auth.signOut().then(() => {
                 repoSayfa.classList.add('gizli');
                 galeriSayfa.classList.add('gizli');
                 girisEkrani.classList.remove('gizli');
-                const isim = currentUser;
                 currentUser = null;
                 aktifRepo = null;
-                isimInput.value = '';
                 kullaniciBilgi.textContent = '';
                 girisHata.classList.remove('goster');
-                altBilgi.textContent = 'İsminizi girin';
-                setStatus(`🔐 ${isim} çıkış yaptı`, '');
-            } else {
-                repoSayfa.classList.add('gizli');
-                galeriSayfa.classList.add('gizli');
-                girisEkrani.classList.remove('gizli');
+                girisBasarili.classList.remove('goster');
                 setStatus('🔐 Çıkış yapıldı', '');
-            }
+            }).catch((error) => {
+                console.error('Çıkış hatası:', error);
+            });
         }
 
         geriBtn.addEventListener('click', geriDon);
@@ -1103,22 +1160,24 @@
         galeriGeriBtn.addEventListener('click', galeridenRepolaraDon);
 
         // ==========================================================
-        // ÇIKIŞ YAP - Tüm Kullanıcıları Sil
+        // ÇIKIŞ YAP - Tüm Oturumu Kapat
         // ==========================================================
         function cikisYap() {
-            if (!confirm('Çıkış yapmak istediğine emin misin? Tüm kullanıcılar silinecek.')) return;
+            if (!confirm('Çıkış yapmak istediğine emin misin?')) return;
 
-            tumKullanicilariSil();
-            repoSayfa.classList.add('gizli');
-            galeriSayfa.classList.add('gizli');
-            girisEkrani.classList.remove('gizli');
-            currentUser = null;
-            aktifRepo = null;
-            isimInput.value = '';
-            kullaniciBilgi.textContent = '';
-            girisHata.classList.remove('goster');
-            altBilgi.textContent = 'İsminizi girin';
-            setStatus('🚪 Çıkış yapıldı. Tüm kullanıcılar silindi.', '');
+            auth.signOut().then(() => {
+                repoSayfa.classList.add('gizli');
+                galeriSayfa.classList.add('gizli');
+                girisEkrani.classList.remove('gizli');
+                currentUser = null;
+                aktifRepo = null;
+                kullaniciBilgi.textContent = '';
+                girisHata.classList.remove('goster');
+                girisBasarili.classList.remove('goster');
+                setStatus('🚪 Çıkış yapıldı', '');
+            }).catch((error) => {
+                console.error('Çıkış hatası:', error);
+            });
         }
 
         cikisBtn.addEventListener('click', cikisYap);
@@ -1426,9 +1485,34 @@
         }
 
         // ==========================================================
-        // BAŞLANGIÇ
+        // OTURUM KONTROLÜ
+        // ==========================================================
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentUser = user.email;
+                const email = user.email;
+                const repolar = kisiRepolar[email];
+                if (repolar) {
+                    girisEkrani.classList.add('gizli');
+                    repoGoster(email);
+                    setStatus(`✅ ${email} olarak giriş yapıldı`, 'success');
+                } else {
+                    auth.signOut();
+                    setStatus('⚠️ Bu e-posta için kayıtlı repo bulunamadı', 'error');
+                }
+            } else {
+                girisEkrani.classList.remove('gizli');
+                repoSayfa.classList.add('gizli');
+                galeriSayfa.classList.add('gizli');
+                setStatus('✨ Lütfen giriş yapın', '');
+            }
+        });
+
+        // ==========================================================
+        // BAŞLANGIÇ - E-posta Linki ile Giriş Kontrolü
         // ==========================================================
         setStatus('✨ Aile sistemine hoş geldiniz', '');
+        epostaIleGiris();
     </script>
 
 </body>
