@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>📸 Gallery Cloud</title>
+    <title>Gallery Cloud</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/tCYfpbZy/be371099-de3c-430e-b3de-37d5dbd175fa.png">
     <style>
         * {
@@ -11,6 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0b0e14;
@@ -19,6 +20,7 @@
             padding: 20px;
             background-image: radial-gradient(ellipse at 50% 0%, #1a2332 0%, #0b0e14 70%);
         }
+
         .app {
             max-width: 920px;
             width: 100%;
@@ -30,6 +32,7 @@
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
+
         .header {
             display: flex;
             align-items: center;
@@ -40,16 +43,19 @@
             border-radius: 20px;
             border: 1px solid rgba(240, 147, 62, 0.1);
         }
+
         .header-left {
             display: flex;
             align-items: center;
             gap: 14px;
         }
+
         .header-logo {
             height: 44px;
             width: auto;
             border-radius: 12px;
         }
+
         .header h1 {
             font-size: 22px;
             font-weight: 700;
@@ -57,6 +63,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
         .header-badge {
             background: linear-gradient(135deg, rgba(240, 147, 62, 0.15), rgba(230, 126, 34, 0.05));
             padding: 6px 16px;
@@ -66,17 +73,20 @@
             color: #f0933e;
             border: 1px solid rgba(240, 147, 62, 0.15);
         }
+
         .input-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 12px;
             margin-bottom: 16px;
         }
+
         .input-group {
             display: flex;
             flex-direction: column;
             gap: 4px;
         }
+
         .input-group label {
             font-size: 10px;
             font-weight: 600;
@@ -87,6 +97,7 @@
             align-items: center;
             gap: 6px;
         }
+
         .input-group input {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -99,14 +110,17 @@
             font-family: inherit;
             width: 100%;
         }
+
         .input-group input:focus {
             border-color: #f0933e;
             box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
             background: rgba(255, 255, 255, 0.06);
         }
+
         .input-group input::placeholder {
             color: #3e485a;
         }
+
         .status {
             background: rgba(255, 255, 255, 0.02);
             border-radius: 14px;
@@ -120,6 +134,7 @@
             align-items: center;
             gap: 12px;
         }
+
         .status .spinner {
             width: 18px;
             height: 18px;
@@ -129,14 +144,78 @@
             animation: spin 0.7s linear infinite;
             display: none;
         }
+
         .status.loading .spinner {
             display: block;
         }
+
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
+
+        .repo-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .repo-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 10px 18px;
+            color: #e8edf5;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .repo-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(240, 147, 62, 0.2);
+        }
+
+        .repo-btn.active {
+            background: rgba(240, 147, 62, 0.12);
+            border-color: #f0933e;
+            color: #f0933e;
+        }
+
+        .repo-btn .doluluk {
+            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .repo-btn .doluluk.dolu {
+            color: #f85149;
+            background: rgba(248, 81, 73, 0.08);
+        }
+
+        .repo-btn .doluluk.yari {
+            color: #f0933e;
+            background: rgba(240, 147, 62, 0.08);
+        }
+
+        .repo-btn .doluluk.bos {
+            color: #4cda6c;
+            background: rgba(46, 160, 67, 0.08);
+        }
+
+        .repo-btn .dosya-sayisi {
+            font-size: 11px;
+            color: #4a5268;
+        }
+
         .file-area {
             border: 2px dashed rgba(255, 255, 255, 0.06);
             border-radius: 18px;
@@ -148,33 +227,40 @@
             margin-bottom: 18px;
             position: relative;
         }
+
         .file-area:hover {
             border-color: rgba(240, 147, 62, 0.3);
             background: rgba(255, 255, 255, 0.03);
         }
+
         .file-area.dragover {
             border-color: #f0933e;
             background: rgba(240, 147, 62, 0.05);
         }
+
         .file-area .icon {
             display: block;
             margin-bottom: 4px;
             opacity: 0.9;
         }
+
         .file-area .text {
             font-size: 15px;
             color: #7a879f;
         }
+
         .file-area .text strong {
             color: #e8edf5;
             font-weight: 500;
         }
+
         .file-area input[type="file"] {
             position: absolute;
             inset: 0;
             opacity: 0;
             cursor: pointer;
         }
+
         .file-area .file-count {
             display: inline-block;
             margin-top: 10px;
@@ -184,12 +270,14 @@
             font-size: 12px;
             color: #5a687e;
         }
+
         .buttons {
             display: grid;
             grid-template-columns: 1fr 1fr 0.7fr;
             gap: 10px;
             margin-bottom: 24px;
         }
+
         .btn {
             padding: 12px 16px;
             border: none;
@@ -204,38 +292,46 @@
             gap: 8px;
             font-family: inherit;
         }
+
         .btn-upload {
             background: linear-gradient(135deg, #f0933e, #e67e22);
             color: #fff;
             box-shadow: 0 4px 20px rgba(240, 147, 62, 0.25);
         }
+
         .btn-upload:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 6px 30px rgba(240, 147, 62, 0.35);
         }
+
         .btn-upload:disabled {
             opacity: 0.4;
             cursor: not-allowed;
             transform: none;
         }
+
         .btn-list {
             background: rgba(255, 255, 255, 0.05);
             color: #e8edf5;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
+
         .btn-list:hover {
             background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
         }
+
         .btn-clear {
             background: rgba(248, 81, 73, 0.08);
             color: #f85149;
             border: 1px solid rgba(248, 81, 73, 0.1);
         }
+
         .btn-clear:hover {
             background: rgba(248, 81, 73, 0.16);
             transform: translateY(-2px);
         }
+
         .gallery-header {
             display: flex;
             justify-content: space-between;
@@ -246,6 +342,7 @@
             flex-wrap: wrap;
             gap: 8px;
         }
+
         .gallery-header .left {
             display: flex;
             align-items: center;
@@ -255,29 +352,34 @@
             font-weight: 500;
             flex-wrap: wrap;
         }
+
         .gallery-header .count {
             background: rgba(255, 255, 255, 0.04);
             padding: 2px 14px;
             border-radius: 20px;
             font-size: 12px;
         }
+
         .gallery-stats {
             display: flex;
             gap: 14px;
             font-size: 12px;
             color: #7a879f;
         }
+
         .gallery-stats span {
             display: flex;
             align-items: center;
             gap: 4px;
         }
+
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 16px;
             padding-top: 2px;
         }
+
         .gallery-empty {
             grid-column: 1 / -1;
             text-align: center;
@@ -285,6 +387,7 @@
             padding: 48px 0 32px;
             font-size: 15px;
         }
+
         .gallery-item {
             background: rgba(255, 255, 255, 0.02);
             border-radius: 18px;
@@ -293,11 +396,13 @@
             transition: 0.4s;
             cursor: pointer;
         }
+
         .gallery-item:hover {
             border-color: rgba(240, 147, 62, 0.25);
             transform: translateY(-6px);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
         }
+
         .gallery-item .media {
             width: 100%;
             height: 170px;
@@ -308,6 +413,7 @@
             overflow: hidden;
             position: relative;
         }
+
         .gallery-item .media img {
             width: 100%;
             height: 100%;
@@ -315,9 +421,11 @@
             transition: 0.5s;
             display: block;
         }
+
         .gallery-item:hover .media img {
             transform: scale(1.05);
         }
+
         .gallery-item .media video {
             width: 100%;
             height: 100%;
@@ -325,6 +433,7 @@
             background: #000;
             display: block;
         }
+
         .gallery-item .info {
             padding: 10px 14px 14px;
             display: flex;
@@ -332,6 +441,7 @@
             justify-content: space-between;
             gap: 8px;
         }
+
         .gallery-item .info .name {
             font-size: 12px;
             color: #6b7a93;
@@ -340,11 +450,13 @@
             text-overflow: ellipsis;
             flex: 1;
         }
+
         .gallery-item .info .actions {
             display: flex;
             gap: 4px;
             flex-shrink: 0;
         }
+
         .gallery-item .info .actions button {
             background: none;
             border: none;
@@ -358,6 +470,7 @@
             align-items: center;
             gap: 4px;
         }
+
         .gallery-item .info .actions .download-btn {
             background: rgba(255, 255, 255, 0.04);
             padding: 4px 10px;
@@ -366,14 +479,17 @@
             color: #b8c4d4;
             font-weight: 500;
         }
+
         .gallery-item .info .actions .download-btn:hover {
             background: #f0933e;
             color: #fff;
         }
+
         .gallery-item .info .actions .delete-btn:hover {
             color: #f85149;
             background: rgba(248, 81, 73, 0.08);
         }
+
         .modal {
             display: none;
             position: fixed;
@@ -385,9 +501,11 @@
             justify-content: center;
             padding: 24px;
         }
+
         .modal.active {
             display: flex;
         }
+
         .modal-content {
             max-width: 94vw;
             max-height: 92vh;
@@ -400,6 +518,7 @@
             overflow: hidden;
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
         }
+
         .modal-content img,
         .modal-content video {
             max-width: 94vw;
@@ -408,9 +527,11 @@
             object-fit: contain;
             border-radius: 16px;
         }
+
         .modal-content video {
             background: #000;
         }
+
         .modal-close {
             position: absolute;
             top: 14px;
@@ -429,10 +550,12 @@
             justify-content: center;
             border: 1px solid rgba(255, 255, 255, 0.06);
         }
+
         .modal-close:hover {
             background: rgba(255, 255, 255, 0.1);
             transform: rotate(90deg);
         }
+
         .modal-bottom {
             position: absolute;
             bottom: 24px;
@@ -449,6 +572,7 @@
             max-width: 90%;
             z-index: 5;
         }
+
         .modal-filename {
             color: #9aabbf;
             font-size: 13px;
@@ -457,6 +581,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
         .modal-download {
             background: linear-gradient(135deg, #f0933e, #e67e22);
             color: #fff;
@@ -472,77 +597,30 @@
             gap: 8px;
             font-family: inherit;
         }
+
         .modal-download:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 28px rgba(240, 147, 62, 0.4);
         }
+
         @media (max-width: 768px) {
-            .app {
-                padding: 18px;
-            }
-            .input-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            .buttons {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-            .header h1 {
-                font-size: 18px;
-            }
-            .header-badge {
-                display: none;
-            }
-            .header-logo {
-                height: 34px;
-            }
-            .gallery {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 12px;
-            }
-            .gallery-item .media {
-                height: 130px;
-            }
-            .modal-content {
-                max-width: 98vw;
-            }
-            .modal-bottom {
-                padding: 6px 12px 6px 16px;
-                gap: 10px;
-                flex-wrap: wrap;
-                justify-content: center;
-                bottom: 14px;
-            }
-            .modal-filename {
-                max-width: 80px;
-                font-size: 12px;
-            }
-            .modal-download {
-                padding: 6px 16px;
-                font-size: 12px;
-            }
-            .modal-close {
-                width: 34px;
-                height: 34px;
-                font-size: 18px;
-                top: 10px;
-                right: 12px;
-            }
-            .gallery-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .gallery-header .left {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-            .gallery-stats {
-                font-size: 11px;
-                gap: 10px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
+            .app { padding: 18px; }
+            .buttons { grid-template-columns: 1fr; gap: 8px; }
+            .header h1 { font-size: 18px; }
+            .header-badge { display: none; }
+            .header-logo { height: 34px; }
+            .gallery { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+            .gallery-item .media { height: 130px; }
+            .repo-buttons { flex-direction: column; }
+            .repo-btn { justify-content: center; }
+            .modal-content { max-width: 98vw; }
+            .modal-bottom { padding: 6px 12px 6px 16px; gap: 10px; flex-wrap: wrap; justify-content: center; bottom: 14px; }
+            .modal-filename { max-width: 80px; font-size: 12px; }
+            .modal-download { padding: 6px 16px; font-size: 12px; }
+            .modal-close { width: 34px; height: 34px; font-size: 18px; top: 10px; right: 12px; }
+            .gallery-header { flex-direction: column; align-items: stretch; }
+            .gallery-header .left { justify-content: center; flex-wrap: wrap; }
+            .gallery-stats { font-size: 11px; gap: 10px; flex-wrap: wrap; justify-content: center; }
         }
     </style>
 </head>
@@ -559,21 +637,16 @@
             <span class="header-badge">✦ Premium</span>
         </div>
 
-        <!-- GİRİŞ -->
+        <!-- TOKEN (SADECE BUNU GİR) -->
         <div class="input-grid">
-            <div class="input-group">
-                <label>👤 Kullanıcı Adı</label>
-                <input type="text" id="username" placeholder="kullaniciadin" value="mm2vault">
-            </div>
-            <div class="input-group">
-                <label>📁 Repo Adı</label>
-                <input type="text" id="repo" placeholder="repo-adi" value="benim-fotolarim">
-            </div>
             <div class="input-group">
                 <label>🔑 Token</label>
                 <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxx">
             </div>
         </div>
+
+        <!-- REPO BUTONLARI -->
+        <div class="repo-buttons" id="repoButtons"></div>
 
         <!-- DURUM -->
         <div class="status" id="status">
@@ -635,12 +708,22 @@
     </div>
 
     <script>
+        // ===== REPO LİSTESİ =====
+        const repolar = [
+            { ad: 'benim-fotolarim', etiket: 'Ana Galeri', limit: 2000 },
+            { ad: 'fotolar-2', etiket: 'Galeri 2', limit: 2000 },
+            { ad: 'fotolar-3', etiket: 'Galeri 3', limit: 2000 }
+        ];
+
+        let aktifRepo = 'benim-fotolarim';
+        let repoDosyaSayilari = {};
+        let currentToken = '';
+
         // ===== DOM =====
-        const username = document.getElementById('username');
-        const repo = document.getElementById('repo');
-        const token = document.getElementById('token');
+        const tokenInput = document.getElementById('token');
         const statusEl = document.getElementById('status');
         const statusMsg = statusEl.querySelector('.msg');
+        const repoButtons = document.getElementById('repoButtons');
         const fileInput = document.getElementById('fileInput');
         const fileArea = document.getElementById('fileArea');
         const fileCount = document.getElementById('fileCount');
@@ -669,17 +752,18 @@
 
         function getConfig() {
             return {
-                user: username.value.trim(),
-                repo: repo.value.trim(),
-                token: token.value.trim()
+                user: 'mm2vault',
+                repo: aktifRepo,
+                token: currentToken || tokenInput.value.trim() || localStorage.getItem('githubToken') || ''
             };
         }
 
         function validateConfig() {
             const c = getConfig();
-            if (!c.user) { setStatus('❌ Kullanıcı adı gerekli', 'error'); return null; }
-            if (!c.repo) { setStatus('❌ Repo adı gerekli', 'error'); return null; }
-            if (!c.token || !c.token.startsWith('ghp_')) { setStatus('❌ Geçerli token gerekli', 'error'); return null; }
+            if (!c.token || !c.token.startsWith('ghp_')) {
+                setStatus('❌ Geçerli token gerekli (ghp_ ile başlar)', 'error');
+                return null;
+            }
             return c;
         }
 
@@ -707,6 +791,63 @@
             }
         });
 
+        // ===== REPO DOSYA SAYISINI ÇEK =====
+        async function getRepoFileCount(repoAdi) {
+            const cfg = getConfig();
+            if (!cfg.token) return 0;
+
+            try {
+                const url = `https://api.github.com/repos/${cfg.user}/${repoAdi}/contents/fotolar`;
+                const res = await fetch(url, {
+                    headers: { 'Authorization': `token ${cfg.token}` }
+                });
+                if (!res.ok) return 0;
+                const data = await res.json();
+                return data.length || 0;
+            } catch {
+                return 0;
+            }
+        }
+
+        // ===== REPO BUTONLARI =====
+        async function renderRepoButtons() {
+            repoButtons.innerHTML = '';
+            const cfg = getConfig();
+            if (!cfg.token) {
+                repoButtons.innerHTML = '<span style="color:#6b7a93;font-size:13px;">⚠️ Token girin</span>';
+                return;
+            }
+
+            for (const repo of repolar) {
+                const dosyaSayisi = await getRepoFileCount(repo.ad);
+                repoDosyaSayilari[repo.ad] = dosyaSayisi;
+                const oran = Math.min((dosyaSayisi / repo.limit) * 100, 100);
+
+                const btn = document.createElement('button');
+                btn.className = `repo-btn ${repo.ad === aktifRepo ? 'active' : ''}`;
+
+                let durumClass = 'bos';
+                let durumText = '🟢 Boş';
+                if (oran >= 90) { durumClass = 'dolu';
+                    durumText = '🔴 Dolu'; } else if (oran >= 50) { durumClass = 'yari';
+                    durumText = '🟡 Yarı Dolu'; }
+
+                btn.innerHTML = `
+                    <span>📁 ${repo.etiket}</span>
+                    <span class="doluluk ${durumClass}">${Math.round(oran)}%</span>
+                    <span class="dosya-sayisi">(${dosyaSayisi} dosya)</span>
+                `;
+
+                btn.addEventListener('click', () => {
+                    aktifRepo = repo.ad;
+                    renderRepoButtons();
+                    listFiles();
+                });
+
+                repoButtons.appendChild(btn);
+            }
+        }
+
         // ===== YÜKLEME =====
         async function uploadFiles() {
             const cfg = validateConfig();
@@ -715,15 +856,13 @@
             if (!files.length) { setStatus('⚠️ Lütfen dosya seç', 'error'); return; }
 
             uploadBtn.disabled = true;
-            let success = 0,
-                failed = 0;
+            let success = 0, failed = 0;
 
             for (const file of files) {
                 setStatus(`⏳ ${file.name} (${success + failed + 1}/${files.length})`, 'loading');
                 try {
                     const base64 = await toBase64(file);
-                    const url =
-                        `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar/${encodeURIComponent(file.name)}`;
+                    const url = `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar/${encodeURIComponent(file.name)}`;
                     const res = await fetch(url, {
                         method: 'PUT',
                         headers: {
@@ -755,11 +894,13 @@
                 fileInput.value = '';
                 updateFileCount();
                 setTimeout(() => {
+                    renderRepoButtons();
                     listFiles();
                 }, 3000);
             } else if (success > 0) {
                 setStatus(`⚠️ ${success} başarılı, ${failed} hata`, 'error');
                 setTimeout(() => {
+                    renderRepoButtons();
                     listFiles();
                 }, 3000);
             } else {
@@ -794,8 +935,7 @@
 
                 if (res.status === 404) {
                     setStatus('📭 Klasör boş', '');
-                    gallery.innerHTML =
-                        `<div class="gallery-empty"><span style="font-size:48px;display:block;margin-bottom:8px;">📭</span>Henüz fotoğraf yok</div>`;
+                    gallery.innerHTML = `<div class="gallery-empty"><span style="font-size:48px;display:block;margin-bottom:8px;">📭</span>Henüz fotoğraf yok</div>`;
                     galleryCount.textContent = '0 dosya';
                     imageCount.textContent = '0';
                     videoCount.textContent = '0';
@@ -811,8 +951,7 @@
                 const data = await res.json();
                 if (!data || !data.length) {
                     setStatus('📭 Boş', '');
-                    gallery.innerHTML =
-                        `<div class="gallery-empty"><span style="font-size:48px;display:block;margin-bottom:8px;">📭</span>Henüz fotoğraf yok</div>`;
+                    gallery.innerHTML = `<div class="gallery-empty"><span style="font-size:48px;display:block;margin-bottom:8px;">📭</span>Henüz fotoğraf yok</div>`;
                     galleryCount.textContent = '0 dosya';
                     imageCount.textContent = '0';
                     videoCount.textContent = '0';
@@ -822,8 +961,7 @@
 
                 tumDosyalar = data;
 
-                let imgSay = 0,
-                    vidSay = 0;
+                let imgSay = 0, vidSay = 0;
                 data.forEach(item => {
                     if (/\.(mp4|webm|mov|avi|mkv|3gp)$/i.test(item.name)) vidSay++;
                     else if (/\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i.test(item.name)) imgSay++;
@@ -838,8 +976,7 @@
                 data.sort((a, b) => a.name.localeCompare(b.name)).reverse();
 
                 for (const item of data) {
-                    const rawUrl =
-                        `https://raw.githubusercontent.com/${cfg.user}/${cfg.repo}/main/fotolar/${encodeURIComponent(item.name)}`;
+                    const rawUrl = `https://raw.githubusercontent.com/${cfg.user}/${cfg.repo}/main/fotolar/${encodeURIComponent(item.name)}`;
                     const isVideo = /\.(mp4|webm|mov|avi|mkv|3gp)$/i.test(item.name);
                     const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i.test(item.name);
 
@@ -848,14 +985,11 @@
 
                     let mediaHtml = '';
                     if (isVideo) {
-                        mediaHtml =
-                            `<div class="media" onclick="openModal('${rawUrl}','${item.name}',true)"><video src="${rawUrl}" preload="metadata" playsinline muted></video></div>`;
+                        mediaHtml = `<div class="media" onclick="openModal('${rawUrl}','${item.name}',true)"><video src="${rawUrl}" preload="metadata" playsinline muted></video></div>`;
                     } else if (isImage) {
-                        mediaHtml =
-                            `<div class="media" onclick="openModal('${rawUrl}','${item.name}',false)"><img src="${rawUrl}" loading="lazy" onerror="this.parentElement.innerHTML='<span style=color:#4a5268;font-size:20px;>⚠️</span>'"></div>`;
+                        mediaHtml = `<div class="media" onclick="openModal('${rawUrl}','${item.name}',false)"><img src="${rawUrl}" loading="lazy" onerror="this.parentElement.innerHTML='<span style=color:#4a5268;font-size:20px;>⚠️</span>'"></div>`;
                     } else {
-                        mediaHtml =
-                            `<div class="media" style="color:#4a5268;font-size:13px;text-align:center;padding:10px;">📄 ${item.name}</div>`;
+                        mediaHtml = `<div class="media" style="color:#4a5268;font-size:13px;text-align:center;padding:10px;">📄 ${item.name}</div>`;
                     }
 
                     div.innerHTML = `
@@ -863,9 +997,7 @@
                         <div class="info">
                             <span class="name" title="${item.name}">${item.name}</span>
                             <div class="actions">
-                                <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">
-                                    ⬇️ İndir
-                                </button>
+                                <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">⬇️ İndir</button>
                                 <button class="delete-btn" onclick="deleteFile('${item.name}')">🗑️</button>
                             </div>
                         </div>
@@ -889,11 +1021,9 @@
             modal.classList.add('active');
 
             if (isVideo) {
-                modalMedia.innerHTML =
-                    `<video src="${url}" controls autoplay style="max-width:94vw;max-height:85vh;border-radius:16px;background:#000;"></video>`;
+                modalMedia.innerHTML = `<video src="${url}" controls autoplay style="max-width:94vw;max-height:85vh;border-radius:16px;background:#000;"></video>`;
             } else {
-                modalMedia.innerHTML =
-                    `<img src="${url}" alt="Fotoğraf" style="max-width:94vw;max-height:85vh;border-radius:16px;">`;
+                modalMedia.innerHTML = `<img src="${url}" alt="Fotoğraf" style="max-width:94vw;max-height:85vh;border-radius:16px;">`;
             }
         }
 
@@ -914,15 +1044,31 @@
             }
         });
 
-        // ===== İNDİRME =====
+        // ===== İNDİRME (DÜZELTİLDİ - YENİ SEKME YOK) =====
         function downloadFile(url, filename) {
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = filename;
-            link.target = '_blank';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error('Dosya alınamadı');
+                    return response.blob();
+                })
+                .then(blob => {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+                })
+                .catch(() => {
+                    // Fallback: direkt link ile indir (yine yeni sekme açmaz)
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
         }
 
         modalDownload.addEventListener('click', () => {
@@ -940,8 +1086,7 @@
 
             setStatus(`⏳ Siliniyor: ${filename}`, 'loading');
             try {
-                const infoUrl =
-                    `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar/${encodeURIComponent(filename)}`;
+                const infoUrl = `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar/${encodeURIComponent(filename)}`;
                 const infoRes = await fetch(infoUrl, {
                     headers: { 'Authorization': `token ${cfg.token}` }
                 });
@@ -1013,31 +1158,39 @@
 
         clearBtn.addEventListener('click', clearAll);
 
-        // ===== LOCAL STORAGE =====
-        try {
-            const saved = localStorage.getItem('fotoApp');
-            if (saved) {
-                const data = JSON.parse(saved);
-                username.value = data.username || '';
-                repo.value = data.repo || '';
-                token.value = data.token || '';
+        // ===== TOKEN HATIRLAMA =====
+        tokenInput.addEventListener('change', () => {
+            const token = tokenInput.value.trim();
+            if (token && token.startsWith('ghp_')) {
+                localStorage.setItem('githubToken', token);
+                currentToken = token;
+                renderRepoButtons();
+                listFiles();
             }
-        } catch (e) {}
-
-        [username, repo, token].forEach(el => {
-            el.addEventListener('change', () => {
-                try {
-                    localStorage.setItem('fotoApp', JSON.stringify({
-                        username: username.value,
-                        repo: repo.value,
-                        token: token.value
-                    }));
-                } catch (e) {}
-            });
         });
 
         // ===== BAŞLANGIÇ =====
-        setStatus('✨ Premium sürüm hazır', 'success');
+        const kayitliToken = localStorage.getItem('githubToken');
+        if (kayitliToken && kayitliToken.startsWith('ghp_')) {
+            currentToken = kayitliToken;
+            tokenInput.value = kayitliToken;
+            renderRepoButtons();
+            listFiles();
+            setStatus('✨ Premium sürüm hazır', 'success');
+        } else {
+            setStatus('🔑 Token girin ve "Listele" butonuna tıklayın', '');
+        }
+
+        // Token değişince butonları yenile
+        tokenInput.addEventListener('change', () => {
+            const token = tokenInput.value.trim();
+            if (token && token.startsWith('ghp_')) {
+                localStorage.setItem('githubToken', token);
+                currentToken = token;
+                renderRepoButtons();
+                listFiles();
+            }
+        });
     </script>
 
 </body>
