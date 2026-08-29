@@ -32,6 +32,41 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
+        /* ===== GENEL İKON STİLLERİ ===== */
+        .icon-img {
+            width: 18px;
+            height: 18px;
+            vertical-align: middle;
+            display: inline-block;
+            object-fit: contain;
+        }
+
+        .icon-img-sm {
+            width: 14px;
+            height: 14px;
+            vertical-align: middle;
+        }
+
+        .icon-img-lg {
+            width: 40px;
+            height: 40px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .icon-img-xl {
+            width: 44px;
+            height: 44px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .header-logo img {
+            width: 28px;
+            height: 28px;
+            display: block;
+        }
+
         .header {
             display: flex;
             align-items: center;
@@ -50,14 +85,21 @@
         }
 
         .header-logo {
-            height: 44px;
-            width: auto;
-            border-radius: 12px;
+            width: 46px;
+            height: 46px;
+            background: linear-gradient(135deg, #f0933e, #e67e22);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(240, 147, 62, 0.25);
+            flex-shrink: 0;
         }
 
         .header h1 {
             font-size: 22px;
             font-weight: 700;
+            letter-spacing: -0.3px;
             background: linear-gradient(135deg, #f0e6d0, #ffffff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -73,23 +115,7 @@
             border: 1px solid rgba(240, 147, 62, 0.15);
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .header-badge .cikis-btn {
-            background: rgba(248, 81, 73, 0.08);
-            color: #f85149;
-            border: 1px solid rgba(248, 81, 73, 0.1);
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: 0.25s;
-            font-family: inherit;
-        }
-
-        .header-badge .cikis-btn:hover {
-            background: rgba(248, 81, 73, 0.16);
+            gap: 6px;
         }
 
         .status {
@@ -120,13 +146,23 @@
             display: block;
         }
 
+        .status.success {
+            border-color: rgba(46, 160, 67, 0.2);
+            color: #4cda6c;
+        }
+
+        .status.error {
+            border-color: rgba(248, 81, 73, 0.2);
+            color: #f85149;
+        }
+
         @keyframes spin {
             to {
                 transform: rotate(360deg);
             }
         }
 
-        /* ===== KİŞİ BUTONLARI ===== */
+        /* ===== KİŞİ GRİD ===== */
         .kisi-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -658,7 +694,12 @@
                 justify-content: center;
             }
             .header-logo {
-                height: 34px;
+                width: 38px;
+                height: 38px;
+            }
+            .header-logo img {
+                width: 22px;
+                height: 22px;
             }
             .gallery {
                 grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -710,6 +751,14 @@
                 top: 10px;
                 right: 12px;
             }
+            .icon-img-lg {
+                width: 32px;
+                height: 32px;
+            }
+            .icon-img-xl {
+                width: 36px;
+                height: 36px;
+            }
             .gallery-header {
                 flex-direction: column;
                 align-items: stretch;
@@ -734,12 +783,14 @@
         <!-- HEADER -->
         <div class="header">
             <div class="header-left">
-                <img class="header-logo" src="https://i.postimg.cc/tCYfpbZy/be371099-de3c-430e-b3de-37d5dbd175fa.png" alt="Logo">
+                <div class="header-logo">
+                    <img src="https://i.postimg.cc/T29c5b6r/e625067c-560b-4f86-a39c-725239da40f1.png" alt="Gallery">
+                </div>
                 <h1>👨‍👩‍👧‍👦 Aile Galerisi</h1>
             </div>
             <span class="header-badge">
-                ✦ Aile Sistemi
-                <button class="cikis-btn" id="cikisBtn">🚪 Çıkış Yap</button>
+                <img src="https://i.postimg.cc/9F0NWb7z/e625067c-560b-4f86-a39c-725239da40f1-(1)(2).png" alt="Premium" class="icon-img-sm">
+                Premium
             </span>
         </div>
 
@@ -749,7 +800,7 @@
             <span class="msg">✨ Hoş geldiniz</span>
         </div>
 
-        <!-- KİŞİ LİSTESİ (ANA SAYFA) -->
+        <!-- KİŞİ LİSTESİ -->
         <div id="anaSayfa">
             <div class="kisi-grid" id="kisiGrid"></div>
         </div>
@@ -766,7 +817,7 @@
 
             <div class="file-area" id="fileArea">
                 <span class="icon">
-                    <img src="https://i.postimg.cc/TY1HR0Dk/e625067c-560b-4f86-a39c-725239da40f1-(1)(3).png" alt="Dosya" style="width:40px;height:40px;display:block;margin:0 auto;">
+                    <img src="https://i.postimg.cc/TY1HR0Dk/e625067c-560b-4f86-a39c-725239da40f1-(1)(3).png" alt="Dosya" class="icon-img-lg">
                 </span>
                 <div class="text">
                     <strong>Dosya seç</strong> veya buraya sürükle
@@ -776,9 +827,18 @@
             </div>
 
             <div class="buttons">
-                <button class="btn btn-upload" id="uploadBtn">📤 Yükle</button>
-                <button class="btn btn-list" id="listBtn">📋 Listele</button>
-                <button class="btn btn-clear" id="clearBtn">🗑️ Temizle</button>
+                <button class="btn btn-upload" id="uploadBtn">
+                    <img src="https://i.postimg.cc/SKMBmrHH/e625067c-560b-4f86-a39c-725239da40f1-(1)(10).png" alt="Yükle" class="icon-img">
+                    Yükle
+                </button>
+                <button class="btn btn-list" id="listBtn">
+                    <img src="https://i.postimg.cc/8Pxf7kjM/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Listele" class="icon-img">
+                    Listele
+                </button>
+                <button class="btn btn-clear" id="clearBtn">
+                    <img src="https://i.postimg.cc/g0WwKMyH/e625067c-560b-4f86-a39c-725239da40f1-(1)(1).png" alt="Temizle" class="icon-img">
+                    Temizle
+                </button>
             </div>
 
             <div class="gallery-header">
@@ -809,7 +869,10 @@
             <div id="modalMedia"></div>
             <div class="modal-bottom">
                 <span class="modal-filename" id="modalFilename">dosya</span>
-                <button class="modal-download" id="modalDownload">⬇️ İndir</button>
+                <button class="modal-download" id="modalDownload">
+                    <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="İndir" class="icon-img">
+                    İndir
+                </button>
             </div>
         </div>
     </div>
@@ -821,17 +884,17 @@
         const kisiler = [{
             id: 'anne',
             isim: 'Anne',
-            avatar: 'https://i.postimg.cc/1Xv5w9jD/anne-avatar.png', // Buraya kendi resim linkini koy
+            avatar: 'https://i.postimg.cc/1Xv5w9jD/anne-avatar.png',
             repolar: ['anne-1', 'anne-2', 'anne-3', 'anne-4']
         }, {
             id: 'sen',
             isim: 'Sen',
-            avatar: 'https://i.postimg.cc/3x9k2w1Z/sen-avatar.png', // Buraya kendi resim linkini koy
+            avatar: 'https://i.postimg.cc/3x9k2w1Z/sen-avatar.png',
             repolar: ['mm2-1', 'mm2-2']
         }, {
             id: 'abla',
             isim: 'Abla',
-            avatar: 'https://i.postimg.cc/7Yx2v3zM/abla-avatar.png', // Buraya kendi resim linkini koy
+            avatar: 'https://i.postimg.cc/7Yx2v3zM/abla-avatar.png',
             repolar: ['abla-1', 'abla-2']
         }];
 
@@ -981,7 +1044,7 @@
         }
 
         // ==========================================================
-        // GERİ BUTONU (Ana Sayfaya Dön)
+        // GERİ BUTONU
         // ==========================================================
         function anaSayfayaDon() {
             repoSayfa.classList.add('gizli');
@@ -994,6 +1057,7 @@
         }
 
         geriBtn.addEventListener('click', anaSayfayaDon);
+
         galeriGeriBtn.addEventListener('click', () => {
             galeriSayfa.classList.add('gizli');
             repoSayfa.classList.remove('gizli');
@@ -1110,8 +1174,13 @@
                         <div class="info">
                             <span class="name" title="${item.name}">${item.name}</span>
                             <div class="actions">
-                                <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">⬇️ İndir</button>
-                                <button class="delete-btn" onclick="deleteFile('${item.name}','${item.sha}')">🗑️</button>
+                                <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">
+                                    <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="İndir" class="icon-img-sm">
+                                    İndir
+                                </button>
+                                <button class="delete-btn" onclick="deleteFile('${item.name}','${item.sha}')">
+                                    <img src="https://i.postimg.cc/g0WwKMyH/e625067c-560b-4f86-a39c-725239da40f1-(1)(1).png" alt="Sil" class="icon-img-sm">
+                                </button>
                             </div>
                         </div>
                     `;
