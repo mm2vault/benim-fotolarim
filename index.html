@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>👨‍👩‍👧‍👦 Aile Galerisi</title>
+    <title>📸 Aile Galerisi</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/tCYfpbZy/be371099-de3c-430e-b3de-37d5dbd175fa.png">
     <style>
         * {
             margin: 0;
@@ -32,37 +33,6 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .icon-img {
-            width: 18px;
-            height: 18px;
-            vertical-align: middle;
-            display: inline-block;
-            object-fit: contain;
-        }
-        .icon-img-sm {
-            width: 14px;
-            height: 14px;
-            vertical-align: middle;
-        }
-        .icon-img-lg {
-            width: 40px;
-            height: 40px;
-            display: block;
-            margin: 0 auto;
-        }
-        .icon-img-xl {
-            width: 44px;
-            height: 44px;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .header-logo img {
-            width: 28px;
-            height: 28px;
-            display: block;
-        }
-
         .header {
             display: flex;
             align-items: center;
@@ -81,21 +51,14 @@
         }
 
         .header-logo {
-            width: 46px;
-            height: 46px;
-            background: linear-gradient(135deg, #f0933e, #e67e22);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 16px rgba(240, 147, 62, 0.25);
-            flex-shrink: 0;
+            height: 44px;
+            width: auto;
+            border-radius: 12px;
         }
 
         .header h1 {
             font-size: 22px;
             font-weight: 700;
-            letter-spacing: -0.3px;
             background: linear-gradient(135deg, #f0e6d0, #ffffff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -111,7 +74,7 @@
             border: 1px solid rgba(240, 147, 62, 0.15);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .header-badge .cikis-btn {
@@ -128,6 +91,53 @@
 
         .header-badge .cikis-btn:hover {
             background: rgba(248, 81, 73, 0.16);
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .input-group label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #8892a8;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .input-group input {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 11px 14px;
+            font-size: 14px;
+            color: #e8edf5;
+            outline: none;
+            transition: 0.3s;
+            font-family: inherit;
+            width: 100%;
+        }
+
+        .input-group input:focus {
+            border-color: #f0933e;
+            box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .input-group input::placeholder {
+            color: #3e485a;
         }
 
         .status {
@@ -157,14 +167,6 @@
         .status.loading .spinner {
             display: block;
         }
-        .status.success {
-            border-color: rgba(46, 160, 67, 0.2);
-            color: #4cda6c;
-        }
-        .status.error {
-            border-color: rgba(248, 81, 73, 0.2);
-            color: #f85149;
-        }
 
         @keyframes spin {
             to {
@@ -172,6 +174,133 @@
             }
         }
 
+        /* ===== KİŞİ BUTONLARI ===== */
+        .kisi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+            margin-top: 16px;
+        }
+
+        .kisi-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 24px;
+            padding: 28px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.4s;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+        }
+
+        .kisi-card:hover {
+            border-color: rgba(240, 147, 62, 0.3);
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .kisi-card .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 12px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            transition: 0.3s;
+        }
+
+        .kisi-card:hover .avatar {
+            border-color: rgba(240, 147, 62, 0.3);
+            transform: scale(1.05);
+        }
+
+        .kisi-card .isim {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .kisi-card .repo-sayisi {
+            font-size: 12px;
+            color: #6b7a93;
+        }
+
+        .kisi-card .kilit {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            font-size: 14px;
+            opacity: 0.5;
+        }
+
+        /* ===== REPO GRİD ===== */
+        .repo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .repo-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 18px;
+            padding: 20px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.4s;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .repo-card:hover {
+            border-color: rgba(240, 147, 62, 0.25);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .repo-card .repo-avatar {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .repo-card .repo-isim {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .repo-card .repo-ad {
+            font-size: 12px;
+            color: #6b7a93;
+        }
+
+        .gizli {
+            display: none !important;
+        }
+
+        .btn-geri {
+            background: rgba(255, 255, 255, 0.05);
+            color: #e8edf5;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.25s;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .btn-geri:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* ===== DOSYA ALANI ===== */
         .file-area {
             border: 2px dashed rgba(255, 255, 255, 0.06);
             border-radius: 18px;
@@ -462,17 +591,6 @@
             display: flex;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.97);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
         .modal-content {
             max-width: 94vw;
             max-height: 92vh;
@@ -497,8 +615,6 @@
 
         .modal-content video {
             background: #000;
-            width: auto;
-            height: auto;
         }
 
         .modal-close {
@@ -514,17 +630,15 @@
             border-radius: 50%;
             cursor: pointer;
             transition: 0.25s;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 5;
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .modal-close:hover {
             background: rgba(255, 255, 255, 0.1);
-            transform: rotate(90deg) scale(1.05);
+            transform: rotate(90deg);
         }
 
         .modal-bottom {
@@ -537,7 +651,6 @@
             gap: 14px;
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             padding: 10px 18px 10px 24px;
             border-radius: 50px;
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -568,137 +681,11 @@
             align-items: center;
             gap: 8px;
             font-family: inherit;
-            white-space: nowrap;
         }
 
         .modal-download:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 28px rgba(240, 147, 62, 0.4);
-        }
-
-        /* ===== KİŞİ BUTONLARI ===== */
-        .kisi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 20px;
-            margin-top: 16px;
-        }
-
-        .kisi-card {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 24px;
-            padding: 28px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: 0.4s;
-            cursor: pointer;
-            text-align: center;
-            position: relative;
-        }
-
-        .kisi-card:hover {
-            border-color: rgba(240, 147, 62, 0.3);
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .kisi-card .avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: block;
-            margin: 0 auto 12px;
-            object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.06);
-            transition: 0.3s;
-        }
-
-        .kisi-card:hover .avatar {
-            border-color: rgba(240, 147, 62, 0.3);
-            transform: scale(1.05);
-        }
-
-        .kisi-card .isim {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .kisi-card .repo-sayisi {
-            font-size: 12px;
-            color: #6b7a93;
-        }
-
-        .kisi-card .kilit {
-            position: absolute;
-            top: 12px;
-            right: 14px;
-            font-size: 14px;
-            opacity: 0.5;
-        }
-
-        .repo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-
-        .repo-card {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 18px;
-            padding: 20px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: 0.4s;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .repo-card:hover {
-            border-color: rgba(240, 147, 62, 0.25);
-            transform: translateY(-6px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .repo-card .repo-avatar {
-            font-size: 32px;
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        .repo-card .repo-isim {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
-
-        .repo-card .repo-ad {
-            font-size: 12px;
-            color: #6b7a93;
-        }
-
-        .gizli {
-            display: none !important;
-        }
-
-        .btn-geri {
-            background: rgba(255, 255, 255, 0.05);
-            color: #e8edf5;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 8px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            transition: 0.25s;
-            font-family: inherit;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 16px;
-        }
-
-        .btn-geri:hover {
-            background: rgba(255, 255, 255, 0.08);
         }
 
         @media (max-width: 600px) {
@@ -719,12 +706,7 @@
                 justify-content: center;
             }
             .header-logo {
-                width: 38px;
-                height: 38px;
-            }
-            .header-logo img {
-                width: 22px;
-                height: 22px;
+                height: 34px;
             }
             .gallery {
                 grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -776,10 +758,6 @@
                 top: 10px;
                 right: 12px;
             }
-            .icon-img-lg {
-                width: 32px;
-                height: 32px;
-            }
             .gallery-header {
                 flex-direction: column;
                 align-items: stretch;
@@ -795,30 +773,6 @@
                 justify-content: center;
             }
         }
-
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .input-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .buttons {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.02);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
     </style>
 </head>
 <body>
@@ -828,15 +782,21 @@
         <!-- HEADER -->
         <div class="header">
             <div class="header-left">
-                <div class="header-logo">
-                    <img src="https://i.postimg.cc/T29c5b6r/e625067c-560b-4f86-a39c-725239da40f1.png" alt="Gallery">
-                </div>
-                <h1>👨‍👩‍👧‍👦 Aile Galerisi</h1>
+                <img class="header-logo" src="https://i.postimg.cc/tCYfpbZy/be371099-de3c-430e-b3de-37d5dbd175fa.png" alt="Logo">
+                <h1>📸 Aile Galerisi</h1>
             </div>
             <span class="header-badge">
-                <img src="https://i.postimg.cc/9F0NWb7z/e625067c-560b-4f86-a39c-725239da40f1-(1)(2).png" alt="Premium" class="icon-img-sm">
-                Premium
+                ✦ Aile Sistemi
+                <button class="cikis-btn" id="cikisBtn">🚪 Çıkış Yap</button>
             </span>
+        </div>
+
+        <!-- TOKEN -->
+        <div class="input-grid">
+            <div class="input-group">
+                <label>🔑 GitHub Token</label>
+                <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxx">
+            </div>
         </div>
 
         <!-- DURUM -->
@@ -862,7 +822,7 @@
 
             <div class="file-area" id="fileArea">
                 <span class="icon">
-                    <img src="https://i.postimg.cc/TY1HR0Dk/e625067c-560b-4f86-a39c-725239da40f1-(1)(3).png" alt="Dosya" class="icon-img-lg">
+                    <img src="https://i.postimg.cc/TY1HR0Dk/e625067c-560b-4f86-a39c-725239da40f1-(1)(3).png" alt="Dosya" style="width:40px;height:40px;display:block;margin:0 auto;">
                 </span>
                 <div class="text">
                     <strong>Dosya seç</strong> veya buraya sürükle
@@ -872,18 +832,9 @@
             </div>
 
             <div class="buttons">
-                <button class="btn btn-upload" id="uploadBtn">
-                    <img src="https://i.postimg.cc/SKMBmrHH/e625067c-560b-4f86-a39c-725239da40f1-(1)(10).png" alt="Yükle" class="icon-img">
-                    Yükle
-                </button>
-                <button class="btn btn-list" id="listBtn">
-                    <img src="https://i.postimg.cc/8Pxf7kjM/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="Listele" class="icon-img">
-                    Listele
-                </button>
-                <button class="btn btn-clear" id="clearBtn">
-                    <img src="https://i.postimg.cc/g0WwKMyH/e625067c-560b-4f86-a39c-725239da40f1-(1)(1).png" alt="Temizle" class="icon-img">
-                    Temizle
-                </button>
+                <button class="btn btn-upload" id="uploadBtn">📤 Yükle</button>
+                <button class="btn btn-list" id="listBtn">📋 Listele</button>
+                <button class="btn btn-clear" id="clearBtn">🗑️ Temizle</button>
             </div>
 
             <div class="gallery-header">
@@ -914,10 +865,7 @@
             <div id="modalMedia"></div>
             <div class="modal-bottom">
                 <span class="modal-filename" id="modalFilename">dosya</span>
-                <button class="modal-download" id="modalDownload">
-                    <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="İndir" class="icon-img">
-                    İndir
-                </button>
+                <button class="modal-download" id="modalDownload">⬇️ İndir</button>
             </div>
         </div>
     </div>
@@ -952,6 +900,7 @@
         // ==========================================================
         // DOM
         // ==========================================================
+        const tokenInput = document.getElementById('token');
         const statusEl = document.getElementById('status');
         const statusMsg = statusEl.querySelector('.msg');
         const kisiGrid = document.getElementById('kisiGrid');
@@ -995,7 +944,7 @@
             return {
                 user: 'mm2vault',
                 repo: aktifRepo,
-                token: localStorage.getItem('githubToken') || ''
+                token: tokenInput.value.trim() || localStorage.getItem('githubToken') || ''
             };
         }
 
@@ -1089,7 +1038,7 @@
         }
 
         // ==========================================================
-        // GERİ BUTONU
+        // GERİ BUTONU (Ana Sayfaya Dön)
         // ==========================================================
         function anaSayfayaDon() {
             repoSayfa.classList.add('gizli');
@@ -1137,8 +1086,12 @@
         // ==========================================================
         async function listFiles() {
             const cfg = getConfig();
-            if (!cfg.token || !cfg.repo) {
-                setStatus('❌ GitHub token gerekli!', 'error');
+            if (!cfg.token || !cfg.token.startsWith('ghp_')) {
+                setStatus('❌ Geçerli GitHub token gerekli!', 'error');
+                return;
+            }
+            if (!cfg.repo) {
+                setStatus('❌ Repo seçili değil', 'error');
                 return;
             }
 
@@ -1219,13 +1172,8 @@
                         <div class="info">
                             <span class="name" title="${item.name}">${item.name}</span>
                             <div class="actions">
-                                <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">
-                                    <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="İndir" class="icon-img-sm">
-                                    İndir
-                                </button>
-                                <button class="delete-btn" onclick="deleteFile('${item.name}','${item.sha}')">
-                                    <img src="https://i.postimg.cc/g0WwKMyH/e625067c-560b-4f86-a39c-725239da40f1-(1)(1).png" alt="Sil" class="icon-img-sm">
-                                </button>
+                                <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">⬇️ İndir</button>
+                                <button class="delete-btn" onclick="deleteFile('${item.name}','${item.sha}')">🗑️</button>
                             </div>
                         </div>
                     `;
@@ -1292,80 +1240,15 @@
         });
 
         // ==========================================================
-        // YÜKLEME
-        // ==========================================================
-        async function uploadFiles() {
-            const cfg = getConfig();
-            if (!cfg.token || !cfg.repo) {
-                setStatus('❌ GitHub token gerekli!', 'error');
-                return;
-            }
-
-            const files = getFileList();
-            if (!files.length) {
-                setStatus('⚠️ Lütfen dosya seç', 'error');
-                return;
-            }
-
-            uploadBtn.disabled = true;
-            let success = 0,
-                failed = 0;
-
-            for (const file of files) {
-                setStatus(`⏳ ${file.name} (${success + failed + 1}/${files.length})`, 'loading');
-                try {
-                    const base64 = await toBase64(file);
-                    const url =
-                        `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar/${encodeURIComponent(file.name)}`;
-                    const res = await fetch(url, {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${cfg.token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: `Yükle: ${file.name}`,
-                            content: base64
-                        })
-                    });
-                    if (res.ok) success++;
-                    else failed++;
-                } catch { failed++; }
-            }
-
-            uploadBtn.disabled = false;
-
-            if (failed === 0 && success > 0) {
-                setStatus(`✅ ${success} dosya yüklendi`, 'success');
-                fileInput.value = '';
-                updateFileCount();
-                setTimeout(listFiles, 2000);
-            } else if (success > 0) {
-                setStatus(`⚠️ ${success} başarılı, ${failed} hata`, 'error');
-                setTimeout(listFiles, 2000);
-            } else {
-                setStatus('❌ Hiçbir dosya yüklenemedi', 'error');
-            }
-        }
-
-        function toBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result.split(',')[1]);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
-
-        uploadBtn.addEventListener('click', uploadFiles);
-
-        // ==========================================================
         // SİLME
         // ==========================================================
         async function deleteFile(filename, sha) {
             if (!confirm(`"${filename}" kalıcı olarak silinsin mi?`)) return;
             const cfg = getConfig();
-            if (!cfg.token || !cfg.repo) return;
+            if (!cfg.token || !cfg.repo) {
+                setStatus('❌ Token veya repo seçili değil', 'error');
+                return;
+            }
 
             setStatus(`⏳ Siliniyor: ${filename}`, 'loading');
             try {
@@ -1397,7 +1280,10 @@
         // ==========================================================
         async function clearAll() {
             const cfg = getConfig();
-            if (!cfg.token || !cfg.repo) return;
+            if (!cfg.token || !cfg.repo) {
+                setStatus('❌ Token veya repo seçili değil', 'error');
+                return;
+            }
             if (!confirm('⚠️ TÜM dosyalar silinecek! Devam et?')) return;
 
             setStatus('⏳ Temizleniyor...', 'loading');
@@ -1434,16 +1320,26 @@
         // ==========================================================
         // TOKEN HATIRLAMA
         // ==========================================================
-        const kayitliToken = localStorage.getItem('githubToken');
-        if (!kayitliToken) {
-            setStatus('⚠️ GitHub token gerekli! Lütfen gir.', 'error');
-        }
+        tokenInput.addEventListener('change', () => {
+            const token = tokenInput.value.trim();
+            if (token && token.startsWith('ghp_')) {
+                localStorage.setItem('githubToken', token);
+                setStatus('✅ Token kaydedildi', 'success');
+            }
+        });
 
         // ==========================================================
         // BAŞLANGIÇ
         // ==========================================================
+        const kayitliToken = localStorage.getItem('githubToken');
+        if (kayitliToken && kayitliToken.startsWith('ghp_')) {
+            tokenInput.value = kayitliToken;
+            setStatus('✨ Aile sistemine hoş geldiniz', '');
+        } else {
+            setStatus('🔑 Lütfen GitHub token\'ını girin', '');
+        }
+
         renderKisiler();
-        setStatus('✨ Aile sistemine hoş geldiniz', '');
     </script>
 
 </body>
