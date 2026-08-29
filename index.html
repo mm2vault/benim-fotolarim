@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>👨‍👩‍👧‍👦 Aile Galerisi</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0b0e14;
@@ -14,6 +19,7 @@
             padding: 20px;
             background-image: radial-gradient(ellipse at 50% 0%, #1a2332 0%, #0b0e14 70%);
         }
+
         .app {
             max-width: 920px;
             width: 100%;
@@ -22,21 +28,33 @@
             backdrop-filter: blur(24px);
             border-radius: 32px;
             padding: 28px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.7);
-            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
+
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 28px;
             padding: 16px 20px;
-            background: linear-gradient(135deg, rgba(240,147,62,0.08), rgba(230,126,34,0.04));
+            background: linear-gradient(135deg, rgba(240, 147, 62, 0.08), rgba(230, 126, 34, 0.04));
             border-radius: 20px;
-            border: 1px solid rgba(240,147,62,0.1);
+            border: 1px solid rgba(240, 147, 62, 0.1);
         }
-        .header-left { display: flex; align-items: center; gap: 14px; }
-        .header-logo { height: 44px; width: auto; border-radius: 12px; }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .header-logo {
+            height: 44px;
+            width: auto;
+            border-radius: 12px;
+        }
+
         .header h1 {
             font-size: 22px;
             font-weight: 700;
@@ -44,22 +62,24 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
         .header-badge {
-            background: linear-gradient(135deg, rgba(240,147,62,0.15), rgba(230,126,34,0.05));
+            background: linear-gradient(135deg, rgba(240, 147, 62, 0.15), rgba(230, 126, 34, 0.05));
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 11px;
             font-weight: 500;
             color: #f0933e;
-            border: 1px solid rgba(240,147,62,0.15);
+            border: 1px solid rgba(240, 147, 62, 0.15);
             display: flex;
             align-items: center;
             gap: 8px;
         }
+
         .header-badge .cikis-btn {
-            background: rgba(248,81,73,0.08);
+            background: rgba(248, 81, 73, 0.08);
             color: #f85149;
-            border: 1px solid rgba(248,81,73,0.1);
+            border: 1px solid rgba(248, 81, 73, 0.1);
             padding: 2px 12px;
             border-radius: 20px;
             font-size: 11px;
@@ -67,9 +87,24 @@
             transition: 0.25s;
             font-family: inherit;
         }
-        .header-badge .cikis-btn:hover { background: rgba(248,81,73,0.16); }
-        .input-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 16px; }
-        .input-group { display: flex; flex-direction: column; gap: 4px; }
+
+        .header-badge .cikis-btn:hover {
+            background: rgba(248, 81, 73, 0.16);
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
         .input-group label {
             font-size: 10px;
             font-weight: 600;
@@ -80,9 +115,10 @@
             align-items: center;
             gap: 6px;
         }
+
         .input-group input {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 12px;
             padding: 11px 14px;
             font-size: 14px;
@@ -92,139 +128,96 @@
             font-family: inherit;
             width: 100%;
         }
+
         .input-group input:focus {
             border-color: #f0933e;
-            box-shadow: 0 0 0 4px rgba(240,147,62,0.08);
-            background: rgba(255,255,255,0.06);
+            box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
+            background: rgba(255, 255, 255, 0.06);
         }
-        .input-group input::placeholder { color: #3e485a; }
+
+        .input-group input::placeholder {
+            color: #3e485a;
+        }
+
         .status {
-            background: rgba(255,255,255,0.02);
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 14px;
             padding: 12px 18px;
             margin-bottom: 18px;
             font-size: 13px;
             color: #7a879f;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: 1px solid rgba(255, 255, 255, 0.04);
             min-height: 48px;
             display: flex;
             align-items: center;
             gap: 12px;
         }
+
         .status .spinner {
             width: 18px;
             height: 18px;
-            border: 2px solid rgba(255,255,255,0.08);
+            border: 2px solid rgba(255, 255, 255, 0.08);
             border-top-color: #f0933e;
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
             display: none;
         }
-        .status.loading .spinner { display: block; }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ===== KİŞİ GİRİŞ ===== */
-        .giris-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 16px;
-        }
-        .giris-card {
-            background: rgba(255,255,255,0.02);
-            border-radius: 18px;
-            padding: 24px 16px;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: 0.4s;
-            text-align: center;
-        }
-        .giris-card:hover {
-            border-color: rgba(240,147,62,0.25);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-        }
-        .giris-card .avatar { font-size: 48px; display: block; margin-bottom: 8px; }
-        .giris-card .isim { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-        .giris-card .durum {
-            display: inline-block;
-            margin-top: 6px;
-            padding: 2px 14px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 500;
-        }
-        .giris-card .durum.kilitli {
-            background: rgba(248,81,73,0.08);
-            color: #f85149;
-            border: 1px solid rgba(248,81,73,0.1);
-        }
-        .giris-card .durum.acik {
-            background: rgba(46,160,67,0.08);
-            color: #4cda6c;
-            border: 1px solid rgba(46,160,67,0.1);
-        }
-        .giris-card .kilit {
-            font-size: 16px;
+        .status.loading .spinner {
             display: block;
-            margin-bottom: 4px;
         }
 
-        /* ===== REPO GRİD ===== */
-        .repo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ===== GİRİŞ EKRANI ===== */
+        .giris-ekrani {
             margin-top: 16px;
-        }
-        .repo-card {
-            background: rgba(255,255,255,0.02);
-            border-radius: 18px;
-            padding: 20px 16px;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: 0.4s;
-            cursor: pointer;
-            text-align: center;
-        }
-        .repo-card:hover {
-            border-color: rgba(240,147,62,0.25);
-            transform: translateY(-6px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-        }
-        .repo-card .repo-avatar { font-size: 32px; display: block; margin-bottom: 6px; }
-        .repo-card .repo-isim { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
-        .repo-card .repo-ad { font-size: 12px; color: #6b7a93; }
-
-        /* ===== ŞİFRE MODAL ===== */
-        .sifre-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(16px);
-            z-index: 999;
-            align-items: center;
-            justify-content: center;
             padding: 24px;
-        }
-        .sifre-modal.active { display: flex; }
-        .sifre-modal .kutu {
-            background: rgba(22,30,44,0.95);
-            border-radius: 24px;
-            padding: 32px 28px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             max-width: 400px;
-            width: 100%;
-            border: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .sifre-modal .kutu h2 { font-size: 20px; margin-bottom: 4px; }
-        .sifre-modal .kutu .alt-bilgi { color: #4a5268; font-size: 13px; margin-bottom: 16px; }
-        .sifre-modal .kutu input {
+
+        .giris-ekrani .avatar {
+            font-size: 64px;
+            display: block;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .giris-ekrani .isim-input {
             width: 100%;
             padding: 12px 16px;
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.06);
-            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8edf5;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+            font-family: inherit;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .giris-ekrani .isim-input:focus {
+            border-color: #f0933e;
+            box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
+        }
+
+        .giris-ekrani .sifre-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.04);
             color: #e8edf5;
             font-size: 16px;
             outline: none;
@@ -232,15 +225,16 @@
             font-family: inherit;
             text-align: center;
             letter-spacing: 4px;
-            margin-bottom: 10px;
+            margin-bottom: 14px;
         }
-        .sifre-modal .kutu input:focus {
+
+        .giris-ekrani .sifre-input:focus {
             border-color: #f0933e;
-            box-shadow: 0 0 0 4px rgba(240,147,62,0.08);
+            box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
         }
-        .sifre-modal .kutu .btn-gir {
+
+        .giris-ekrani .btn-giris {
             width: 100%;
-            margin-top: 4px;
             padding: 12px;
             background: linear-gradient(135deg, #f0933e, #e67e22);
             color: #fff;
@@ -252,83 +246,167 @@
             transition: 0.25s;
             font-family: inherit;
         }
-        .sifre-modal .kutu .btn-gir:hover {
+
+        .giris-ekrani .btn-giris:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(240,147,62,0.3);
+            box-shadow: 0 6px 30px rgba(240, 147, 62, 0.3);
         }
-        .sifre-modal .kutu .btn-iptal {
-            width: 100%;
-            margin-top: 10px;
-            padding: 10px;
-            background: rgba(255,255,255,0.04);
-            color: #6b7a93;
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 14px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.25s;
-            font-family: inherit;
-        }
-        .sifre-modal .kutu .btn-iptal:hover { background: rgba(255,255,255,0.08); }
-        .sifre-modal .kutu .hata {
+
+        .giris-ekrani .hata {
             color: #f85149;
             font-size: 13px;
-            margin-top: 8px;
+            text-align: center;
+            margin-top: 10px;
             display: none;
         }
-        .sifre-modal .kutu .hata.goster { display: block; }
-        .sifre-modal .kutu .basarili {
-            color: #4cda6c;
+
+        .giris-ekrani .hata.goster {
+            display: block;
+        }
+
+        .giris-ekrani .kayit-bilgi {
+            color: #4a5268;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .giris-ekrani .durum-text {
+            text-align: center;
+            font-size: 14px;
+            color: #6b7a93;
+            margin-bottom: 12px;
+        }
+
+        /* ===== REPO GRİD ===== */
+        .repo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .repo-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 18px;
+            padding: 20px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.4s;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .repo-card:hover {
+            border-color: rgba(240, 147, 62, 0.25);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .repo-card .repo-avatar {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .repo-card .repo-isim {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .repo-card .repo-ad {
+            font-size: 12px;
+            color: #6b7a93;
+        }
+
+        .gizli {
+            display: none !important;
+        }
+
+        .btn-geri {
+            background: rgba(255, 255, 255, 0.05);
+            color: #e8edf5;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
             font-size: 13px;
-            margin-top: 8px;
-            display: none;
+            font-weight: 500;
+            transition: 0.25s;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 16px;
         }
-        .sifre-modal .kutu .basarili.goster { display: block; }
+
+        .btn-geri:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
 
         /* ===== DOSYA ALANI ===== */
         .file-area {
-            border: 2px dashed rgba(255,255,255,0.06);
+            border: 2px dashed rgba(255, 255, 255, 0.06);
             border-radius: 18px;
             padding: 30px 20px 24px;
             text-align: center;
             cursor: pointer;
             transition: 0.4s;
-            background: rgba(255,255,255,0.01);
+            background: rgba(255, 255, 255, 0.01);
             margin-bottom: 18px;
             position: relative;
         }
+
         .file-area:hover {
-            border-color: rgba(240,147,62,0.3);
-            background: rgba(255,255,255,0.03);
+            border-color: rgba(240, 147, 62, 0.3);
+            background: rgba(255, 255, 255, 0.03);
         }
+
         .file-area.dragover {
             border-color: #f0933e;
-            background: rgba(240,147,62,0.05);
+            background: rgba(240, 147, 62, 0.05);
         }
-        .file-area .icon { display: block; margin-bottom: 4px; opacity: 0.9; }
-        .file-area .text { font-size: 15px; color: #7a879f; }
-        .file-area .text strong { color: #e8edf5; font-weight: 500; }
+
+        .file-area .icon {
+            display: block;
+            margin-bottom: 4px;
+            opacity: 0.9;
+        }
+
+        .file-area .text {
+            font-size: 15px;
+            color: #7a879f;
+        }
+
+        .file-area .text strong {
+            color: #e8edf5;
+            font-weight: 500;
+        }
+
         .file-area input[type="file"] {
             position: absolute;
             inset: 0;
             opacity: 0;
             cursor: pointer;
         }
+
         .file-area .file-count {
             display: inline-block;
             margin-top: 10px;
-            background: rgba(255,255,255,0.04);
+            background: rgba(255, 255, 255, 0.04);
             padding: 3px 18px;
             border-radius: 20px;
             font-size: 12px;
             color: #5a687e;
         }
+
         .buttons {
             display: grid;
             grid-template-columns: 1fr 1fr 0.7fr;
             gap: 10px;
             margin-bottom: 24px;
         }
+
         .btn {
             padding: 12px 16px;
             border: none;
@@ -343,57 +421,57 @@
             gap: 8px;
             font-family: inherit;
         }
+
         .btn-upload {
             background: linear-gradient(135deg, #f0933e, #e67e22);
             color: #fff;
-            box-shadow: 0 4px 20px rgba(240,147,62,0.25);
+            box-shadow: 0 4px 20px rgba(240, 147, 62, 0.25);
         }
+
         .btn-upload:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(240,147,62,0.35);
+            box-shadow: 0 6px 30px rgba(240, 147, 62, 0.35);
         }
-        .btn-upload:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        .btn-upload:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .btn-list {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             color: #e8edf5;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .btn-list:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+
+        .btn-list:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
         .btn-clear {
-            background: rgba(248,81,73,0.08);
+            background: rgba(248, 81, 73, 0.08);
             color: #f85149;
-            border: 1px solid rgba(248,81,73,0.1);
+            border: 1px solid rgba(248, 81, 73, 0.1);
         }
-        .btn-clear:hover { background: rgba(248,81,73,0.16); transform: translateY(-2px); }
-        .btn-geri {
-            background: rgba(255,255,255,0.05);
-            color: #e8edf5;
-            border: 1px solid rgba(255,255,255,0.05);
-            padding: 8px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            transition: 0.25s;
-            font-family: inherit;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 16px;
+
+        .btn-clear:hover {
+            background: rgba(248, 81, 73, 0.16);
+            transform: translateY(-2px);
         }
-        .btn-geri:hover { background: rgba(255,255,255,0.08); }
-        .gizli { display: none !important; }
 
         .gallery-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 12px 0 14px;
-            border-top: 1px solid rgba(255,255,255,0.04);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
             margin-top: 2px;
             flex-wrap: wrap;
             gap: 8px;
         }
+
         .gallery-header .left {
             display: flex;
             align-items: center;
@@ -403,19 +481,26 @@
             font-weight: 500;
             flex-wrap: wrap;
         }
+
         .gallery-header .count {
-            background: rgba(255,255,255,0.04);
+            background: rgba(255, 255, 255, 0.04);
             padding: 2px 14px;
             border-radius: 20px;
             font-size: 12px;
         }
+
         .gallery-stats {
             display: flex;
             gap: 14px;
             font-size: 12px;
             color: #7a879f;
         }
-        .gallery-stats span { display: flex; align-items: center; gap: 4px; }
+
+        .gallery-stats span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
 
         .gallery {
             display: grid;
@@ -423,6 +508,7 @@
             gap: 16px;
             padding-top: 2px;
         }
+
         .gallery-empty {
             grid-column: 1 / -1;
             text-align: center;
@@ -430,19 +516,22 @@
             padding: 48px 0 32px;
             font-size: 15px;
         }
+
         .gallery-item {
-            background: rgba(255,255,255,0.02);
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 18px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: 1px solid rgba(255, 255, 255, 0.04);
             transition: 0.4s;
             cursor: pointer;
         }
+
         .gallery-item:hover {
-            border-color: rgba(240,147,62,0.25);
+            border-color: rgba(240, 147, 62, 0.25);
             transform: translateY(-6px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
         }
+
         .gallery-item .media {
             width: 100%;
             height: 170px;
@@ -453,6 +542,7 @@
             overflow: hidden;
             position: relative;
         }
+
         .gallery-item .media img {
             width: 100%;
             height: 100%;
@@ -460,7 +550,11 @@
             transition: 0.5s;
             display: block;
         }
-        .gallery-item:hover .media img { transform: scale(1.05); }
+
+        .gallery-item:hover .media img {
+            transform: scale(1.05);
+        }
+
         .gallery-item .media video {
             width: 100%;
             height: 100%;
@@ -468,6 +562,7 @@
             background: #000;
             display: block;
         }
+
         .gallery-item .info {
             padding: 10px 14px 14px;
             display: flex;
@@ -475,6 +570,7 @@
             justify-content: space-between;
             gap: 8px;
         }
+
         .gallery-item .info .name {
             font-size: 12px;
             color: #6b7a93;
@@ -483,11 +579,13 @@
             text-overflow: ellipsis;
             flex: 1;
         }
+
         .gallery-item .info .actions {
             display: flex;
             gap: 4px;
             flex-shrink: 0;
         }
+
         .gallery-item .info .actions button {
             background: none;
             border: none;
@@ -501,32 +599,42 @@
             align-items: center;
             gap: 4px;
         }
+
         .gallery-item .info .actions .download-btn {
-            background: rgba(255,255,255,0.04);
+            background: rgba(255, 255, 255, 0.04);
             padding: 4px 10px;
             border-radius: 8px;
             font-size: 12px;
             color: #b8c4d4;
             font-weight: 500;
         }
-        .gallery-item .info .actions .download-btn:hover { background: #f0933e; color: #fff; }
+
+        .gallery-item .info .actions .download-btn:hover {
+            background: #f0933e;
+            color: #fff;
+        }
+
         .gallery-item .info .actions .delete-btn:hover {
             color: #f85149;
-            background: rgba(248,81,73,0.08);
+            background: rgba(248, 81, 73, 0.08);
         }
 
         .modal {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.94);
+            background: rgba(0, 0, 0, 0.94);
             backdrop-filter: blur(20px);
             z-index: 999;
             align-items: center;
             justify-content: center;
             padding: 24px;
         }
-        .modal.active { display: flex; }
+
+        .modal.active {
+            display: flex;
+        }
+
         .modal-content {
             max-width: 94vw;
             max-height: 92vh;
@@ -537,21 +645,27 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
         }
-        .modal-content img, .modal-content video {
+
+        .modal-content img,
+        .modal-content video {
             max-width: 94vw;
             max-height: 85vh;
             display: block;
             object-fit: contain;
             border-radius: 16px;
         }
-        .modal-content video { background: #000; }
+
+        .modal-content video {
+            background: #000;
+        }
+
         .modal-close {
             position: absolute;
             top: 14px;
             right: 18px;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.6);
             border: none;
             color: #fff;
             font-size: 22px;
@@ -563,9 +677,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
-        .modal-close:hover { background: rgba(255,255,255,0.1); transform: rotate(90deg); }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(90deg);
+        }
+
         .modal-bottom {
             position: absolute;
             bottom: 24px;
@@ -574,14 +693,15 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(16px);
             padding: 10px 18px 10px 24px;
             border-radius: 50px;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             max-width: 90%;
             z-index: 5;
         }
+
         .modal-filename {
             color: #9aabbf;
             font-size: 13px;
@@ -590,6 +710,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
         .modal-download {
             background: linear-gradient(135deg, #f0933e, #e67e22);
             color: #fff;
@@ -605,30 +726,91 @@
             gap: 8px;
             font-family: inherit;
         }
-        .modal-download:hover { transform: scale(1.05); box-shadow: 0 4px 28px rgba(240,147,62,0.4); }
+
+        .modal-download:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 28px rgba(240, 147, 62, 0.4);
+        }
 
         @media (max-width: 600px) {
-            .app { padding: 18px; }
-            .buttons { grid-template-columns: 1fr; gap: 8px; }
-            .header h1 { font-size: 18px; }
-            .header-badge { font-size: 10px; padding: 4px 12px; flex-wrap: wrap; justify-content: center; }
-            .header-logo { height: 34px; }
-            .gallery { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-            .gallery-item .media { height: 130px; }
-            .giris-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-            .giris-card { padding: 16px 12px; }
-            .giris-card .avatar { font-size: 36px; }
-            .repo-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-            .repo-card { padding: 16px 12px; }
-            .sifre-modal .kutu { padding: 24px 20px; }
-            .modal-content { max-width: 98vw; }
-            .modal-bottom { padding: 6px 12px 6px 16px; gap: 10px; flex-wrap: wrap; justify-content: center; bottom: 14px; }
-            .modal-filename { max-width: 80px; font-size: 12px; }
-            .modal-download { padding: 6px 16px; font-size: 12px; }
-            .modal-close { width: 34px; height: 34px; font-size: 18px; top: 10px; right: 12px; }
-            .gallery-header { flex-direction: column; align-items: stretch; }
-            .gallery-header .left { justify-content: center; flex-wrap: wrap; }
-            .gallery-stats { font-size: 11px; gap: 10px; flex-wrap: wrap; justify-content: center; }
+            .app {
+                padding: 18px;
+            }
+            .buttons {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .header h1 {
+                font-size: 18px;
+            }
+            .header-badge {
+                font-size: 10px;
+                padding: 4px 12px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .header-logo {
+                height: 34px;
+            }
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 12px;
+            }
+            .gallery-item .media {
+                height: 130px;
+            }
+            .repo-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .repo-card {
+                padding: 16px 12px;
+            }
+            .giris-ekrani {
+                padding: 16px;
+            }
+            .giris-ekrani .avatar {
+                font-size: 48px;
+            }
+            .modal-content {
+                max-width: 98vw;
+            }
+            .modal-bottom {
+                padding: 6px 12px 6px 16px;
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+                bottom: 14px;
+            }
+            .modal-filename {
+                max-width: 80px;
+                font-size: 12px;
+            }
+            .modal-download {
+                padding: 6px 16px;
+                font-size: 12px;
+            }
+            .modal-close {
+                width: 34px;
+                height: 34px;
+                font-size: 18px;
+                top: 10px;
+                right: 12px;
+            }
+            .gallery-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .gallery-header .left {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .gallery-stats {
+                font-size: 11px;
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -662,9 +844,17 @@
             <span class="msg">✨ Hoş geldiniz</span>
         </div>
 
-        <!-- ANA SAYFA (KİŞİLER) -->
+        <!-- ANA SAYFA (GİRİŞ) -->
         <div id="anaSayfa">
-            <div class="giris-grid" id="kisiGrid"></div>
+            <div class="giris-ekrani">
+                <span class="avatar">👤</span>
+                <div class="durum-text" id="girisDurum">🔑 Giriş yapmak için isim ve şifre girin</div>
+                <input type="text" class="isim-input" id="isimInput" placeholder="👤 İsminizi girin">
+                <input type="password" class="sifre-input" id="sifreInput" placeholder="🔑 Şifrenizi girin">
+                <button class="btn-giris" id="girisBtn">🔓 Giriş Yap</button>
+                <div class="hata" id="girisHata">❌ İsim veya şifre yanlış! Tekrar deneyin.</div>
+                <div class="kayit-bilgi" id="kayitBilgi">💡 İlk kez giriyorsanız, yeni hesap oluşturulacak.</div>
+            </div>
         </div>
 
         <!-- REPO SAYFASI -->
@@ -715,19 +905,6 @@
 
     </div>
 
-    <!-- ŞİFRE MODAL -->
-    <div class="sifre-modal" id="sifreModal">
-        <div class="kutu">
-            <h2 id="sifreKisi">🔒 Giriş</h2>
-            <div class="alt-bilgi" id="sifreDurum">🔑 Şifrenizi girin (ilk kez ise belirleyin)</div>
-            <input type="password" id="sifreInput" placeholder="••••••" autocomplete="off">
-            <div class="hata" id="sifreHata">❌ Şifre yanlış! Tekrar deneyin.</div>
-            <div class="basarili" id="sifreBasarili">✅ Şifre doğru! Yönlendiriliyorsunuz...</div>
-            <button class="btn-gir" id="sifreGirBtn">🔓 Giriş Yap</button>
-            <button class="btn-iptal" id="sifreIptalBtn">İptal</button>
-        </div>
-    </div>
-
     <!-- MODAL -->
     <div class="modal" id="modal">
         <div class="modal-content" id="modalContent">
@@ -742,14 +919,14 @@
 
     <script>
         // ==========================================================
-        // KİŞİ LİSTESİ (SABİT)
+        // KİŞİ REPO EŞLEŞMESİ
         // ==========================================================
-        const kisiler = [
-            { id: 'anne', isim: 'Anne', avatar: '👩', repolar: ['anne-1', 'anne-2'] },
-            { id: 'baba', isim: 'Baba', avatar: '👨', repolar: ['baba-1', 'baba-2'] },
-            { id: 'sen', isim: 'Sen', avatar: '🧑', repolar: ['mm2-1', 'mm2-2'] },
-            { id: 'abla', isim: 'Abla', avatar: '👩', repolar: ['abla-1', 'abla-2'] }
-        ];
+        const kisiRepolar = {
+            'anne': ['anne-1', 'anne-2'],
+            'baba': ['baba-1', 'baba-2'],
+            'sen': ['mm2-1', 'mm2-2'],
+            'abla': ['abla-1', 'abla-2']
+        };
 
         // ==========================================================
         // DURUM
@@ -757,8 +934,6 @@
         let aktifKisi = null;
         let aktifRepo = null;
         let currentToken = '';
-        let sifreBekleyenKisi = null;
-        let beklemeTimeout = null;
 
         // ==========================================================
         // DOM
@@ -766,14 +941,20 @@
         const tokenInput = document.getElementById('token');
         const statusEl = document.getElementById('status');
         const statusMsg = statusEl.querySelector('.msg');
-        const kisiGrid = document.getElementById('kisiGrid');
-        const repoGrid = document.getElementById('repoGrid');
         const anaSayfa = document.getElementById('anaSayfa');
         const repoSayfa = document.getElementById('repoSayfa');
         const galeriSayfa = document.getElementById('galeriSayfa');
         const geriBtn = document.getElementById('geriBtn');
         const galeriGeriBtn = document.getElementById('galeriGeriBtn');
         const cikisBtn = document.getElementById('cikisBtn');
+
+        const isimInput = document.getElementById('isimInput');
+        const sifreInput = document.getElementById('sifreInput');
+        const girisBtn = document.getElementById('girisBtn');
+        const girisDurum = document.getElementById('girisDurum');
+        const girisHata = document.getElementById('girisHata');
+        const kayitBilgi = document.getElementById('kayitBilgi');
+        const repoGrid = document.getElementById('repoGrid');
 
         const fileInput = document.getElementById('fileInput');
         const fileArea = document.getElementById('fileArea');
@@ -791,15 +972,6 @@
         const modalFilename = document.getElementById('modalFilename');
         const modalClose = document.getElementById('modalClose');
         const modalDownload = document.getElementById('modalDownload');
-
-        const sifreModal = document.getElementById('sifreModal');
-        const sifreKisi = document.getElementById('sifreKisi');
-        const sifreDurum = document.getElementById('sifreDurum');
-        const sifreInput = document.getElementById('sifreInput');
-        const sifreHata = document.getElementById('sifreHata');
-        const sifreBasarili = document.getElementById('sifreBasarili');
-        const sifreGirBtn = document.getElementById('sifreGirBtn');
-        const sifreIptalBtn = document.getElementById('sifreIptalBtn');
 
         let currentModalUrl = '';
         let currentModalName = '';
@@ -847,173 +1019,94 @@
         });
 
         // ==========================================================
-        // ŞİFRE YÖNETİMİ (SAĞLAM)
+        // ŞİFRE YÖNETİMİ (localStorage)
         // ==========================================================
-        function sifreKaydet(kisiId, sifre) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v5') || '{}');
-            sifreler[kisiId] = sifre;
-            localStorage.setItem('aileSifreler_v5', JSON.stringify(sifreler));
-            console.log('✅ Şifre kaydedildi:', kisiId);
+        function kullaniciKaydet(isim, sifre) {
+            const kullanicilar = JSON.parse(localStorage.getItem('aileKullanicilar') || '{}');
+            kullanicilar[isim] = sifre;
+            localStorage.setItem('aileKullanicilar', JSON.stringify(kullanicilar));
+            console.log('✅ Kullanıcı kaydedildi:', isim);
         }
 
-        function sifreAl(kisiId) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v5') || '{}');
-            const sifre = sifreler[kisiId] || null;
-            console.log('🔍 Şifre okundu:', kisiId, sifre);
-            return sifre;
+        function kullaniciSifreAl(isim) {
+            const kullanicilar = JSON.parse(localStorage.getItem('aileKullanicilar') || '{}');
+            return kullanicilar[isim] || null;
         }
 
-        function sifreSil(kisiId) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v5') || '{}');
-            delete sifreler[kisiId];
-            localStorage.setItem('aileSifreler_v5', JSON.stringify(sifreler));
-            console.log('🗑️ Şifre silindi:', kisiId);
-        }
-
-        function tumSifreleriSil() {
-            localStorage.removeItem('aileSifreler_v5');
-            console.log('🗑️ Tüm şifreler silindi');
-        }
-
-        function kisiAcikMi(kisiId) {
-            return sifreAl(kisiId) !== null;
+        function tumKullanicilariSil() {
+            localStorage.removeItem('aileKullanicilar');
+            console.log('🗑️ Tüm kullanıcılar silindi');
         }
 
         // ==========================================================
-        // KİŞİLERİ LİSTELE
+        // GİRİŞ İŞLEMİ
         // ==========================================================
-        function renderKisiler() {
-            kisiGrid.innerHTML = '';
-            const cfg = getConfig();
-            if (!cfg.token) {
-                kisiGrid.innerHTML = '<p style="color:#6b7a93;text-align:center;padding:20px;">⚠️ Token girin</p>';
+        function girisYap() {
+            const isim = isimInput.value.trim().toLowerCase();
+            const sifre = sifreInput.value.trim();
+
+            if (!isim || !sifre) {
+                girisHata.textContent = '❌ Lütfen isim ve şifre girin!';
+                girisHata.classList.add('goster');
                 return;
             }
 
-            for (const kisi of kisiler) {
-                const acikMi = kisiAcikMi(kisi.id);
+            const kayitliSifre = kullaniciSifreAl(isim);
 
-                const kart = document.createElement('div');
-                kart.className = 'giris-card';
-
-                kart.innerHTML = `
-                    <span class="kilit">${acikMi ? '🔓' : '🔒'}</span>
-                    <span class="avatar">${kisi.avatar}</span>
-                    <div class="isim">${kisi.isim}</div>
-                    <span class="durum ${acikMi ? 'acik' : 'kilitli'}">${acikMi ? '✅ Açık' : '🔒 Kilitli'}</span>
-                `;
-
-                kart.addEventListener('click', () => {
-                    if (acikMi) {
-                        // Şifre zaten kayıtlı, repoları göster
-                        aktifKisi = kisi;
-                        repoGoster(kisi);
-                    } else {
-                        // Şifre sor
-                        sifreBekleyenKisi = kisi;
-                        sifreKisi.textContent = `🔒 ${kisi.isim}`;
-                        sifreDurum.textContent = '🔑 Şifrenizi girin (ilk kez ise belirleyin)';
-                        sifreInput.value = '';
-                        sifreHata.classList.remove('goster');
-                        sifreBasarili.classList.remove('goster');
-                        sifreModal.classList.add('active');
-                        setTimeout(() => sifreInput.focus(), 300);
-                    }
-                });
-
-                kisiGrid.appendChild(kart);
-            }
-        }
-
-        // ==========================================================
-        // ŞİFRE KONTROLÜ / KAYDI
-        // ==========================================================
-        function sifreIsle() {
-            if (!sifreBekleyenKisi) return;
-            const girilen = sifreInput.value.trim();
-
-            if (!girilen) {
-                sifreHata.textContent = '❌ Lütfen bir şifre girin!';
-                sifreHata.classList.add('goster');
-                sifreBasarili.classList.remove('goster');
+            if (kayitliSifre === null) {
+                // Yeni kullanıcı - kaydet
+                kullaniciKaydet(isim, sifre);
+                girisHata.classList.remove('goster');
+                girisDurum.textContent = '✅ Hesap oluşturuldu!';
+                aktifKisi = isim;
+                repoGoster(isim);
                 return;
             }
 
-            const kayitli = sifreAl(sifreBekleyenKisi.id);
-
-            if (kayitli === null) {
-                // İLK KAYIT
-                sifreKaydet(sifreBekleyenKisi.id, girilen);
-                sifreBasarili.textContent = '✅ Şifre kaydedildi!';
-                sifreBasarili.classList.add('goster');
-                sifreHata.classList.remove('goster');
-
-                if (beklemeTimeout) clearTimeout(beklemeTimeout);
-                beklemeTimeout = setTimeout(() => {
-                    sifreModal.classList.remove('active');
-                    aktifKisi = sifreBekleyenKisi;
-                    repoGoster(sifreBekleyenKisi);
-                    renderKisiler();
-                    sifreBekleyenKisi = null;
-                    beklemeTimeout = null;
-                }, 800);
-                return;
-            }
-
-            if (girilen === kayitli) {
-                // ŞİFRE DOĞRU
-                sifreBasarili.textContent = '✅ Şifre doğru!';
-                sifreBasarili.classList.add('goster');
-                sifreHata.classList.remove('goster');
-
-                if (beklemeTimeout) clearTimeout(beklemeTimeout);
-                beklemeTimeout = setTimeout(() => {
-                    sifreModal.classList.remove('active');
-                    aktifKisi = sifreBekleyenKisi;
-                    repoGoster(sifreBekleyenKisi);
-                    renderKisiler();
-                    sifreBekleyenKisi = null;
-                    beklemeTimeout = null;
-                }, 800);
+            if (sifre === kayitliSifre) {
+                // Şifre doğru
+                girisHata.classList.remove('goster');
+                girisDurum.textContent = '✅ Hoş geldin ' + isim + '!';
+                aktifKisi = isim;
+                repoGoster(isim);
             } else {
-                // ŞİFRE YANLIŞ
-                sifreHata.textContent = '❌ Şifre yanlış! Tekrar deneyin.';
-                sifreHata.classList.add('goster');
-                sifreBasarili.classList.remove('goster');
+                // Şifre yanlış
+                girisHata.textContent = '❌ Şifre yanlış! Tekrar deneyin.';
+                girisHata.classList.add('goster');
                 sifreInput.value = '';
                 sifreInput.focus();
             }
         }
 
-        sifreGirBtn.addEventListener('click', sifreIsle);
+        girisBtn.addEventListener('click', girisYap);
         sifreInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') sifreIsle();
+            if (e.key === 'Enter') girisYap();
         });
-
-        sifreIptalBtn.addEventListener('click', () => {
-            sifreModal.classList.remove('active');
-            sifreBekleyenKisi = null;
-            if (beklemeTimeout) {
-                clearTimeout(beklemeTimeout);
-                beklemeTimeout = null;
-            }
+        isimInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') sifreInput.focus();
         });
 
         // ==========================================================
         // REPOLARI GÖSTER
         // ==========================================================
-        function repoGoster(kisi) {
+        function repoGoster(isim) {
             anaSayfa.classList.add('gizli');
             repoSayfa.classList.remove('gizli');
             galeriSayfa.classList.add('gizli');
             repoGrid.innerHTML = '';
 
-            for (const repoAdi of kisi.repolar) {
+            const repolar = kisiRepolar[isim];
+            if (!repolar) {
+                setStatus('❌ Bu kullanıcı için repo bulunamadı', 'error');
+                return;
+            }
+
+            for (const repoAdi of repolar) {
                 const kart = document.createElement('div');
                 kart.className = 'repo-card';
                 kart.innerHTML = `
                     <span class="repo-avatar">📁</span>
-                    <div class="repo-isim">${kisi.isim} - ${repoAdi}</div>
+                    <div class="repo-isim">${isim} - ${repoAdi}</div>
                     <div class="repo-ad">${repoAdi}</div>
                 `;
                 kart.addEventListener('click', () => {
@@ -1023,7 +1116,7 @@
                 repoGrid.appendChild(kart);
             }
 
-            setStatus(`📂 ${kisi.isim} - Repolar`, '');
+            setStatus(`📂 ${isim} - Repolar`, '');
         }
 
         // ==========================================================
@@ -1037,27 +1130,29 @@
         }
 
         // ==========================================================
-        // GERİ BUTONU (Repolardan Kişilere Dön - Şifreyi Sil)
+        // GERİ BUTONU (Repolardan Girişe Dön - Şifreyi Sil)
         // ==========================================================
-        function repodanKisilereDon() {
+        function repodanGiriseDon() {
             if (aktifKisi) {
-                // Kişiyi kilitle (şifreyi sil)
-                sifreSil(aktifKisi.id);
-                repoSayfa.classList.add('gizli');
-                anaSayfa.classList.remove('gizli');
-                const kisiAdi = aktifKisi.isim;
-                aktifKisi = null;
-                renderKisiler();
-                setStatus(`🔒 ${kisiAdi} kilitlendi`, '');
-            } else {
-                repoSayfa.classList.add('gizli');
-                anaSayfa.classList.remove('gizli');
-                renderKisiler();
-                setStatus('✨ Ana sayfa', '');
+                // Kullanıcıyı sil (çıkış yap)
+                const sifreler = JSON.parse(localStorage.getItem('aileKullanicilar') || '{}');
+                delete sifreler[aktifKisi];
+                localStorage.setItem('aileKullanicilar', JSON.stringify(sifreler));
+                console.log('🗑️ Kullanıcı silindi:', aktifKisi);
             }
+
+            repoSayfa.classList.add('gizli');
+            anaSayfa.classList.remove('gizli');
+            aktifKisi = null;
+            aktifRepo = null;
+            girisDurum.textContent = '🔑 Giriş yapmak için isim ve şifre girin';
+            isimInput.value = '';
+            sifreInput.value = '';
+            girisHata.classList.remove('goster');
+            setStatus('✨ Ana sayfa', '');
         }
 
-        geriBtn.addEventListener('click', repodanKisilereDon);
+        geriBtn.addEventListener('click', repodanGiriseDon);
 
         // ==========================================================
         // GALERİDEN GERİ (Repolara Dön)
@@ -1066,7 +1161,7 @@
             galeriSayfa.classList.add('gizli');
             repoSayfa.classList.remove('gizli');
             if (aktifKisi) {
-                setStatus(`📂 ${aktifKisi.isim} - Repolar`, '');
+                setStatus(`📂 ${aktifKisi} - Repolar`, '');
             } else {
                 setStatus('📂 Repolar', '');
             }
@@ -1079,19 +1174,22 @@
         galeriGeriBtn.addEventListener('click', galeridenRepolaraDon);
 
         // ==========================================================
-        // ÇIKIŞ YAP
+        // ÇIKIŞ YAP - Tüm kullanıcıları sil
         // ==========================================================
         function cikisYap() {
-            if (!confirm('Çıkış yapmak istediğinize emin misiniz? Tüm şifreler silinecek.')) return;
+            if (!confirm('Çıkış yapmak istediğinize emin misiniz? Tüm hesaplar silinecek.')) return;
 
-            tumSifreleriSil();
+            tumKullanicilariSil();
             anaSayfa.classList.remove('gizli');
             repoSayfa.classList.add('gizli');
             galeriSayfa.classList.add('gizli');
             aktifKisi = null;
             aktifRepo = null;
-            renderKisiler();
-            setStatus('🚪 Çıkış yapıldı. Tüm şifreler silindi.', '');
+            girisDurum.textContent = '🔑 Giriş yapmak için isim ve şifre girin';
+            isimInput.value = '';
+            sifreInput.value = '';
+            girisHata.classList.remove('goster');
+            setStatus('🚪 Çıkış yapıldı. Tüm hesaplar silindi.', '');
         }
 
         cikisBtn.addEventListener('click', cikisYap);
@@ -1414,7 +1512,6 @@
             if (token && token.startsWith('ghp_')) {
                 localStorage.setItem('githubToken', token);
                 currentToken = token;
-                renderKisiler();
                 setStatus('✅ Token kaydedildi', 'success');
             }
         });
@@ -1426,7 +1523,6 @@
         if (kayitliToken && kayitliToken.startsWith('ghp_')) {
             currentToken = kayitliToken;
             tokenInput.value = kayitliToken;
-            renderKisiler();
             setStatus('✨ Aile sistemine hoş geldiniz', 'success');
         } else {
             setStatus('🔑 Token girin', '');
