@@ -106,6 +106,90 @@
             to { transform: rotate(360deg); }
         }
 
+        /* ===== DOSYA ALANI ===== */
+        .file-area {
+            border: 2px dashed rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            padding: 30px 20px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.4s;
+            background: rgba(255, 255, 255, 0.01);
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .file-area:hover {
+            border-color: rgba(240, 147, 62, 0.3);
+            background: rgba(255, 255, 255, 0.03);
+            box-shadow: 0 0 30px rgba(240, 147, 62, 0.03);
+        }
+
+        .file-area.dragover {
+            border-color: #f0933e;
+            background: rgba(240, 147, 62, 0.05);
+            box-shadow: 0 0 40px rgba(240, 147, 62, 0.05);
+        }
+
+        .file-area .icon {
+            display: block;
+            margin-bottom: 4px;
+            opacity: 0.9;
+        }
+
+        .file-area .text {
+            font-size: 15px;
+            color: #7a879f;
+        }
+
+        .file-area .text strong {
+            color: #e8edf5;
+            font-weight: 500;
+        }
+
+        .file-area input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-area .file-count {
+            display: inline-block;
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 3px 18px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #5a687e;
+        }
+
+        .btn-upload {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #f0933e, #e67e22);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+            box-shadow: 0 4px 20px rgba(240, 147, 62, 0.2);
+            margin-top: 4px;
+        }
+
+        .btn-upload:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(240, 147, 62, 0.3);
+        }
+
+        .btn-upload:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .repo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -236,7 +320,7 @@
             font-weight: 600;
         }
 
-        /* ===== GALERİ İÇİ ===== */
+        /* ===== GALERİ ===== */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -407,7 +491,7 @@
             <div class="repo-grid" id="repoGrid"></div>
         </div>
 
-        <!-- REPO İÇİ SAYFA (GALERİ) -->
+        <!-- REPO İÇİ SAYFA (GALERİ + YÜKLEME) -->
         <div id="repoSayfa" class="gizli">
             <button class="back-btn" id="geriBtn">← Geri</button>
             <div class="repo-adu">
@@ -415,6 +499,21 @@
                 <span class="durum acik" id="repoDurum">🟢 Açık</span>
                 <span class="repo-aktif-badge" id="repoAktifBadge">✅ Aktif</span>
             </div>
+
+            <!-- DOSYA YÜKLEME ALANI -->
+            <div class="file-area" id="fileArea">
+                <span class="icon">
+                    <img src="https://i.postimg.cc/TY1HR0Dk/e625067c-560b-4f86-a39c-725239da40f1-(1)(3).png" alt="Dosya" style="width:40px;height:40px;display:block;margin:0 auto;">
+                </span>
+                <div class="text">
+                    <strong>Dosya seç</strong> veya buraya sürükle
+                </div>
+                <div class="file-count" id="fileCount">Hiç dosya seçilmedi</div>
+                <input type="file" id="fileInput" multiple accept="image/*,video/*">
+            </div>
+
+            <button class="btn-upload" id="uploadBtn">📤 Yükle</button>
+
             <div id="repoGaleri"></div>
         </div>
 
@@ -458,10 +557,15 @@
         const repoAktifBadge = document.getElementById('repoAktifBadge');
         const repoGaleri = document.getElementById('repoGaleri');
         const geriBtn = document.getElementById('geriBtn');
+        const fileInput = document.getElementById('fileInput');
+        const fileArea = document.getElementById('fileArea');
+        const fileCount = document.getElementById('fileCount');
+        const uploadBtn = document.getElementById('uploadBtn');
 
         let aktifRepo = 'benim-fotolarim';
         let repoDosyaSayilari = {};
         let currentToken = '';
+        let yukleniyor = false;
 
         // ============================================
         // YARDIMCI
@@ -477,6 +581,119 @@
                 token: currentToken || localStorage.getItem('githubToken') || ''
             };
         }
+
+        function getFileList() { return Array.from(fileInput.files); }
+
+        function updateFileCount() {
+            const files = getFileList();
+            fileCount.textContent = files.length === 0 ? 'Hiç dosya seçilmedi' : `${files.length} dosya seçildi`;
+        }
+
+        fileInput.addEventListener('change', updateFileCount);
+
+        // ============================================
+        // DRAG & DROP
+        // ============================================
+        fileArea.addEventListener('dragover', e => {
+            e.preventDefault();
+            fileArea.classList.add('dragover');
+        });
+        fileArea.addEventListener('dragleave', () => fileArea.classList.remove('dragover'));
+        fileArea.addEventListener('drop', e => {
+            e.preventDefault();
+            fileArea.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                updateFileCount();
+            }
+        });
+
+        // ============================================
+        // YÜKLEME
+        // ============================================
+        async function uploadFiles() {
+            if (yukleniyor) return;
+
+            const cfg = getConfig();
+            if (!cfg.token) {
+                setStatus('❌ Token gerekli!', 'error');
+                return;
+            }
+
+            const files = getFileList();
+            if (!files.length) {
+                setStatus('⚠️ Lütfen dosya seç', 'error');
+                return;
+            }
+
+            yukleniyor = true;
+            uploadBtn.disabled = true;
+            let success = 0,
+                failed = 0;
+
+            for (const file of files) {
+                setStatus(`⏳ ${file.name} (${success + failed + 1}/${files.length})`, 'loading');
+                try {
+                    const base64 = await toBase64(file);
+                    const url =
+                        `https://api.github.com/repos/${cfg.user}/${aktifRepo}/contents/fotolar/${encodeURIComponent(file.name)}`;
+                    const res = await fetch(url, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${cfg.token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: `Yükle: ${file.name}`,
+                            content: base64
+                        })
+                    });
+                    if (res.ok) {
+                        success++;
+                    } else {
+                        const err = await res.json();
+                        if (err.message && err.message.includes('already exists')) {
+                            setStatus(`⚠️ "${file.name}" zaten var`, 'error');
+                        }
+                        failed++;
+                    }
+                } catch {
+                    failed++;
+                }
+            }
+
+            yukleniyor = false;
+            uploadBtn.disabled = false;
+
+            if (failed === 0 && success > 0) {
+                setStatus(`✅ ${success} dosya yüklendi, galeri yenileniyor...`, 'success');
+                fileInput.value = '';
+                updateFileCount();
+                setTimeout(() => {
+                    getRepoFiles(aktifRepo);
+                    listRepos();
+                }, 3000);
+            } else if (success > 0) {
+                setStatus(`⚠️ ${success} başarılı, ${failed} hata`, 'error');
+                setTimeout(() => {
+                    getRepoFiles(aktifRepo);
+                    listRepos();
+                }, 3000);
+            } else {
+                setStatus('❌ Hiçbir dosya yüklenemedi', 'error');
+            }
+        }
+
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        uploadBtn.addEventListener('click', uploadFiles);
 
         // ============================================
         // REPO DOSYA SAYISINI ÇEK
@@ -643,7 +860,8 @@
                 data.sort((a, b) => a.name.localeCompare(b.name)).reverse();
 
                 for (const item of data) {
-                    const rawUrl = `https://raw.githubusercontent.com/${cfg.user}/${repoAdi}/main/fotolar/${encodeURIComponent(item.name)}`;
+                    const rawUrl =
+                        `https://raw.githubusercontent.com/${cfg.user}/${repoAdi}/main/fotolar/${encodeURIComponent(item.name)}`;
                     const isVideo = /\.(mp4|webm|mov|avi|mkv|3gp)$/i.test(item.name);
                     const isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg|heic|heif)$/i.test(item.name);
 
@@ -708,7 +926,8 @@
             setStatus(`⏳ Siliniyor: ${filename}`, 'loading');
 
             try {
-                const url = `https://api.github.com/repos/${cfg.user}/${repoAdi}/contents/fotolar/${encodeURIComponent(filename)}`;
+                const url =
+                    `https://api.github.com/repos/${cfg.user}/${repoAdi}/contents/fotolar/${encodeURIComponent(filename)}`;
                 const res = await fetch(url, {
                     method: 'DELETE',
                     headers: {
