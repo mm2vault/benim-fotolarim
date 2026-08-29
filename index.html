@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Aile Galerisi</title>
+    <title>📸 Aile Galerisi</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/tCYfpbZy/be371099-de3c-430e-b3de-37d5dbd175fa.png">
     <style>
         * {
@@ -167,12 +167,77 @@
         .status.loading .spinner {
             display: block;
         }
+        .status.success {
+            border-color: rgba(46, 160, 67, 0.2);
+            color: #4cda6c;
+        }
+        .status.error {
+            border-color: rgba(248, 81, 73, 0.2);
+            color: #f85149;
+        }
 
         @keyframes spin {
             to {
                 transform: rotate(360deg);
             }
         }
+
+        /* ===== TOAST BİLDİRİM ===== */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            pointer-events: none;
+            max-width: 90%;
+            width: 400px;
+        }
+
+        .toast {
+            pointer-events: auto;
+            background: rgba(22, 30, 44, 0.92);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 14px 22px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 280px;
+            width: 100%;
+            animation: toastIn 0.35s ease both;
+            transition: 0.3s;
+        }
+
+        .toast.hide {
+            animation: toastOut 0.35s ease both;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateY(0) scale(1); }
+            to { opacity: 0; transform: translateY(-10px) scale(0.96); }
+        }
+
+        .toast .icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
+        .toast .content { flex: 1; font-size: 14px; color: #e8edf5; font-weight: 500; line-height: 1.4; }
+        .toast .content .sub { font-size: 12px; color: #6b7a93; font-weight: 400; display: block; margin-top: 2px; }
+        .toast .close-btn { background: none; border: none; color: #4a5268; font-size: 18px; cursor: pointer; padding: 0 4px; transition: 0.2s; }
+        .toast .close-btn:hover { color: #e8edf5; }
+        .toast.success { border-left: 3px solid #4cda6c; }
+        .toast.error { border-left: 3px solid #f85149; }
+        .toast.warning { border-left: 3px solid #f0933e; }
+        .toast.info { border-left: 3px solid #58a6ff; }
 
         /* ===== KİŞİ KARTLARI ===== */
         .kisi-grid {
@@ -232,7 +297,6 @@
             margin: 0 4px;
         }
 
-        /* ===== DOLULUK ÇUBUĞU ===== */
         .progress-bar {
             width: 100%;
             height: 4px;
@@ -711,90 +775,83 @@
             box-shadow: 0 4px 28px rgba(240, 147, 62, 0.4);
         }
 
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            pointer-events: none;
+            max-width: 90%;
+            width: 400px;
+        }
+
+        .toast {
+            pointer-events: auto;
+            background: rgba(22, 30, 44, 0.92);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 14px 22px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 280px;
+            width: 100%;
+            animation: toastIn 0.35s ease both;
+            transition: 0.3s;
+        }
+
+        .toast.hide {
+            animation: toastOut 0.35s ease both;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateY(0) scale(1); }
+            to { opacity: 0; transform: translateY(-10px) scale(0.96); }
+        }
+
+        .toast .icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
+        .toast .content { flex: 1; font-size: 14px; color: #e8edf5; font-weight: 500; line-height: 1.4; }
+        .toast .content .sub { font-size: 12px; color: #6b7a93; font-weight: 400; display: block; margin-top: 2px; }
+        .toast .close-btn { background: none; border: none; color: #4a5268; font-size: 18px; cursor: pointer; padding: 0 4px; transition: 0.2s; }
+        .toast .close-btn:hover { color: #e8edf5; }
+        .toast.success { border-left: 3px solid #4cda6c; }
+        .toast.error { border-left: 3px solid #f85149; }
+        .toast.warning { border-left: 3px solid #f0933e; }
+        .toast.info { border-left: 3px solid #58a6ff; }
+
         @media (max-width: 600px) {
-            .app {
-                padding: 18px;
-            }
-            .buttons {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-            .header h1 {
-                font-size: 18px;
-            }
-            .header-badge {
-                font-size: 10px;
-                padding: 4px 12px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .header-logo {
-                height: 34px;
-            }
-            .gallery {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 12px;
-            }
-            .gallery-item .media {
-                height: 130px;
-            }
-            .kisi-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-            }
-            .kisi-card {
-                padding: 20px 12px;
-            }
-            .kisi-card .avatar {
-                width: 60px;
-                height: 60px;
-            }
-            .repo-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-            }
-            .repo-card {
-                padding: 16px 12px;
-            }
-            .modal-content {
-                max-width: 98vw;
-            }
-            .modal-bottom {
-                padding: 6px 12px 6px 16px;
-                gap: 10px;
-                flex-wrap: wrap;
-                justify-content: center;
-                bottom: 14px;
-            }
-            .modal-filename {
-                max-width: 80px;
-                font-size: 12px;
-            }
-            .modal-download {
-                padding: 6px 16px;
-                font-size: 12px;
-            }
-            .modal-close {
-                width: 34px;
-                height: 34px;
-                font-size: 18px;
-                top: 10px;
-                right: 12px;
-            }
-            .gallery-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .gallery-header .left {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-            .gallery-stats {
-                font-size: 11px;
-                gap: 10px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
+            .app { padding: 18px; }
+            .buttons { grid-template-columns: 1fr; gap: 8px; }
+            .header h1 { font-size: 18px; }
+            .header-badge { font-size: 10px; padding: 4px 12px; flex-wrap: wrap; justify-content: center; }
+            .header-logo { height: 34px; }
+            .gallery { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+            .gallery-item .media { height: 130px; }
+            .kisi-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .kisi-card { padding: 20px 12px; }
+            .kisi-card .avatar { width: 60px; height: 60px; }
+            .repo-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .repo-card { padding: 16px 12px; }
+            .modal-content { max-width: 98vw; }
+            .modal-bottom { padding: 6px 12px 6px 16px; gap: 10px; flex-wrap: wrap; justify-content: center; bottom: 14px; }
+            .modal-filename { max-width: 80px; font-size: 12px; }
+            .modal-download { padding: 6px 16px; font-size: 12px; }
+            .modal-close { width: 34px; height: 34px; font-size: 18px; top: 10px; right: 12px; }
+            .gallery-header { flex-direction: column; align-items: stretch; }
+            .gallery-header .left { justify-content: center; flex-wrap: wrap; }
+            .gallery-stats { font-size: 11px; gap: 10px; flex-wrap: wrap; justify-content: center; }
         }
     </style>
 </head>
@@ -893,9 +950,12 @@
         </div>
     </div>
 
+    <!-- TOAST BİLDİRİM KONTEYNERİ -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <script>
         // ==========================================================
-        // KİŞİ LİSTESİ (RESİM LİNKLERİ EKLENDİ)
+        // KİŞİ LİSTESİ
         // ==========================================================
         const kisiler = [{
             id: 'anne',
@@ -922,7 +982,6 @@
         // ==========================================================
         let aktifKisi = null;
         let aktifRepo = null;
-        let repoDosyaSayilari = {};
 
         // ==========================================================
         // DOM
@@ -955,9 +1014,31 @@
         const modalFilename = document.getElementById('modalFilename');
         const modalClose = document.getElementById('modalClose');
         const modalDownload = document.getElementById('modalDownload');
+        const toastContainer = document.getElementById('toastContainer');
 
         let currentModalUrl = '';
         let currentModalName = '';
+
+        // ==========================================================
+        // TOAST BİLDİRİM
+        // ==========================================================
+        function showToast(icon, message, subMessage = '', type = 'info', duration = 4000) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="icon">${icon}</span>
+                <div class="content">
+                    ${message}
+                    ${subMessage ? `<span class="sub">${subMessage}</span>` : ''}
+                </div>
+                <button class="close-btn" onclick="this.closest('.toast').remove()">✕</button>
+            `;
+            toastContainer.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 400);
+            }, duration);
+        }
 
         // ==========================================================
         // YARDIMCI
@@ -1022,13 +1103,12 @@
         }
 
         // ==========================================================
-        // KİŞİLERİ LİSTELE (DOSYA SAYISI VE % İLE)
+        // KİŞİLERİ LİSTELE
         // ==========================================================
         async function renderKisiler() {
             kisiGrid.innerHTML = '';
             const cfg = getConfig();
 
-            // Token yoksa uyarı göster
             if (!cfg.token || !cfg.token.startsWith('ghp_')) {
                 kisiGrid.innerHTML =
                     '<p style="color:#6b7a93;text-align:center;padding:20px;grid-column:1/-1;">⚠️ Lütfen geçerli bir GitHub token girin.</p>';
@@ -1040,14 +1120,13 @@
             for (const kisi of kisiler) {
                 let toplamDosya = 0;
 
-                // Tüm repoların dosya sayısını topla
                 for (const repoAdi of kisi.repolar) {
                     const sayi = await getRepoFileCount(repoAdi);
                     toplamDosya += sayi;
                 }
 
                 const oran = Math.min((toplamDosya / kisi.limit) * 100, 100);
-                let durumRengi = '#4cda6c'; // yeşil
+                let durumRengi = '#4cda6c';
                 let durumText = 'Boş';
                 if (oran >= 90) { durumRengi = '#f85149';
                     durumText = 'Dolu'; } else if (oran >= 50) { durumRengi = '#f0933e';
@@ -1169,10 +1248,12 @@
             const cfg = getConfig();
             if (!cfg.token || !cfg.token.startsWith('ghp_')) {
                 setStatus('❌ Geçerli GitHub token gerekli!', 'error');
+                showToast('❌', 'Geçerli GitHub token gerekli!', 'Lütfen token\'ınızı kontrol edin.', 'error', 4000);
                 return;
             }
             if (!cfg.repo) {
                 setStatus('❌ Repo seçili değil', 'error');
+                showToast('⚠️', 'Repo seçili değil', 'Lütfen bir repo seçin.', 'warning', 3000);
                 return;
             }
 
@@ -1198,6 +1279,7 @@
                 if (!res.ok) {
                     const err = await res.json();
                     setStatus(`❌ ${err.message || 'Hata'}`, 'error');
+                    showToast('❌', 'Listeleme hatası', err.message || 'Dosyalar alınamadı.', 'error', 4000);
                     return;
                 }
 
@@ -1264,10 +1346,108 @@
 
             } catch (e) {
                 setStatus(`❌ ${e.message}`, 'error');
+                showToast('❌', 'Hata', e.message, 'error', 4000);
             }
         }
 
         listBtn.addEventListener('click', listFiles);
+
+        // ==========================================================
+        // YÜKLEME (Otomatik Liste ile)
+        // ==========================================================
+        async function uploadFiles() {
+            const cfg = getConfig();
+            if (!cfg.token || !cfg.token.startsWith('ghp_')) {
+                setStatus('❌ Geçerli GitHub token gerekli!', 'error');
+                showToast('❌', 'Geçerli GitHub token gerekli!', 'Lütfen token\'ınızı kontrol edin.', 'error', 4000);
+                return;
+            }
+            if (!cfg.repo) {
+                setStatus('❌ Repo seçili değil', 'error');
+                showToast('⚠️', 'Repo seçili değil', 'Lütfen bir repo seçin.', 'warning', 3000);
+                return;
+            }
+
+            const files = getFileList();
+            if (!files.length) {
+                setStatus('⚠️ Lütfen dosya seç', 'error');
+                showToast('⚠️', 'Dosya seçilmedi', 'Lütfen en az bir dosya seçin.', 'warning', 3000);
+                return;
+            }
+
+            uploadBtn.disabled = true;
+            let success = 0,
+                failed = 0;
+
+            for (const file of files) {
+                setStatus(`⏳ ${file.name} (${success + failed + 1}/${files.length})`, 'loading');
+                try {
+                    const base64 = await toBase64(file);
+                    const url =
+                        `https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/fotolar/${encodeURIComponent(file.name)}`;
+                    const res = await fetch(url, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${cfg.token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: `Yükle: ${file.name}`,
+                            content: base64
+                        })
+                    });
+                    if (res.ok) {
+                        success++;
+                    } else {
+                        const err = await res.json();
+                        if (err.message && err.message.includes('already exists')) {
+                            setStatus(`⚠️ "${file.name}" zaten var`, 'error');
+                            showToast('⚠️', `${file.name} zaten var`, 'Aynı isimli dosya mevcut.', 'warning', 3000);
+                        }
+                        failed++;
+                    }
+                } catch {
+                    failed++;
+                }
+            }
+
+            uploadBtn.disabled = false;
+
+            if (failed === 0 && success > 0) {
+                setStatus(`✅ ${success} dosya yüklendi`, 'success');
+                showToast('✅', `${success} dosya yüklendi`, 'Galeri yenileniyor...', 'success', 3000);
+                fileInput.value = '';
+                updateFileCount();
+                // Dosyalar yüklendikten sonra otomatik listele
+                setTimeout(() => {
+                    listFiles();
+                    renderKisiler();
+                }, 2000);
+            } else if (success > 0) {
+                setStatus(`⚠️ ${success} başarılı, ${failed} hata`, 'error');
+                showToast('⚠️', `${success} başarılı, ${failed} hata`, 'Bazı dosyalar yüklenemedi.', 'warning', 4000);
+                fileInput.value = '';
+                updateFileCount();
+                setTimeout(() => {
+                    listFiles();
+                    renderKisiler();
+                }, 2000);
+            } else {
+                setStatus('❌ Hiçbir dosya yüklenemedi', 'error');
+                showToast('❌', 'Yükleme başarısız', 'Hiçbir dosya yüklenemedi.', 'error', 4000);
+            }
+        }
+
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        uploadBtn.addEventListener('click', uploadFiles);
 
         // ==========================================================
         // MODAL
@@ -1346,13 +1526,19 @@
 
                 if (res.ok) {
                     setStatus(`🗑️ "${filename}" silindi`, 'success');
-                    setTimeout(listFiles, 2000);
+                    showToast('🗑️', `"${filename}" silindi`, 'Dosya başarıyla kaldırıldı.', 'success', 3000);
+                    setTimeout(() => {
+                        listFiles();
+                        renderKisiler();
+                    }, 2000);
                 } else {
                     const err = await res.json();
                     setStatus(`❌ Silinemedi: ${err.message || 'Hata'}`, 'error');
+                    showToast('❌', 'Silme başarısız', err.message || 'Dosya silinemedi.', 'error', 4000);
                 }
             } catch (e) {
                 setStatus(`❌ ${e.message}`, 'error');
+                showToast('❌', 'Hata', e.message, 'error', 4000);
             }
         }
 
@@ -1390,9 +1576,14 @@
                     if (del.ok) deleted++;
                 }
                 setStatus(`🗑️ ${deleted} dosya silindi`, 'success');
-                setTimeout(listFiles, 2000);
+                showToast('🗑️', `${deleted} dosya silindi`, 'Tüm dosyalar temizlendi.', 'success', 3000);
+                setTimeout(() => {
+                    listFiles();
+                    renderKisiler();
+                }, 2000);
             } catch (e) {
                 setStatus(`❌ ${e.message}`, 'error');
+                showToast('❌', 'Hata', e.message, 'error', 4000);
             }
         }
 
@@ -1406,6 +1597,7 @@
             if (token && token.startsWith('ghp_')) {
                 localStorage.setItem('githubToken', token);
                 setStatus('✅ Token kaydedildi', 'success');
+                showToast('🔑', 'Token kaydedildi', 'Artık otomatik kullanılacak.', 'success', 2500);
                 renderKisiler();
             }
         });
@@ -1418,9 +1610,11 @@
             tokenInput.value = kayitliToken;
             setStatus('✨ Aile sistemine hoş geldiniz', '');
             renderKisiler();
+            showToast('👋', 'Hoş geldin!', 'Aile Galerisi hazır.', 'info', 2000);
         } else {
             setStatus('🔑 Lütfen GitHub token\'ını girin', '');
             renderKisiler();
+            showToast('🔑', 'Token gerekli', 'Lütfen GitHub token\'ınızı girin.', 'info', 4000);
         }
     </script>
 
