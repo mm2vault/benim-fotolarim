@@ -1353,7 +1353,7 @@
         listBtn.addEventListener('click', listFiles);
 
         // ==========================================================
-        // YÜKLEME (Otomatik Liste ile)
+        // YÜKLEME
         // ==========================================================
         async function uploadFiles() {
             const cfg = getConfig();
@@ -1418,7 +1418,6 @@
                 showToast('✅', `${success} dosya yüklendi`, 'Galeri yenileniyor...', 'success', 3000);
                 fileInput.value = '';
                 updateFileCount();
-                // Dosyalar yüklendikten sonra otomatik listele
                 setTimeout(() => {
                     listFiles();
                     renderKisiler();
@@ -1485,15 +1484,37 @@
         });
 
         // ==========================================================
-        // İNDİRME
+        // İNDİRME (DÜZELTİLDİ - YENİ SEKME YOK)
         // ==========================================================
         function downloadFile(url, filename) {
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            showToast('⏳', `${filename} indiriliyor...`, 'Lütfen bekleyin.', 'info', 2000);
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error('Dosya alınamadı');
+                    return response.blob();
+                })
+                .then(blob => {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+
+                    showToast('✅', `"${filename}" indirildi!`, 'Dosya başarıyla kaydedildi.', 'success', 3000);
+                })
+                .catch(() => {
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    showToast('⚠️', `"${filename}" indirildi`, 'Alternatif yöntem kullanıldı.', 'warning', 3000);
+                });
         }
 
         modalDownload.addEventListener('click', () => {
