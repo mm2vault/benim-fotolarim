@@ -126,6 +126,53 @@
         }
         .status.loading .spinner { display: block; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .kisi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+            margin-top: 16px;
+        }
+        .kisi-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 18px;
+            padding: 28px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.4s;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+        }
+        .kisi-card:hover {
+            border-color: rgba(240, 147, 62, 0.25);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+        .kisi-card .avatar { font-size: 64px; display: block; margin-bottom: 10px; }
+        .kisi-card .isim { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+        .kisi-card .durum {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .kisi-card .durum.kilitli {
+            background: rgba(248, 81, 73, 0.08);
+            color: #f85149;
+            border: 1px solid rgba(248, 81, 73, 0.1);
+        }
+        .kisi-card .durum.acik {
+            background: rgba(46, 160, 67, 0.08);
+            color: #4cda6c;
+            border: 1px solid rgba(46, 160, 67, 0.1);
+        }
+        .kisi-card .kilit {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            font-size: 16px;
+        }
         .repo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -147,28 +194,9 @@
             transform: translateY(-6px);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
         }
-        .repo-card .avatar { font-size: 48px; display: block; margin-bottom: 10px; }
-        .repo-card .isim { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+        .repo-card .repo-avatar { font-size: 32px; display: block; margin-bottom: 6px; }
+        .repo-card .repo-isim { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
         .repo-card .repo-ad { font-size: 12px; color: #6b7a93; }
-        .repo-card .kilit { position: absolute; top: 12px; right: 14px; font-size: 16px; }
-        .repo-card .durum {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 2px 14px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 500;
-        }
-        .repo-card .durum.kilitli {
-            background: rgba(248, 81, 73, 0.08);
-            color: #f85149;
-            border: 1px solid rgba(248, 81, 73, 0.1);
-        }
-        .repo-card .durum.acik {
-            background: rgba(46, 160, 67, 0.08);
-            color: #4cda6c;
-            border: 1px solid rgba(46, 160, 67, 0.1);
-        }
         .sifre-modal {
             display: none;
             position: fixed;
@@ -585,9 +613,11 @@
             .header-logo { height: 34px; }
             .gallery { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
             .gallery-item .media { height: 130px; }
+            .kisi-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .kisi-card { padding: 20px 12px; }
+            .kisi-card .avatar { font-size: 48px; }
             .repo-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
             .repo-card { padding: 16px 12px; }
-            .repo-card .avatar { font-size: 36px; }
             .sifre-modal .kutu { padding: 24px 20px; }
             .modal-content { max-width: 98vw; }
             .modal-bottom { padding: 6px 12px 6px 16px; gap: 10px; flex-wrap: wrap; justify-content: center; bottom: 14px; }
@@ -630,14 +660,20 @@
             <span class="msg">✨ Hoş geldiniz</span>
         </div>
 
-        <!-- ANA SAYFA -->
+        <!-- ANA SAYFA (KİŞİLER) -->
         <div id="anaSayfa">
+            <div class="kisi-grid" id="kisiGrid"></div>
+        </div>
+
+        <!-- REPO SAYFASI -->
+        <div id="repoSayfa" class="gizli">
+            <button class="btn-geri" id="geriBtn">← Geri</button>
             <div class="repo-grid" id="repoGrid"></div>
         </div>
 
-        <!-- REPO İÇİ -->
-        <div id="repoSayfa" class="gizli">
-            <button class="btn-geri" id="geriBtn">← Geri</button>
+        <!-- GALERİ SAYFASI -->
+        <div id="galeriSayfa" class="gizli">
+            <button class="btn-geri" id="galeriGeriBtn">← Geri</button>
 
             <div class="file-area" id="fileArea">
                 <span class="icon">
@@ -681,8 +717,8 @@
     <div class="sifre-modal" id="sifreModal">
         <div class="kutu">
             <h2 id="sifreKisi">🔒 Anne</h2>
-            <p id="sifreRepo">repo-adı</p>
-            <div class="alt-bilgi" id="sifreDurum">🔑 Şifrenizi girin</div>
+            <p id="sifreRepo">Şifrenizi girin</p>
+            <div class="alt-bilgi" id="sifreDurum">🔑 İlk kez giriyorsanız şifre belirleyin</div>
             <input type="password" id="sifreInput" placeholder="••••••" autocomplete="off">
             <div class="hata" id="sifreHata">❌ Şifre yanlış! Tekrar deneyin.</div>
             <div class="basarili" id="sifreBasarili">✅ Şifre doğru! Yönlendiriliyorsunuz...</div>
@@ -705,27 +741,22 @@
 
     <script>
         // ==========================================================
-        // AİLE REPO LİSTESİ
+        // KİŞİ LİSTESİ
         // ==========================================================
-        const aileRepolar = [
-            { id: 'anne-1', kisi: 'Anne', avatar: '👩', repo: 'anne-1' },
-            { id: 'anne-2', kisi: 'Anne', avatar: '👩', repo: 'anne-2' },
-            { id: 'baba-1', kisi: 'Baba', avatar: '👨', repo: 'baba-1' },
-            { id: 'baba-2', kisi: 'Baba', avatar: '👨', repo: 'baba-2' },
-            { id: 'mm2-1', kisi: 'Sen', avatar: '🧑', repo: 'mm2-1' },
-            { id: 'mm2-2', kisi: 'Sen', avatar: '🧑', repo: 'mm2-2' },
-            { id: 'abla-1', kisi: 'Abla', avatar: '👩', repo: 'abla-1' },
-            { id: 'abla-2', kisi: 'Abla', avatar: '👩', repo: 'abla-2' }
+        const kisiler = [
+            { id: 'anne', isim: 'Anne', avatar: '👩', repolar: ['anne-1', 'anne-2'] },
+            { id: 'baba', isim: 'Baba', avatar: '👨', repolar: ['baba-1', 'baba-2'] },
+            { id: 'sen', isim: 'Sen', avatar: '🧑', repolar: ['mm2-1', 'mm2-2'] },
+            { id: 'abla', isim: 'Abla', avatar: '👩', repolar: ['abla-1', 'abla-2'] }
         ];
 
         // ==========================================================
         // DURUM
         // ==========================================================
+        let aktifKisi = null;
         let aktifRepo = null;
-        let aktifRepoInfo = null;
         let currentToken = '';
-        let sifreBekleyenRepo = null;
-        let beklemeTimeout = null;
+        let sifreBekleyenKisi = null;
 
         // ==========================================================
         // DOM
@@ -733,10 +764,13 @@
         const tokenInput = document.getElementById('token');
         const statusEl = document.getElementById('status');
         const statusMsg = statusEl.querySelector('.msg');
+        const kisiGrid = document.getElementById('kisiGrid');
         const repoGrid = document.getElementById('repoGrid');
         const anaSayfa = document.getElementById('anaSayfa');
         const repoSayfa = document.getElementById('repoSayfa');
+        const galeriSayfa = document.getElementById('galeriSayfa');
         const geriBtn = document.getElementById('geriBtn');
+        const galeriGeriBtn = document.getElementById('galeriGeriBtn');
         const cikisBtn = document.getElementById('cikisBtn');
 
         const fileInput = document.getElementById('fileInput');
@@ -768,6 +802,7 @@
 
         let currentModalUrl = '';
         let currentModalName = '';
+        let beklemeTimeout = null;
 
         // ==========================================================
         // YARDIMCI
@@ -814,71 +849,67 @@
         // ==========================================================
         // ŞİFRE YÖNETİMİ (localStorage)
         // ==========================================================
-        function sifreKaydet(repoId, sifre) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v2') || '{}');
-            sifreler[repoId] = sifre;
-            localStorage.setItem('aileSifreler_v2', JSON.stringify(sifreler));
-            console.log(`✅ Şifre kaydedildi: ${repoId} -> ${sifre}`);
+        function sifreKaydet(kisiId, sifre) {
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v3') || '{}');
+            sifreler[kisiId] = sifre;
+            localStorage.setItem('aileSifreler_v3', JSON.stringify(sifreler));
+            console.log(`✅ Şifre kaydedildi: ${kisiId}`);
         }
 
-        function sifreAl(repoId) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v2') || '{}');
-            const sifre = sifreler[repoId] || null;
-            console.log(`🔍 Şifre okundu: ${repoId} -> ${sifre}`);
-            return sifre;
+        function sifreAl(kisiId) {
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v3') || '{}');
+            return sifreler[kisiId] || null;
         }
 
-        function sifreSil(repoId) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v2') || '{}');
-            delete sifreler[repoId];
-            localStorage.setItem('aileSifreler_v2', JSON.stringify(sifreler));
-            console.log(`🗑️ Şifre silindi: ${repoId}`);
+        function sifreSil(kisiId) {
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v3') || '{}');
+            delete sifreler[kisiId];
+            localStorage.setItem('aileSifreler_v3', JSON.stringify(sifreler));
         }
 
         function tumSifreleriSil() {
-            localStorage.removeItem('aileSifreler_v2');
-            console.log('🗑️ Tüm şifreler silindi');
+            localStorage.removeItem('aileSifreler_v3');
+        }
+
+        function kisiAcikMi(kisiId) {
+            return sifreAl(kisiId) !== null;
         }
 
         // ==========================================================
-        // REPOLARI LİSTELE
+        // KİŞİLERİ LİSTELE
         // ==========================================================
-        function renderRepos() {
-            repoGrid.innerHTML = '';
+        function renderKisiler() {
+            kisiGrid.innerHTML = '';
             const cfg = getConfig();
             if (!cfg.token) {
-                repoGrid.innerHTML = '<p style="color:#6b7a93;text-align:center;padding:20px;">⚠️ Token girin</p>';
+                kisiGrid.innerHTML = '<p style="color:#6b7a93;text-align:center;padding:20px;">⚠️ Token girin</p>';
                 return;
             }
 
-            for (const repo of aileRepolar) {
-                const kayitliSifre = sifreAl(repo.id);
-                const acikMi = kayitliSifre !== null;
+            for (const kisi of kisiler) {
+                const acikMi = kisiAcikMi(kisi.id);
 
                 const kart = document.createElement('div');
-                kart.className = 'repo-card';
+                kart.className = 'kisi-card';
 
                 kart.innerHTML = `
-                    <span class="avatar">${repo.avatar}</span>
+                    <span class="avatar">${kisi.avatar}</span>
                     <span class="kilit">${acikMi ? '🔓' : '🔒'}</span>
-                    <div class="isim">${repo.kisi}</div>
-                    <div class="repo-ad">${repo.repo}</div>
+                    <div class="isim">${kisi.isim}</div>
                     <span class="durum ${acikMi ? 'acik' : 'kilitli'}">${acikMi ? '✅ Açık' : '🔒 Kilitli'}</span>
                 `;
 
                 kart.addEventListener('click', () => {
-                    const kayitli = sifreAl(repo.id);
-                    if (kayitli !== null) {
-                        // Şifre zaten kayıtlı, direkt gir
-                        aktifRepo = repo.repo;
-                        aktifRepoInfo = repo;
-                        repoAc(repo);
+                    if (acikMi) {
+                        // Şifre zaten kayıtlı, repoları göster
+                        aktifKisi = kisi;
+                        repoGoster(kisi);
                     } else {
-                        // Şifre yok, sor
-                        sifreBekleyenRepo = repo;
-                        sifreKisi.textContent = `🔒 ${repo.kisi}`;
-                        sifreRepo.textContent = repo.repo;
-                        sifreDurum.textContent = '🔑 Şifrenizi belirleyin (ilk giriş)';
+                        // Şifre sor
+                        sifreBekleyenKisi = kisi;
+                        sifreKisi.textContent = `🔒 ${kisi.isim}`;
+                        sifreRepo.textContent = kisi.isim;
+                        sifreDurum.textContent = '🔑 Şifrenizi girin (ilk kez ise belirleyin)';
                         sifreInput.value = '';
                         sifreHata.classList.remove('goster');
                         sifreBasarili.classList.remove('goster');
@@ -887,15 +918,15 @@
                     }
                 });
 
-                repoGrid.appendChild(kart);
+                kisiGrid.appendChild(kart);
             }
         }
 
         // ==========================================================
-        // ŞİFRE DOĞRULA / KAYDET
+        // ŞİFRE KONTROLÜ / KAYDI
         // ==========================================================
         function sifreIsle() {
-            if (!sifreBekleyenRepo) return;
+            if (!sifreBekleyenKisi) return;
             const girilen = sifreInput.value.trim();
 
             if (!girilen) {
@@ -905,44 +936,40 @@
                 return;
             }
 
-            const kayitli = sifreAl(sifreBekleyenRepo.id);
+            const kayitli = sifreAl(sifreBekleyenKisi.id);
 
-            // --- İLK KAYIT (Hiç şifre yoksa) ---
             if (kayitli === null) {
-                // Şifreyi kaydet
-                sifreKaydet(sifreBekleyenRepo.id, girilen);
-                sifreBasarili.textContent = '✅ Şifre kaydedildi! Yönlendiriliyorsunuz...';
+                // İLK KAYIT
+                sifreKaydet(sifreBekleyenKisi.id, girilen);
+                sifreBasarili.textContent = '✅ Şifre kaydedildi!';
                 sifreBasarili.classList.add('goster');
                 sifreHata.classList.remove('goster');
 
                 if (beklemeTimeout) clearTimeout(beklemeTimeout);
                 beklemeTimeout = setTimeout(() => {
                     sifreModal.classList.remove('active');
-                    aktifRepo = sifreBekleyenRepo.repo;
-                    aktifRepoInfo = sifreBekleyenRepo;
-                    repoAc(sifreBekleyenRepo);
-                    renderRepos();
-                    sifreBekleyenRepo = null;
+                    aktifKisi = sifreBekleyenKisi;
+                    repoGoster(sifreBekleyenKisi);
+                    renderKisiler();
+                    sifreBekleyenKisi = null;
                     beklemeTimeout = null;
                 }, 800);
                 return;
             }
 
-            // --- ŞİFRE KONTROLÜ (Kayıtlı şifre varsa) ---
             if (girilen === kayitli) {
                 // ŞİFRE DOĞRU
-                sifreBasarili.textContent = '✅ Şifre doğru! Yönlendiriliyorsunuz...';
+                sifreBasarili.textContent = '✅ Şifre doğru!';
                 sifreBasarili.classList.add('goster');
                 sifreHata.classList.remove('goster');
 
                 if (beklemeTimeout) clearTimeout(beklemeTimeout);
                 beklemeTimeout = setTimeout(() => {
                     sifreModal.classList.remove('active');
-                    aktifRepo = sifreBekleyenRepo.repo;
-                    aktifRepoInfo = sifreBekleyenRepo;
-                    repoAc(sifreBekleyenRepo);
-                    renderRepos();
-                    sifreBekleyenRepo = null;
+                    aktifKisi = sifreBekleyenKisi;
+                    repoGoster(sifreBekleyenKisi);
+                    renderKisiler();
+                    sifreBekleyenKisi = null;
                     beklemeTimeout = null;
                 }, 800);
             } else {
@@ -962,7 +989,7 @@
 
         sifreIptalBtn.addEventListener('click', () => {
             sifreModal.classList.remove('active');
-            sifreBekleyenRepo = null;
+            sifreBekleyenKisi = null;
             if (beklemeTimeout) {
                 clearTimeout(beklemeTimeout);
                 beklemeTimeout = null;
@@ -970,53 +997,99 @@
         });
 
         // ==========================================================
-        // REPO AÇ
+        // REPOLARI GÖSTER
         // ==========================================================
-        function repoAc(repo) {
+        function repoGoster(kisi) {
             anaSayfa.classList.add('gizli');
             repoSayfa.classList.remove('gizli');
-            setStatus(`📂 ${repo.kisi} - ${repo.repo}`, '');
+            galeriSayfa.classList.add('gizli');
+            repoGrid.innerHTML = '';
+
+            for (const repoAdi of kisi.repolar) {
+                const kart = document.createElement('div');
+                kart.className = 'repo-card';
+                kart.innerHTML = `
+                    <span class="repo-avatar">📁</span>
+                    <div class="repo-isim">${kisi.isim} - ${repoAdi}</div>
+                    <div class="repo-ad">${repoAdi}</div>
+                `;
+                kart.addEventListener('click', () => {
+                    aktifRepo = repoAdi;
+                    galeriAc(repoAdi);
+                });
+                repoGrid.appendChild(kart);
+            }
+
+            setStatus(`📂 ${kisi.isim} - Repolar`, '');
+        }
+
+        // ==========================================================
+        // GALERİ AÇ
+        // ==========================================================
+        function galeriAc(repoAdi) {
+            repoSayfa.classList.add('gizli');
+            galeriSayfa.classList.remove('gizli');
+            setStatus(`📂 ${repoAdi}`, '');
             listFiles();
         }
 
         // ==========================================================
-        // GERİ BUTONU - KİLİTLE
+        // GERİ BUTONU (Repolardan Kişilere Dön)
         // ==========================================================
-        function geriDonVeKilitle() {
-            if (aktifRepoInfo) {
-                // O anki repo'nun şifresini sil (kilitle)
-                sifreSil(aktifRepoInfo.id);
-                // Ana sayfaya dön
+        function repodanKisilereDon() {
+            if (aktifKisi) {
+                // Kişiyi kilitle
+                sifreSil(aktifKisi.id);
                 repoSayfa.classList.add('gizli');
                 anaSayfa.classList.remove('gizli');
-                const kisi = aktifRepoInfo.kisi;
-                aktifRepo = null;
-                aktifRepoInfo = null;
-                renderRepos();
-                setStatus(`🔒 ${kisi} kilitlendi`, '');
+                const kisiAdi = aktifKisi.isim;
+                aktifKisi = null;
+                renderKisiler();
+                setStatus(`🔒 ${kisiAdi} kilitlendi`, '');
             } else {
                 repoSayfa.classList.add('gizli');
                 anaSayfa.classList.remove('gizli');
-                renderRepos();
+                renderKisiler();
                 setStatus('✨ Ana sayfa', '');
             }
         }
 
-        geriBtn.addEventListener('click', geriDonVeKilitle);
+        geriBtn.addEventListener('click', repodanKisilereDon);
+
+        // ==========================================================
+        // GALERİDEN GERİ (Repolara Dön)
+        // ==========================================================
+        function galeridenRepolaraDon() {
+            galeriSayfa.classList.add('gizli');
+            repoSayfa.classList.remove('gizli');
+            if (aktifKisi) {
+                setStatus(`📂 ${aktifKisi.isim} - Repolar`, '');
+            } else {
+                setStatus('📂 Repolar', '');
+            }
+            // Galeri içeriğini temizle
+            gallery.innerHTML = '';
+            galleryCount.textContent = '0 dosya';
+            imageCount.textContent = '0';
+            videoCount.textContent = '0';
+        }
+
+        galeriGeriBtn.addEventListener('click', galeridenRepolaraDon);
 
         // ==========================================================
         // ÇIKIŞ YAP
         // ==========================================================
         function cikisYap() {
-            if (!confirm('Çıkış yapmak istediğinize emin misiniz? Tüm oturumlar kapanacak.')) return;
+            if (!confirm('Çıkış yapmak istediğinize emin misiniz? Tüm şifreler silinecek.')) return;
 
             tumSifreleriSil();
-            repoSayfa.classList.add('gizli');
             anaSayfa.classList.remove('gizli');
+            repoSayfa.classList.add('gizli');
+            galeriSayfa.classList.add('gizli');
+            aktifKisi = null;
             aktifRepo = null;
-            aktifRepoInfo = null;
-            renderRepos();
-            setStatus('🚪 Çıkış yapıldı. Tüm repolar yeniden kilitlendi.', '');
+            renderKisiler();
+            setStatus('🚪 Çıkış yapıldı. Tüm şifreler silindi.', '');
         }
 
         cikisBtn.addEventListener('click', cikisYap);
@@ -1339,7 +1412,7 @@
             if (token && token.startsWith('ghp_')) {
                 localStorage.setItem('githubToken', token);
                 currentToken = token;
-                renderRepos();
+                renderKisiler();
                 setStatus('✅ Token kaydedildi', 'success');
             }
         });
@@ -1351,7 +1424,7 @@
         if (kayitliToken && kayitliToken.startsWith('ghp_')) {
             currentToken = kayitliToken;
             tokenInput.value = kayitliToken;
-            renderRepos();
+            renderKisiler();
             setStatus('✨ Aile sistemine hoş geldiniz', 'success');
         } else {
             setStatus('🔑 Token girin', '');
