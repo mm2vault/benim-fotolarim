@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>👨‍👩‍👧‍👦 Aile Galerisi</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0b0e14;
@@ -26,8 +22,8 @@
             backdrop-filter: blur(24px);
             border-radius: 32px;
             padding: 28px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+            border: 1px solid rgba(255,255,255,0.05);
         }
         .header {
             display: flex;
@@ -35,9 +31,9 @@
             justify-content: space-between;
             margin-bottom: 28px;
             padding: 16px 20px;
-            background: linear-gradient(135deg, rgba(240, 147, 62, 0.08), rgba(230, 126, 34, 0.04));
+            background: linear-gradient(135deg, rgba(240,147,62,0.08), rgba(230,126,34,0.04));
             border-radius: 20px;
-            border: 1px solid rgba(240, 147, 62, 0.1);
+            border: 1px solid rgba(240,147,62,0.1);
         }
         .header-left { display: flex; align-items: center; gap: 14px; }
         .header-logo { height: 44px; width: auto; border-radius: 12px; }
@@ -49,21 +45,21 @@
             -webkit-text-fill-color: transparent;
         }
         .header-badge {
-            background: linear-gradient(135deg, rgba(240, 147, 62, 0.15), rgba(230, 126, 34, 0.05));
+            background: linear-gradient(135deg, rgba(240,147,62,0.15), rgba(230,126,34,0.05));
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 11px;
             font-weight: 500;
             color: #f0933e;
-            border: 1px solid rgba(240, 147, 62, 0.15);
+            border: 1px solid rgba(240,147,62,0.15);
             display: flex;
             align-items: center;
             gap: 8px;
         }
         .header-badge .cikis-btn {
-            background: rgba(248, 81, 73, 0.08);
+            background: rgba(248,81,73,0.08);
             color: #f85149;
-            border: 1px solid rgba(248, 81, 73, 0.1);
+            border: 1px solid rgba(248,81,73,0.1);
             padding: 2px 12px;
             border-radius: 20px;
             font-size: 11px;
@@ -71,7 +67,7 @@
             transition: 0.25s;
             font-family: inherit;
         }
-        .header-badge .cikis-btn:hover { background: rgba(248, 81, 73, 0.16); }
+        .header-badge .cikis-btn:hover { background: rgba(248,81,73,0.16); }
         .input-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 16px; }
         .input-group { display: flex; flex-direction: column; gap: 4px; }
         .input-group label {
@@ -85,8 +81,8 @@
             gap: 6px;
         }
         .input-group input {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
             border-radius: 12px;
             padding: 11px 14px;
             font-size: 14px;
@@ -98,18 +94,18 @@
         }
         .input-group input:focus {
             border-color: #f0933e;
-            box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
-            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 4px rgba(240,147,62,0.08);
+            background: rgba(255,255,255,0.06);
         }
         .input-group input::placeholder { color: #3e485a; }
         .status {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255,255,255,0.02);
             border-radius: 14px;
             padding: 12px 18px;
             margin-bottom: 18px;
             font-size: 13px;
             color: #7a879f;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.04);
             min-height: 48px;
             display: flex;
             align-items: center;
@@ -118,7 +114,7 @@
         .status .spinner {
             width: 18px;
             height: 18px;
-            border: 2px solid rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255,255,255,0.08);
             border-top-color: #f0933e;
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
@@ -126,30 +122,30 @@
         }
         .status.loading .spinner { display: block; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .kisi-grid {
+
+        /* ===== KİŞİ GİRİŞ ===== */
+        .giris-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
             margin-top: 16px;
         }
-        .kisi-card {
-            background: rgba(255, 255, 255, 0.02);
+        .giris-card {
+            background: rgba(255,255,255,0.02);
             border-radius: 18px;
-            padding: 28px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 24px 16px;
+            border: 1px solid rgba(255,255,255,0.05);
             transition: 0.4s;
-            cursor: pointer;
             text-align: center;
-            position: relative;
         }
-        .kisi-card:hover {
-            border-color: rgba(240, 147, 62, 0.25);
-            transform: translateY(-6px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        .giris-card:hover {
+            border-color: rgba(240,147,62,0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
         }
-        .kisi-card .avatar { font-size: 64px; display: block; margin-bottom: 10px; }
-        .kisi-card .isim { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
-        .kisi-card .durum {
+        .giris-card .avatar { font-size: 48px; display: block; margin-bottom: 8px; }
+        .giris-card .isim { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+        .giris-card .durum {
             display: inline-block;
             margin-top: 6px;
             padding: 2px 14px;
@@ -157,22 +153,23 @@
             font-size: 11px;
             font-weight: 500;
         }
-        .kisi-card .durum.kilitli {
-            background: rgba(248, 81, 73, 0.08);
+        .giris-card .durum.kilitli {
+            background: rgba(248,81,73,0.08);
             color: #f85149;
-            border: 1px solid rgba(248, 81, 73, 0.1);
+            border: 1px solid rgba(248,81,73,0.1);
         }
-        .kisi-card .durum.acik {
-            background: rgba(46, 160, 67, 0.08);
+        .giris-card .durum.acik {
+            background: rgba(46,160,67,0.08);
             color: #4cda6c;
-            border: 1px solid rgba(46, 160, 67, 0.1);
+            border: 1px solid rgba(46,160,67,0.1);
         }
-        .kisi-card .kilit {
-            position: absolute;
-            top: 12px;
-            right: 14px;
+        .giris-card .kilit {
             font-size: 16px;
+            display: block;
+            margin-bottom: 4px;
         }
+
+        /* ===== REPO GRİD ===== */
         .repo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -180,28 +177,29 @@
             margin-top: 16px;
         }
         .repo-card {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255,255,255,0.02);
             border-radius: 18px;
             padding: 20px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.05);
             transition: 0.4s;
             cursor: pointer;
             text-align: center;
-            position: relative;
         }
         .repo-card:hover {
-            border-color: rgba(240, 147, 62, 0.25);
+            border-color: rgba(240,147,62,0.25);
             transform: translateY(-6px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
         }
         .repo-card .repo-avatar { font-size: 32px; display: block; margin-bottom: 6px; }
         .repo-card .repo-isim { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
         .repo-card .repo-ad { font-size: 12px; color: #6b7a93; }
+
+        /* ===== ŞİFRE MODAL ===== */
         .sifre-modal {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0,0,0,0.85);
             backdrop-filter: blur(16px);
             z-index: 999;
             align-items: center;
@@ -210,24 +208,23 @@
         }
         .sifre-modal.active { display: flex; }
         .sifre-modal .kutu {
-            background: rgba(22, 30, 44, 0.95);
+            background: rgba(22,30,44,0.95);
             border-radius: 24px;
             padding: 32px 28px;
             max-width: 400px;
             width: 100%;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.6);
             text-align: center;
         }
-        .sifre-modal .kutu h2 { font-size: 20px; margin-bottom: 6px; }
-        .sifre-modal .kutu p { color: #6b7a93; font-size: 14px; margin-bottom: 8px; }
-        .sifre-modal .kutu .alt-bilgi { color: #4a5268; font-size: 12px; margin-bottom: 16px; }
+        .sifre-modal .kutu h2 { font-size: 20px; margin-bottom: 4px; }
+        .sifre-modal .kutu .alt-bilgi { color: #4a5268; font-size: 13px; margin-bottom: 16px; }
         .sifre-modal .kutu input {
             width: 100%;
             padding: 12px 16px;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.04);
             color: #e8edf5;
             font-size: 16px;
             outline: none;
@@ -239,7 +236,7 @@
         }
         .sifre-modal .kutu input:focus {
             border-color: #f0933e;
-            box-shadow: 0 0 0 4px rgba(240, 147, 62, 0.08);
+            box-shadow: 0 0 0 4px rgba(240,147,62,0.08);
         }
         .sifre-modal .kutu .btn-gir {
             width: 100%;
@@ -257,22 +254,22 @@
         }
         .sifre-modal .kutu .btn-gir:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(240, 147, 62, 0.3);
+            box-shadow: 0 6px 30px rgba(240,147,62,0.3);
         }
         .sifre-modal .kutu .btn-iptal {
             width: 100%;
             margin-top: 10px;
             padding: 10px;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255,255,255,0.04);
             color: #6b7a93;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255,255,255,0.06);
             border-radius: 14px;
             font-size: 14px;
             cursor: pointer;
             transition: 0.25s;
             font-family: inherit;
         }
-        .sifre-modal .kutu .btn-iptal:hover { background: rgba(255, 255, 255, 0.08); }
+        .sifre-modal .kutu .btn-iptal:hover { background: rgba(255,255,255,0.08); }
         .sifre-modal .kutu .hata {
             color: #f85149;
             font-size: 13px;
@@ -287,24 +284,26 @@
             display: none;
         }
         .sifre-modal .kutu .basarili.goster { display: block; }
+
+        /* ===== DOSYA ALANI ===== */
         .file-area {
-            border: 2px dashed rgba(255, 255, 255, 0.06);
+            border: 2px dashed rgba(255,255,255,0.06);
             border-radius: 18px;
             padding: 30px 20px 24px;
             text-align: center;
             cursor: pointer;
             transition: 0.4s;
-            background: rgba(255, 255, 255, 0.01);
+            background: rgba(255,255,255,0.01);
             margin-bottom: 18px;
             position: relative;
         }
         .file-area:hover {
-            border-color: rgba(240, 147, 62, 0.3);
-            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(240,147,62,0.3);
+            background: rgba(255,255,255,0.03);
         }
         .file-area.dragover {
             border-color: #f0933e;
-            background: rgba(240, 147, 62, 0.05);
+            background: rgba(240,147,62,0.05);
         }
         .file-area .icon { display: block; margin-bottom: 4px; opacity: 0.9; }
         .file-area .text { font-size: 15px; color: #7a879f; }
@@ -318,7 +317,7 @@
         .file-area .file-count {
             display: inline-block;
             margin-top: 10px;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255,255,255,0.04);
             padding: 3px 18px;
             border-radius: 20px;
             font-size: 12px;
@@ -347,29 +346,29 @@
         .btn-upload {
             background: linear-gradient(135deg, #f0933e, #e67e22);
             color: #fff;
-            box-shadow: 0 4px 20px rgba(240, 147, 62, 0.25);
+            box-shadow: 0 4px 20px rgba(240,147,62,0.25);
         }
         .btn-upload:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(240, 147, 62, 0.35);
+            box-shadow: 0 6px 30px rgba(240,147,62,0.35);
         }
         .btn-upload:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
         .btn-list {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255,255,255,0.05);
             color: #e8edf5;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.05);
         }
-        .btn-list:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-2px); }
+        .btn-list:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
         .btn-clear {
-            background: rgba(248, 81, 73, 0.08);
+            background: rgba(248,81,73,0.08);
             color: #f85149;
-            border: 1px solid rgba(248, 81, 73, 0.1);
+            border: 1px solid rgba(248,81,73,0.1);
         }
-        .btn-clear:hover { background: rgba(248, 81, 73, 0.16); transform: translateY(-2px); }
+        .btn-clear:hover { background: rgba(248,81,73,0.16); transform: translateY(-2px); }
         .btn-geri {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255,255,255,0.05);
             color: #e8edf5;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.05);
             padding: 8px 16px;
             border-radius: 12px;
             cursor: pointer;
@@ -382,14 +381,15 @@
             gap: 6px;
             margin-bottom: 16px;
         }
-        .btn-geri:hover { background: rgba(255, 255, 255, 0.08); }
+        .btn-geri:hover { background: rgba(255,255,255,0.08); }
         .gizli { display: none !important; }
+
         .gallery-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 12px 0 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            border-top: 1px solid rgba(255,255,255,0.04);
             margin-top: 2px;
             flex-wrap: wrap;
             gap: 8px;
@@ -404,7 +404,7 @@
             flex-wrap: wrap;
         }
         .gallery-header .count {
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255,255,255,0.04);
             padding: 2px 14px;
             border-radius: 20px;
             font-size: 12px;
@@ -416,6 +416,7 @@
             color: #7a879f;
         }
         .gallery-stats span { display: flex; align-items: center; gap: 4px; }
+
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -430,17 +431,17 @@
             font-size: 15px;
         }
         .gallery-item {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255,255,255,0.02);
             border-radius: 18px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.04);
             transition: 0.4s;
             cursor: pointer;
         }
         .gallery-item:hover {
-            border-color: rgba(240, 147, 62, 0.25);
+            border-color: rgba(240,147,62,0.25);
             transform: translateY(-6px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
         }
         .gallery-item .media {
             width: 100%;
@@ -501,7 +502,7 @@
             gap: 4px;
         }
         .gallery-item .info .actions .download-btn {
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255,255,255,0.04);
             padding: 4px 10px;
             border-radius: 8px;
             font-size: 12px;
@@ -511,13 +512,14 @@
         .gallery-item .info .actions .download-btn:hover { background: #f0933e; color: #fff; }
         .gallery-item .info .actions .delete-btn:hover {
             color: #f85149;
-            background: rgba(248, 81, 73, 0.08);
+            background: rgba(248,81,73,0.08);
         }
+
         .modal {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.94);
+            background: rgba(0,0,0,0.94);
             backdrop-filter: blur(20px);
             z-index: 999;
             align-items: center;
@@ -535,10 +537,9 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.8);
         }
-        .modal-content img,
-        .modal-content video {
+        .modal-content img, .modal-content video {
             max-width: 94vw;
             max-height: 85vh;
             display: block;
@@ -550,7 +551,7 @@
             position: absolute;
             top: 14px;
             right: 18px;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0,0,0,0.6);
             border: none;
             color: #fff;
             font-size: 22px;
@@ -562,9 +563,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255,255,255,0.06);
         }
-        .modal-close:hover { background: rgba(255, 255, 255, 0.1); transform: rotate(90deg); }
+        .modal-close:hover { background: rgba(255,255,255,0.1); transform: rotate(90deg); }
         .modal-bottom {
             position: absolute;
             bottom: 24px;
@@ -573,11 +574,11 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0,0,0,0.7);
             backdrop-filter: blur(16px);
             padding: 10px 18px 10px 24px;
             border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255,255,255,0.06);
             max-width: 90%;
             z-index: 5;
         }
@@ -604,7 +605,8 @@
             gap: 8px;
             font-family: inherit;
         }
-        .modal-download:hover { transform: scale(1.05); box-shadow: 0 4px 28px rgba(240, 147, 62, 0.4); }
+        .modal-download:hover { transform: scale(1.05); box-shadow: 0 4px 28px rgba(240,147,62,0.4); }
+
         @media (max-width: 600px) {
             .app { padding: 18px; }
             .buttons { grid-template-columns: 1fr; gap: 8px; }
@@ -613,9 +615,9 @@
             .header-logo { height: 34px; }
             .gallery { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
             .gallery-item .media { height: 130px; }
-            .kisi-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-            .kisi-card { padding: 20px 12px; }
-            .kisi-card .avatar { font-size: 48px; }
+            .giris-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .giris-card { padding: 16px 12px; }
+            .giris-card .avatar { font-size: 36px; }
             .repo-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
             .repo-card { padding: 16px 12px; }
             .sifre-modal .kutu { padding: 24px 20px; }
@@ -662,7 +664,7 @@
 
         <!-- ANA SAYFA (KİŞİLER) -->
         <div id="anaSayfa">
-            <div class="kisi-grid" id="kisiGrid"></div>
+            <div class="giris-grid" id="kisiGrid"></div>
         </div>
 
         <!-- REPO SAYFASI -->
@@ -716,9 +718,8 @@
     <!-- ŞİFRE MODAL -->
     <div class="sifre-modal" id="sifreModal">
         <div class="kutu">
-            <h2 id="sifreKisi">🔒 Anne</h2>
-            <p id="sifreRepo">Şifrenizi girin</p>
-            <div class="alt-bilgi" id="sifreDurum">🔑 İlk kez giriyorsanız şifre belirleyin</div>
+            <h2 id="sifreKisi">🔒 Giriş</h2>
+            <div class="alt-bilgi" id="sifreDurum">🔑 Şifrenizi girin (ilk kez ise belirleyin)</div>
             <input type="password" id="sifreInput" placeholder="••••••" autocomplete="off">
             <div class="hata" id="sifreHata">❌ Şifre yanlış! Tekrar deneyin.</div>
             <div class="basarili" id="sifreBasarili">✅ Şifre doğru! Yönlendiriliyorsunuz...</div>
@@ -741,7 +742,7 @@
 
     <script>
         // ==========================================================
-        // KİŞİ LİSTESİ
+        // KİŞİ LİSTESİ (SABİT)
         // ==========================================================
         const kisiler = [
             { id: 'anne', isim: 'Anne', avatar: '👩', repolar: ['anne-1', 'anne-2'] },
@@ -757,6 +758,7 @@
         let aktifRepo = null;
         let currentToken = '';
         let sifreBekleyenKisi = null;
+        let beklemeTimeout = null;
 
         // ==========================================================
         // DOM
@@ -792,7 +794,6 @@
 
         const sifreModal = document.getElementById('sifreModal');
         const sifreKisi = document.getElementById('sifreKisi');
-        const sifreRepo = document.getElementById('sifreRepo');
         const sifreDurum = document.getElementById('sifreDurum');
         const sifreInput = document.getElementById('sifreInput');
         const sifreHata = document.getElementById('sifreHata');
@@ -802,7 +803,6 @@
 
         let currentModalUrl = '';
         let currentModalName = '';
-        let beklemeTimeout = null;
 
         // ==========================================================
         // YARDIMCI
@@ -850,32 +850,33 @@
         // ŞİFRE YÖNETİMİ (SAĞLAM)
         // ==========================================================
         function sifreKaydet(kisiId, sifre) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v4') || '{}');
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v5') || '{}');
             sifreler[kisiId] = sifre;
-            localStorage.setItem('aileSifreler_v4', JSON.stringify(sifreler));
+            localStorage.setItem('aileSifreler_v5', JSON.stringify(sifreler));
             console.log('✅ Şifre kaydedildi:', kisiId);
         }
 
         function sifreAl(kisiId) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v4') || '{}');
-            return sifreler[kisiId] || null;
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v5') || '{}');
+            const sifre = sifreler[kisiId] || null;
+            console.log('🔍 Şifre okundu:', kisiId, sifre);
+            return sifre;
         }
 
         function sifreSil(kisiId) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v4') || '{}');
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v5') || '{}');
             delete sifreler[kisiId];
-            localStorage.setItem('aileSifreler_v4', JSON.stringify(sifreler));
+            localStorage.setItem('aileSifreler_v5', JSON.stringify(sifreler));
             console.log('🗑️ Şifre silindi:', kisiId);
         }
 
         function tumSifreleriSil() {
-            localStorage.removeItem('aileSifreler_v4');
+            localStorage.removeItem('aileSifreler_v5');
             console.log('🗑️ Tüm şifreler silindi');
         }
 
         function kisiAcikMi(kisiId) {
-            const sifre = sifreAl(kisiId);
-            return sifre !== null;
+            return sifreAl(kisiId) !== null;
         }
 
         // ==========================================================
@@ -893,11 +894,11 @@
                 const acikMi = kisiAcikMi(kisi.id);
 
                 const kart = document.createElement('div');
-                kart.className = 'kisi-card';
+                kart.className = 'giris-card';
 
                 kart.innerHTML = `
-                    <span class="avatar">${kisi.avatar}</span>
                     <span class="kilit">${acikMi ? '🔓' : '🔒'}</span>
+                    <span class="avatar">${kisi.avatar}</span>
                     <div class="isim">${kisi.isim}</div>
                     <span class="durum ${acikMi ? 'acik' : 'kilitli'}">${acikMi ? '✅ Açık' : '🔒 Kilitli'}</span>
                 `;
@@ -911,7 +912,6 @@
                         // Şifre sor
                         sifreBekleyenKisi = kisi;
                         sifreKisi.textContent = `🔒 ${kisi.isim}`;
-                        sifreRepo.textContent = kisi.isim;
                         sifreDurum.textContent = '🔑 Şifrenizi girin (ilk kez ise belirleyin)';
                         sifreInput.value = '';
                         sifreHata.classList.remove('goster');
@@ -1070,7 +1070,6 @@
             } else {
                 setStatus('📂 Repolar', '');
             }
-            // Galeri içeriğini temizle
             gallery.innerHTML = '';
             galleryCount.textContent = '0 dosya';
             imageCount.textContent = '0';
