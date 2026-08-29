@@ -74,23 +74,7 @@
             border: 1px solid rgba(240, 147, 62, 0.15);
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .header-badge .cikis-btn {
-            background: rgba(248, 81, 73, 0.08);
-            color: #f85149;
-            border: 1px solid rgba(248, 81, 73, 0.1);
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: 0.25s;
-            font-family: inherit;
-        }
-
-        .header-badge .cikis-btn:hover {
-            background: rgba(248, 81, 73, 0.16);
+            gap: 6px;
         }
 
         .input-grid {
@@ -867,7 +851,6 @@
             </div>
             <span class="header-badge">
                 ✦ Aile Sistemi
-                <button class="cikis-btn" id="cikisBtn">🚪 Çıkış Yap</button>
             </span>
         </div>
 
@@ -892,13 +875,13 @@
 
         <!-- REPO SAYFASI -->
         <div id="repoSayfa" class="gizli">
-            <button class="btn-geri" id="geriBtn">← Geri</button>
+            <button class="btn-geri" id="anaGeriBtn">← Ana Sayfaya Dön</button>
             <div class="repo-grid" id="repoGrid"></div>
         </div>
 
         <!-- GALERİ SAYFASI -->
         <div id="galeriSayfa" class="gizli">
-            <button class="btn-geri" id="galeriGeriBtn">← Geri</button>
+            <button class="btn-geri" id="repoGeriBtn">← Repolara Dön</button>
 
             <div class="file-area" id="fileArea">
                 <span class="icon">
@@ -994,9 +977,8 @@
         const anaSayfa = document.getElementById('anaSayfa');
         const repoSayfa = document.getElementById('repoSayfa');
         const galeriSayfa = document.getElementById('galeriSayfa');
-        const geriBtn = document.getElementById('geriBtn');
-        const galeriGeriBtn = document.getElementById('galeriGeriBtn');
-        const cikisBtn = document.getElementById('cikisBtn');
+        const anaGeriBtn = document.getElementById('anaGeriBtn');
+        const repoGeriBtn = document.getElementById('repoGeriBtn');
 
         const fileInput = document.getElementById('fileInput');
         const fileArea = document.getElementById('fileArea');
@@ -1199,8 +1181,9 @@
         }
 
         // ==========================================================
-        // GERİ BUTONU
+        // GERİ BUTONLARI
         // ==========================================================
+        // Ana sayfaya dön (repo sayfasından)
         function anaSayfayaDon() {
             repoSayfa.classList.add('gizli');
             galeriSayfa.classList.add('gizli');
@@ -1210,9 +1193,10 @@
             renderKisiler();
         }
 
-        geriBtn.addEventListener('click', anaSayfayaDon);
+        anaGeriBtn.addEventListener('click', anaSayfayaDon);
 
-        galeriGeriBtn.addEventListener('click', () => {
+        // Repolara dön (galeri sayfasından)
+        function repolaraDon() {
             galeriSayfa.classList.add('gizli');
             repoSayfa.classList.remove('gizli');
             if (aktifKisi) {
@@ -1222,24 +1206,9 @@
             galleryCount.textContent = '0 dosya';
             imageCount.textContent = '0';
             videoCount.textContent = '0';
-        });
-
-        // ==========================================================
-        // ÇIKIŞ YAP
-        // ==========================================================
-        function cikisYap() {
-            if (!confirm('Çıkış yapmak istediğine emin misin?')) return;
-
-            anaSayfa.classList.remove('gizli');
-            repoSayfa.classList.add('gizli');
-            galeriSayfa.classList.add('gizli');
-            aktifKisi = null;
-            aktifRepo = null;
-            renderKisiler();
-            setStatus('🚪 Çıkış yapıldı', '');
         }
 
-        cikisBtn.addEventListener('click', cikisYap);
+        repoGeriBtn.addEventListener('click', repolaraDon);
 
         // ==========================================================
         // LİSTELEME
