@@ -32,7 +32,6 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* ===== GENEL İKON STİLLERİ ===== */
         .icon-img {
             width: 18px;
             height: 18px;
@@ -40,31 +39,16 @@
             display: inline-block;
             object-fit: contain;
         }
-
         .icon-img-sm {
             width: 14px;
             height: 14px;
             vertical-align: middle;
         }
-
         .icon-img-lg {
             width: 40px;
             height: 40px;
             display: block;
             margin: 0 auto;
-        }
-
-        .icon-img-xl {
-            width: 44px;
-            height: 44px;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .header-logo img {
-            width: 28px;
-            height: 28px;
-            display: block;
         }
 
         .header {
@@ -94,6 +78,12 @@
             justify-content: center;
             box-shadow: 0 4px 16px rgba(240, 147, 62, 0.25);
             flex-shrink: 0;
+        }
+
+        .header-logo img {
+            width: 28px;
+            height: 28px;
+            display: block;
         }
 
         .header h1 {
@@ -146,28 +136,18 @@
             display: block;
         }
 
-        .status.success {
-            border-color: rgba(46, 160, 67, 0.2);
-            color: #4cda6c;
-        }
-
-        .status.error {
-            border-color: rgba(248, 81, 73, 0.2);
-            color: #f85149;
-        }
-
         @keyframes spin {
             to {
                 transform: rotate(360deg);
             }
         }
 
-        /* ===== KİŞİ GRİD ===== */
+        /* ===== KİŞİ BUTONLARI ===== */
         .kisi-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 20px;
-            margin-top: 30px;
+            margin-top: 16px;
         }
 
         .kisi-card {
@@ -184,7 +164,7 @@
         .kisi-card:hover {
             border-color: rgba(240, 147, 62, 0.3);
             transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(240, 147, 62, 0.05);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
         }
 
         .kisi-card .avatar {
@@ -222,7 +202,6 @@
             opacity: 0.5;
         }
 
-        /* ===== REPO GRİD ===== */
         .repo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -288,7 +267,6 @@
             background: rgba(255, 255, 255, 0.08);
         }
 
-        /* ===== DOSYA ALANI ===== */
         .file-area {
             border: 2px dashed rgba(255, 255, 255, 0.06);
             border-radius: 18px;
@@ -754,10 +732,6 @@
             .icon-img-lg {
                 width: 32px;
                 height: 32px;
-            }
-            .icon-img-xl {
-                width: 36px;
-                height: 36px;
             }
             .gallery-header {
                 flex-direction: column;
