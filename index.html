@@ -1072,7 +1072,7 @@
         });
 
         // ==========================================================
-        // ŞİFRE YÖNETİMİ
+        // ŞİFRE YÖNETİMİ (HER REPO AYRI)
         // ==========================================================
         function sifreKaydet(repoId, sifre) {
             const sifreler = JSON.parse(localStorage.getItem('aileSifreler') || '{}');
@@ -1102,8 +1102,7 @@
             repoGrid.innerHTML = '';
             const cfg = getConfig();
             if (!cfg.token) {
-                repoGrid.innerHTML =
-                    '<p style="color:#6b7a93;text-align:center;padding:20px;">⚠️ Token girin</p>';
+                repoGrid.innerHTML = '<p style="color:#6b7a93;text-align:center;padding:20px;">⚠️ Token girin</p>';
                 return;
             }
 
@@ -1129,11 +1128,11 @@
                         aktifRepoInfo = repo;
                         repoAc(repo);
                     } else {
-                        // Şifre sor (ilk giriş veya şifre silinmiş)
+                        // Şifre sor (ilk giriş)
                         sifreBekleyenRepo = repo;
                         sifreKisi.textContent = `🔒 ${repo.kisi}`;
                         sifreRepo.textContent = repo.repo;
-                        sifreDurum.textContent = '🔑 Şifrenizi girin (ilk kez ise belirleyin)';
+                        sifreDurum.textContent = '🔑 Şifrenizi belirleyin';
                         sifreInput.value = '';
                         sifreHata.classList.remove('goster');
                         sifreBasarili.classList.remove('goster');
@@ -1223,7 +1222,7 @@
         }
 
         // ==========================================================
-        // GERİ BUTONU (KİLİTLEME VE ANA SAYFAYA DÖN)
+        // GERİ BUTONU - KİLİTLE (Şifreyi sil)
         // ==========================================================
         function geriDonVeKilitle() {
             if (aktifRepoInfo) {
@@ -1235,15 +1234,7 @@
                 aktifRepo = null;
                 aktifRepoInfo = null;
                 renderRepos();
-                setStatus(`🔒 Kilitlendi`, '');
-                // Küçük bir geri bildirim
-                const msg = statusEl.querySelector('.msg');
-                msg.innerHTML = '🔒 Kilitlendi';
-                setTimeout(() => {
-                    if (!aktifRepoInfo) {
-                        msg.innerHTML = '✨ Ana sayfa';
-                    }
-                }, 1500);
+                setStatus(`🔒 ${aktifRepoInfo ? aktifRepoInfo.kisi : ''} kilitlendi`, '');
             } else {
                 repoSayfa.classList.add('gizli');
                 anaSayfa.classList.remove('gizli');
