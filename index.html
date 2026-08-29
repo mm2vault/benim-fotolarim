@@ -847,32 +847,35 @@
         });
 
         // ==========================================================
-        // ŞİFRE YÖNETİMİ (localStorage)
+        // ŞİFRE YÖNETİMİ (SAĞLAM)
         // ==========================================================
         function sifreKaydet(kisiId, sifre) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v3') || '{}');
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v4') || '{}');
             sifreler[kisiId] = sifre;
-            localStorage.setItem('aileSifreler_v3', JSON.stringify(sifreler));
-            console.log(`✅ Şifre kaydedildi: ${kisiId}`);
+            localStorage.setItem('aileSifreler_v4', JSON.stringify(sifreler));
+            console.log('✅ Şifre kaydedildi:', kisiId);
         }
 
         function sifreAl(kisiId) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v3') || '{}');
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v4') || '{}');
             return sifreler[kisiId] || null;
         }
 
         function sifreSil(kisiId) {
-            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v3') || '{}');
+            const sifreler = JSON.parse(localStorage.getItem('aileSifreler_v4') || '{}');
             delete sifreler[kisiId];
-            localStorage.setItem('aileSifreler_v3', JSON.stringify(sifreler));
+            localStorage.setItem('aileSifreler_v4', JSON.stringify(sifreler));
+            console.log('🗑️ Şifre silindi:', kisiId);
         }
 
         function tumSifreleriSil() {
-            localStorage.removeItem('aileSifreler_v3');
+            localStorage.removeItem('aileSifreler_v4');
+            console.log('🗑️ Tüm şifreler silindi');
         }
 
         function kisiAcikMi(kisiId) {
-            return sifreAl(kisiId) !== null;
+            const sifre = sifreAl(kisiId);
+            return sifre !== null;
         }
 
         // ==========================================================
@@ -1034,11 +1037,11 @@
         }
 
         // ==========================================================
-        // GERİ BUTONU (Repolardan Kişilere Dön)
+        // GERİ BUTONU (Repolardan Kişilere Dön - Şifreyi Sil)
         // ==========================================================
         function repodanKisilereDon() {
             if (aktifKisi) {
-                // Kişiyi kilitle
+                // Kişiyi kilitle (şifreyi sil)
                 sifreSil(aktifKisi.id);
                 repoSayfa.classList.add('gizli');
                 anaSayfa.classList.remove('gizli');
