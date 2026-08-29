@@ -964,8 +964,8 @@
             repolar: ['anne-1', 'anne-2', 'anne-3', 'anne-4'],
             limit: 2000
         }, {
-            id: 'sen',
-            isim: 'Sen',
+            id: 'abi',
+            isim: 'Abi',
             avatar: 'https://i.postimg.cc/cHYZYLVt/54aa9db1-bd7b-4b58-afb6-59e8c19ae4b9.png',
             repolar: ['mm2-1', 'mm2-2'],
             limit: 2000
@@ -1320,14 +1320,21 @@
 
                     let mediaHtml = '';
                     if (isVideo) {
-                        mediaHtml =
-                            `<div class="media" onclick="openModal('${rawUrl}','${item.name}',true)"><video src="${rawUrl}" preload="metadata" playsinline muted></video></div>`;
+                        mediaHtml = `
+                            <div class="media" onclick="openModal('${rawUrl}','${item.name}',true)">
+                                <video src="${rawUrl}" preload="metadata" playsinline muted></video>
+                            </div>
+                        `;
                     } else if (isImage) {
-                        mediaHtml =
-                            `<div class="media" onclick="openModal('${rawUrl}','${item.name}',false)"><img src="${rawUrl}" loading="lazy" onerror="this.parentElement.innerHTML='<span style=color:#4a5268;font-size:20px;>⚠️</span>'"></div>`;
+                        mediaHtml = `
+                            <div class="media" onclick="openModal('${rawUrl}','${item.name}',false)">
+                                <img src="${rawUrl}" loading="lazy" onerror="this.parentElement.innerHTML='<span style=color:#4a5268;font-size:20px;>⚠️</span>'">
+                            </div>
+                        `;
                     } else {
-                        mediaHtml =
-                            `<div class="media" style="color:#4a5268;font-size:13px;text-align:center;padding:10px;">📄 ${item.name}</div>`;
+                        mediaHtml = `
+                            <div class="media" style="color:#4a5268;font-size:13px;text-align:center;padding:10px;">📄 ${item.name}</div>
+                        `;
                     }
 
                     div.innerHTML = `
@@ -1335,8 +1342,13 @@
                         <div class="info">
                             <span class="name" title="${item.name}">${item.name}</span>
                             <div class="actions">
-                                <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">⬇️ İndir</button>
-                                <button class="delete-btn" onclick="deleteFile('${item.name}','${item.sha}')">🗑️</button>
+                                <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">
+                                    <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="İndir" class="icon-img-sm">
+                                    İndir
+                                </button>
+                                <button class="delete-btn" onclick="deleteFile('${item.name}','${item.sha}')">
+                                    <img src="https://i.postimg.cc/g0WwKMyH/e625067c-560b-4f86-a39c-725239da40f1-(1)(1).png" alt="Sil" class="icon-img-sm">
+                                </button>
                             </div>
                         </div>
                     `;
