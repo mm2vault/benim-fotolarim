@@ -1072,7 +1072,7 @@
         });
 
         // ==========================================================
-        // ŞİFRE YÖNETİMİ (HER REPO AYRI)
+        // ŞİFRE YÖNETİMİ
         // ==========================================================
         function sifreKaydet(repoId, sifre) {
             const sifreler = JSON.parse(localStorage.getItem('aileSifreler') || '{}');
@@ -1146,7 +1146,7 @@
         }
 
         // ==========================================================
-        // ŞİFRE DOĞRULA / KAYDET
+        // ŞİFRE DOĞRULA / KAYDET (DÜZELTİLDİ)
         // ==========================================================
         function sifreIsle() {
             if (!sifreBekleyenRepo) return;
@@ -1155,13 +1155,15 @@
             if (!girilen) {
                 sifreHata.textContent = '❌ Lütfen bir şifre girin!';
                 sifreHata.classList.add('goster');
+                sifreBasarili.classList.remove('goster');
                 return;
             }
 
             const kayitli = sifreAl(sifreBekleyenRepo.id);
 
+            // --- İLK KAYIT (Hiç şifre yoksa) ---
             if (kayitli === null) {
-                // İLK KAYIT - Şifre belirleme
+                // Şifreyi kaydet
                 sifreKaydet(sifreBekleyenRepo.id, girilen);
                 sifreBasarili.textContent = '✅ Şifre kaydedildi! Yönlendiriliyorsunuz...';
                 sifreBasarili.classList.add('goster');
@@ -1175,8 +1177,11 @@
                     renderRepos();
                     sifreBekleyenRepo = null;
                 }, 800);
+                return;
+            }
 
-            } else if (girilen === kayitli) {
+            // --- ŞİFRE KONTROLÜ (Kayıtlı şifre varsa) ---
+            if (girilen === kayitli) {
                 // ŞİFRE DOĞRU
                 sifreBasarili.textContent = '✅ Şifre doğru! Yönlendiriliyorsunuz...';
                 sifreBasarili.classList.add('goster');
@@ -1190,7 +1195,6 @@
                     renderRepos();
                     sifreBekleyenRepo = null;
                 }, 800);
-
             } else {
                 // ŞİFRE YANLIŞ
                 sifreHata.textContent = '❌ Şifre yanlış! Tekrar deneyin.';
@@ -1222,7 +1226,7 @@
         }
 
         // ==========================================================
-        // GERİ BUTONU - KİLİTLE (Şifreyi sil)
+        // GERİ BUTONU - KİLİTLE
         // ==========================================================
         function geriDonVeKilitle() {
             if (aktifRepoInfo) {
@@ -1246,7 +1250,7 @@
         geriBtn.addEventListener('click', geriDonVeKilitle);
 
         // ==========================================================
-        // ÇIKIŞ YAP (Tüm şifreleri sil, ana sayfaya dön)
+        // ÇIKIŞ YAP
         // ==========================================================
         function cikisYap() {
             if (!confirm('Çıkış yapmak istediğinize emin misiniz? Tüm oturumlar kapanacak.')) return;
