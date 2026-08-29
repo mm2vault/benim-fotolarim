@@ -646,6 +646,19 @@
             background: rgba(248, 81, 73, 0.08);
         }
 
+        /* ===== İKON BOYUT ===== */
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            vertical-align: middle;
+            flex-shrink: 0;
+        }
+
+        .download-btn .icon-sm {
+            margin-right: 4px;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -758,62 +771,6 @@
             transform: scale(1.05);
             box-shadow: 0 4px 28px rgba(240, 147, 62, 0.4);
         }
-
-        .toast-container {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            pointer-events: none;
-            max-width: 90%;
-            width: 400px;
-        }
-
-        .toast {
-            pointer-events: auto;
-            background: rgba(22, 30, 44, 0.92);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
-            padding: 14px 22px;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            min-width: 280px;
-            width: 100%;
-            animation: toastIn 0.35s ease both;
-            transition: 0.3s;
-        }
-
-        .toast.hide {
-            animation: toastOut 0.35s ease both;
-        }
-
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateY(20px) scale(0.96); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes toastOut {
-            from { opacity: 1; transform: translateY(0) scale(1); }
-            to { opacity: 0; transform: translateY(-10px) scale(0.96); }
-        }
-
-        .toast .icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
-        .toast .content { flex: 1; font-size: 14px; color: #e8edf5; font-weight: 500; line-height: 1.4; }
-        .toast .content .sub { font-size: 12px; color: #6b7a93; font-weight: 400; display: block; margin-top: 2px; }
-        .toast .close-btn { background: none; border: none; color: #4a5268; font-size: 18px; cursor: pointer; padding: 0 4px; transition: 0.2s; }
-        .toast .close-btn:hover { color: #e8edf5; }
-        .toast.success { border-left: 3px solid #4cda6c; }
-        .toast.error { border-left: 3px solid #f85149; }
-        .toast.warning { border-left: 3px solid #f0933e; }
-        .toast.info { border-left: 3px solid #58a6ff; }
 
         @media (max-width: 600px) {
             .app { padding: 18px; }
@@ -1312,11 +1269,11 @@
                             <span class="name" title="${item.name}">${item.name}</span>
                             <div class="actions">
                                 <button class="download-btn" onclick="downloadFile('${rawUrl}','${item.name}')">
-                                    <img src="https://i.postimg.cc/K8dWpT4r/e625067c-560b-4f86-a39c-725239da40f1-(1).png" alt="İndir" class="icon-img-sm">
+                                    <img src="https://i.postimg.cc/SKMBmrHH/e625067c-560b-4f86-a39c-725239da40f1-(1)(10).png" alt="İndir" class="icon-sm">
                                     İndir
                                 </button>
                                 <button class="delete-btn" onclick="deleteFile('${item.name}','${item.sha}')">
-                                    <img src="https://i.postimg.cc/g0WwKMyH/e625067c-560b-4f86-a39c-725239da40f1-(1)(1).png" alt="Sil" class="icon-img-sm">
+                                    <img src="https://i.postimg.cc/g0WwKMyH/e625067c-560b-4f86-a39c-725239da40f1-(1)(1).png" alt="Sil" class="icon-sm">
                                 </button>
                             </div>
                         </div>
@@ -1465,7 +1422,7 @@
         });
 
         // ==========================================================
-        // İNDİRME (DÜZELTİLDİ - YENİ SEKME YOK)
+        // İNDİRME
         // ==========================================================
         function downloadFile(url, filename) {
             showToast('⏳', `${filename} indiriliyor...`, 'Lütfen bekleyin.', 'info', 2000);
